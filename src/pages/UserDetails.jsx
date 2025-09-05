@@ -21,7 +21,6 @@ function UserDetails() {
         initialValues: {
             name: '',
             age: '',
-            email: '',
             gender: '',
             profession: '',
             health_status: '',
@@ -54,14 +53,23 @@ function UserDetails() {
                                     placeholder="Enter your full name" />
                             </div>
                             <div className='flex flex-col'>
-                                <label>Age</label>
-                                <input type="number" placeholder="Enter your age" />
+                                <label htmlFor='age'>Age</label>
+                                <input
+                                    id="age"
+                                    name="age"
+                                    type="number"
+                                    onChange={formik.handleChange}
+                                    value={formik.values.age} placeholder="Enter your age" />
                             </div>
                         </div>
                         <div className="flex">
                             <div className='flex flex-col'>
-                                <label>Gender</label>
-                                <select>
+                                <label htmlFor='gender'>Gender</label>
+                                <select
+                                    id="gender"
+                                    name="gender"
+                                    onChange={formik.handleChange}
+                                    value={formik.values.gender}>
                                     <option value="">Select gender</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
@@ -70,14 +78,23 @@ function UserDetails() {
                                 </select>
                             </div>
                             <div className='flex flex-col'>
-                                <label>Profession</label>
-                                <input type="text" placeholder="Enter your profession" />
+                                <label htmlFor='profession'>Profession</label>
+                                <input
+                                    id="profession"
+                                    name="profession"
+                                    type="text"
+                                    onChange={formik.handleChange}
+                                    value={formik.values.profession} placeholder="Enter your profession" />
                             </div>
                         </div>
                         <div className='flex'>
                             <div className="flex flex-col">
-                                <label>Health status</label>
-                                <select>
+                                <label htmlFor='health_status'>Health status</label>
+                                <select
+                                    id="health_status"
+                                    name="health_status"
+                                    onChange={formik.handleChange}
+                                    value={formik.values.health_status}>
                                     <option value="">Select health status</option>
                                     <option value="Excellent">Excellent</option>
                                     <option value="Good">Good</option>
@@ -86,8 +103,12 @@ function UserDetails() {
                                 </select>
                             </div>
                             <div className='flex flex-col'>
-                                <label>Current Emotional State</label>
-                                <select>
+                                <label htmlFor='emotional_status'>Current Emotional State</label>
+                                <select
+                                    id="emotional_status"
+                                    name="emotional_status"
+                                    onChange={formik.handleChange}
+                                    value={formik.values.emotional_status}>
                                     <option value="">How are you feeling?</option>
                                     <option value="Happy">Happy</option>
                                     <option value="Sad">Sad</option>
@@ -99,8 +120,12 @@ function UserDetails() {
                             </div>
                         </div>
                         <div className='flex flex-col'>
-                            <label>Relationship Status</label>
-                            <select>
+                            <label htmlFor='relationship_status'>Relationship Status</label>
+                            <select
+                                id="relationship_status"
+                                name="relationship_status"
+                                onChange={formik.handleChange}
+                                value={formik.values.relationship_status}>
                                 <option value="">Select relationship status</option>
                                 <option value="Single">Single</option>
                                 <option value="In a relationship">In a relationship</option>
