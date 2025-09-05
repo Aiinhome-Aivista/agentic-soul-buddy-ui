@@ -26,15 +26,15 @@ const Guidance = () => {
         <ArrowBackIcon onClick={() => navigate('/home')} className='cursor-pointer' />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-5xl font-bold pt-[20%]'>Welcome, User</p>
-        <p className='font-light'>Speak with your AI spiritual guide. Press and hold to talk</p>
+        <p className='text-5xl font-bold text-yellow-400 pt-[20%]'>Welcome, User</p>
+        <p className='font-light text-yellow-100'>Speak with your AI spiritual guide. Press and hold to talk</p>
       </div>
       <div className="flex flex-col items-center h-[50%]">
         <div className='pb-[1%]'>
-          <MicIcon sx={{ fontSize: '5rem', color: isRecording ? 'red' : 'white' }} onClick={handleMicClick} />
+          <MicIcon sx={{ fontSize: '5rem', color: isRecording ? 'red' : '#fefce8' }} onClick={handleMicClick} />
         </div>
-        <p className='pb-[70%] font-light text-xs'>{isRecording ? 'Listening...' : 'Click the mic to start recording'}</p>
-        <p className='font-light'>Share your thoughts, questions, or concerns...</p>
+        <p className='pb-[70%] font-light text-xs text-yellow-100'>{isRecording ? 'Listening...' : 'Click the mic to start recording'}</p>
+        <p className='font-light text-yellow-100'>Share your thoughts, questions, or concerns...</p>
       </div>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
     </div>
