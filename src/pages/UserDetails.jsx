@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import bgAudio from '../assets/audio/uplifting-pad-texture-113842.mp3';
+import { useNavigate } from 'react-router-dom';
 
 function UserDetails() {
     const audioRef = useRef(null);
+    const navigate = useNavigate()
 
     useEffect(() => {
         handlePlay();
@@ -80,7 +82,7 @@ function UserDetails() {
                                 <option value="Complicated">It's Complicated</option>
                             </select>
                         </div>
-                        <button type="submit">
+                        <button onClick={() => navigate('/guidance')} >
                             Begin Sacred Journey
                         </button>
                     </div>
