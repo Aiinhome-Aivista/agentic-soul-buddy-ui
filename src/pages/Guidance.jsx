@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MicIcon from '@mui/icons-material/Mic';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
@@ -20,8 +21,8 @@ const Guidance = () => {
         <ArrowBackIcon onClick={() => navigate('/home')} className='cursor-pointer' />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <div className='text-5xl font-bold pt-[20%]'>Welcome, User</div>
-        <div className='font-light'>Speak with your AI spiritual guide. Press and hold to talk</div>
+        <p className='text-5xl font-bold pt-[20%]'>Welcome, User</p>
+        <p className='font-light'>Speak with your AI spiritual guide. Press and hold to talk</p>
       </div>
       <div className="flex flex-col items-center justify-between h-[50%]">
         <div className='pb-[4%]'>
