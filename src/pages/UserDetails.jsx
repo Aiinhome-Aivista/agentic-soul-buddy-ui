@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import bgAudio from '../assets/audio/uplifting-pad-texture-113842.mp3';
 
 function UserDetails() {
     const audioRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         handlePlay();
@@ -17,7 +19,7 @@ function UserDetails() {
     return (
         <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]"
             onMouseEnter={handlePlay}>
-            <div>
+            <div className='flex flex-col '>
                 <h1>Welcome, Soul Seeker</h1>
                 <p>Share your details to begin your personalized spiritual journey</p>
             </div>
@@ -80,13 +82,19 @@ function UserDetails() {
                                 <option value="Complicated">It's Complicated</option>
                             </select>
                         </div>
-                        <button type="submit">
+                      
+                        <button type="button" onClick={() => navigate('/guidance')}
+                            className="cursor-pointer">
                             Begin Sacred Journey
                         </button>
                     </div>
                 </form>
             </div>
             <audio ref={audioRef} src={bgAudio} preload="auto" />
+            {/* <div className='flex flex-row h-60 w-60 bg-white rounded-4xl p-3 gap-3 justify-end items-center'>
+                <div className='h-10 w-10 bg-black rounded-full'></div>
+                <div className='h-10 w-10 bg-black rounded-full'></div>
+            </div> */}
         </div>
     )
 }
