@@ -46,7 +46,7 @@ const SpiritualAudioWaves = () => {
             style={{ fontSize: "2.8rem", fontWeight: "bold", margin: "0", opacity: "0.6" }}>
             Cosmic Wisdom
           </p>
-          <p className="text-muted-foreground text-sm max-w-md p-0 m-0">
+          <p className="text-muted-foreground text-3xl max-w-md p-0 m-0">
             "Sharing ancient Indian wisdom through sound..."
           </p>
         </div>

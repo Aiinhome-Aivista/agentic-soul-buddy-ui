@@ -1,5 +1,4 @@
 import galaxyVideo from '../assets/galaxy.mp4';
-import Galaxy from '../common/background/Galaxy';
 
 const UniverseBackground = () => {
   return (
