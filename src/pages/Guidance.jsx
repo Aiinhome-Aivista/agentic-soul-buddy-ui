@@ -13,8 +13,16 @@ const Guidance = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center w- h-screen">
-      <div className="flex items-start w-[100%]">hello</div>
+    <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]">
+      <div className="flex items-start w-[100%]">back</div>
+      <div className="flex flex-col h-[40%]">
+        <div>Welcome, User</div>
+        <div>Speak with your AI spiritual guide. Press and hold to talk</div>
+      </div>
+      <div className="flex flex-col">
+        <div>button</div>
+        <div>Share your thoughts, questions, or concerns</div>
+      </div>
     </div>
   );
 };

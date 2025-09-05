@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Audio from "../assets/audio.mp3";
+import Audio from "../assets/audio/audio.mp3";
 import CanvasVisualizer from "./ui/CanvasVisualizer";
 
 const SpiritualAudioWaves = () => {
