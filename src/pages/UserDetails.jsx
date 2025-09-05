@@ -1,8 +1,19 @@
 import React from 'react'
+import Galaxy from '../common/background/GalaxyBackground'
 
 function UserDetails() {
     return (
-        <div className='bg-blue-500 h-screen w-screen text-black'>UserDetails</div>
+<div style={{ width: '100%', height: '600px', position: 'relative' }}>
+      <Galaxy 
+        mouseRepulsion={true}
+        mouseInteraction={false}
+        density={1.5}
+        glowIntensity={0.5}
+        saturation={0.8}
+        hueShift={240}
+      />
+       
+      </div>
     )
 }
 
