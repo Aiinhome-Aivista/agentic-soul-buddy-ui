@@ -13,7 +13,7 @@ const App = () => (
         mouseInteraction={false}
         density={1}
         glowIntensity={0.4}
-        saturation={0.2}
+        saturation={0.4}
         hueShift={240}
       />
     </div>
