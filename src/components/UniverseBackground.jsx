@@ -12,7 +12,7 @@ const UniverseBackground = () => {
         muted
         playsInline
         className="absolute inset-0 w-full h-full object-cover z-0"
-        style={{ filter: 'brightness(0.5)' }} // Dim the background
+        style={{ filter: 'brightness(0.4)' }} // Dim the background
       />
       {/* Overlay for extra dimming (optional) */}
       {/* <Galaxy /> */}

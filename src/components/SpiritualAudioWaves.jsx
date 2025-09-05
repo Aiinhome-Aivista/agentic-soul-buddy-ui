@@ -11,18 +11,26 @@ const SpiritualAudioWaves = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handlePlay();
+    }, 20);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handlePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.play().catch(() => {
-      // Handle autoplay block if needed
+    audio.play().catch((error) => {
+      console.error('Audio playback failed:', error);
     });
   };
+
 
   return (
     <div
       className="flex flex-col items-center justify-center z-10 relative overflow-hidden max-h-full"
-      onClick={handlePlay}
+      onClick={() => handlePlay()}
     >
       <div
         className={`relative transition-all duration-1000 ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
@@ -35,7 +43,7 @@ const SpiritualAudioWaves = () => {
             }`}
         >
           <p
-            style={{ fontSize: "2.8rem", fontWeight: "bold", margin: "0" }}>
+            style={{ fontSize: "2.8rem", fontWeight: "bold", margin: "0", opacity: "0.6" }}>
             Cosmic Wisdom
           </p>
           <p className="text-muted-foreground text-sm max-w-md p-0 m-0">
@@ -48,8 +56,8 @@ const SpiritualAudioWaves = () => {
           audioRef={audioRef}
           width={400}
           height={100}
-          barWidth={3}
-          gap={30}
+          barWidth={9}
+          gap={35}
           minBarHeight={1}
           fps={60}
         />
@@ -59,7 +67,6 @@ const SpiritualAudioWaves = () => {
           ref={audioRef}
           src={Audio}
           style={{ display: "none" }}
-          autoPlay
         />
       </div>
 

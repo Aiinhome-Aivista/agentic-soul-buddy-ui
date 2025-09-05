@@ -8,7 +8,7 @@ const CanvasVisualizer = ({
     gap = 2,            // space between bars
     minBarHeight = 8,   // minimum height for visibility
     fps = 30,           // limit animation speed
-    sensitivity = 8     // higher = taller bars
+    sensitivity = 10     // higher = taller bars
 }) => {
     const canvasRef = useRef(null);
     const animationRef = useRef(null);
@@ -46,6 +46,7 @@ const CanvasVisualizer = ({
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioContext.createAnalyser();
             analyser.fftSize = 2048;
+            analyser.smoothingTimeConstant = 0.5; // between 0 and 1
             dataArray = new Uint8Array(analyser.fftSize);
 
             source = audioContext.createMediaElementSource(audio);
