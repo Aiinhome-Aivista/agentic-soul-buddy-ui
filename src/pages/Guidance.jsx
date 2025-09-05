@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MicIcon from '@mui/icons-material/Mic';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { VoiceRecognizer } from '../common/helper/VoiceRecognizer'
 
 const Guidance = () => {
   const audioRef = useRef(null);
   const navigate = useNavigate();
-  const recognitionRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
 
   useEffect(() => {
@@ -16,45 +16,8 @@ const Guidance = () => {
     });
   }, []);
 
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      console.error('SpeechRecognition API not supported in this browser.');
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      console.log('Recognized text:', transcript);
-    };
-
-    recognition.onerror = (event) => {
-      console.error('Speech recognition error:', event.error);
-      setIsRecording(false);
-    };
-
-    recognition.onend = () => {
-      setIsRecording(false);
-    };
-
-    recognitionRef.current = recognition;
-  }, []);
-
   const handleMicClick = () => {
-    if (!recognitionRef.current) return;
-
-    if (isRecording) {
-      recognitionRef.current.stop();
-      setIsRecording(false);
-    } else {
-      recognitionRef.current.start();
-      setIsRecording(true);
-    }
+    setIsRecording((prevState) => !prevState);
   };
 
   return (
@@ -73,6 +36,7 @@ const Guidance = () => {
         <p className='pb-[70%] font-light text-xs'>{isRecording ? 'Listening...' : 'Click the mic to start recording'}</p>
         <p className='font-light'>Share your thoughts, questions, or concerns...</p>
       </div>
+      <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
     </div>
   );
 };
