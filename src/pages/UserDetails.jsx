@@ -1,15 +1,29 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react';
+import bgAudio from '../assets/audio/uplifting-pad-texture-113842.mp3';
 
 function UserDetails() {
-  return (
-    <div>
-        <div>
-            <h1>Welcome, Soul Seeker</h1>
-            <p>Share your details to begin your personalized spiritual journey</p>
-        </div>
-        <div>
-            <form action="">
-                <div className='flex'>
+    const audioRef = useRef(null);
+
+    useEffect(() => {
+        handlePlay();
+    }, []);
+
+    const handlePlay = () => {
+        audioRef.current?.play().catch((error) => {
+            console.error('Audio playback failed. User interaction may be required:', error);
+        });
+    };
+
+    return (
+        <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]"
+            onMouseEnter={handlePlay}>
+            <div>
+                <h1>Welcome, Soul Seeker</h1>
+                <p>Share your details to begin your personalized spiritual journey</p>
+            </div>
+            <div>
+                <form action="">
+                    <div className='flex'>
                         <div>
                             <label>Full Name</label>
                             <input type="text" placeholder="Enter your full name" />
@@ -19,7 +33,7 @@ function UserDetails() {
                             <input type="number" placeholder="Enter your age" />
                         </div>
                         <div>
-                            <label>Gender</label>                            
+                            <label>Gender</label>
                             <select>
                                 <option value="">Select gender</option>
                                 <option value="male">Male</option>
@@ -36,11 +50,11 @@ function UserDetails() {
                             <label>Health status</label>
                             <select>
                                 <option value="">Select health status</option>
-                               <option value="Excellent">Excellent</option>
-                               <option value="Good">Good</option>
-                               <option value="Fair">Fair</option>
-                               <option value="Poor">Poor</option>
-                             
+                                <option value="Excellent">Excellent</option>
+                                <option value="Good">Good</option>
+                                <option value="Fair">Fair</option>
+                                <option value="Poor">Poor</option>
+
                             </select>
                         </div>
                         <div>
@@ -52,7 +66,7 @@ function UserDetails() {
                                 <option value="Angry">Angry</option>
                                 <option value="Depressed">Depressed</option>
                                 <option value="Stressed">Stressed</option>
-                                <option value="Peaceful">Peaceful</option>                          
+                                <option value="Peaceful">Peaceful</option>
                             </select>
                         </div>
                         <div>
@@ -70,10 +84,11 @@ function UserDetails() {
                             Begin Sacred Journey
                         </button>
                     </div>
-            </form>
+                </form>
+            </div>
+            <audio ref={audioRef} src={bgAudio} preload="auto" />
         </div>
-    </div>
-  )
+    )
 }
 
 export default UserDetails

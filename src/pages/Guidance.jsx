@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import UniverseBackground from '../components/UniverseBackground';
-import SpiritualAudioWaves from '../components/SpiritualAudioWaves';
+import MicIcon from '@mui/icons-material/Mic';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Guidance = () => {
   const audioRef = useRef(null);
@@ -13,8 +13,20 @@ const Guidance = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center w- h-screen">
-      <div className="flex items-start w-[100%]">hello</div>
+    <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]">
+      <div className="flex items-start w-[100%]">
+        <ArrowBackIcon />
+      </div>
+      <div className="flex flex-col items-center gap-[3%] h-[40%]">
+        <div className='text-5xl font-bold pt-[20%]'>Welcome, User</div>
+        <div className='font-light'>Speak with your AI spiritual guide. Press and hold to talk</div>
+      </div>
+      <div className="flex flex-col items-center justify-between h-[50%]">
+        <div className='pb-[4%]'>
+          <MicIcon sx={{ fontSize: '5rem' }} />
+        </div>
+        <p className='font-light'>Share your thoughts, questions, or concerns...</p>
+      </div>
     </div>
   );
 };
