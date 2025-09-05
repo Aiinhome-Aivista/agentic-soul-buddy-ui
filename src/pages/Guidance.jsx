@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import UniverseBackground from '../components/UniverseBackground';
 import SpiritualAudioWaves from '../components/SpiritualAudioWaves';
 
-const Index = () => {
+const Guidance = () => {
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -13,15 +13,10 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden flex flex-col">
-      {/* Universe Background */}
-      <UniverseBackground />
-      {/* Main Content */}
-      <div className="relative z-10 min-h-[calc(58vh)] flex items-end justify-center">
-        <SpiritualAudioWaves />
-      </div>
+    <div className="flex flex-col items-center w- h-screen">
+      <div className="flex items-start w-[100%]">hello</div>
     </div>
   );
 };
 
-export default Index;
+export default Guidance;
