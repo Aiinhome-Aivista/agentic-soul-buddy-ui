@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useContext } from 'react';
 import bgAudio from '../assets/audio/uplifting-pad-texture-113842.mp3';
 import { useFormik } from 'formik';
 import { apiService } from '../service/apiService';
 import { POST_url } from '../connection/connection';
+import { Context } from '../common/helper/Context';
 
 function UserDetails() {
     const audioRef = useRef(null);
-    const navigate = useNavigate();
+    const { setLoadGuidance } = useContext(Context)
 
     useEffect(() => {
         handlePlay();
@@ -42,7 +42,7 @@ function UserDetails() {
 
                 if (response && !response.error) {
                     console.log('Submission successful:', response);
-                    navigate('/guidance');
+                    setLoadGuidance(true)
                 } else {
                     console.error('Submission failed:', response?.message);
                     alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
@@ -56,15 +56,14 @@ function UserDetails() {
         },
     });
 
-
-
     return (
         <div
             className="flex flex-col items-center justify-center w-full h-screen to-black text-white p-6"
             onMouseEnter={handlePlay}
         >
             <div className="text-center mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-yellow-400 drop-shadow-lg">
+                <h1 className="text-3xl md:text-4xl font-bold text-yellow-400 drop-shadow-lg"
+                    onClick={() => { setLoadGuidance(true) }}>
                     Welcome, Soul Seeker
                 </h1>
                 <p className="text-gray-300 mt-2">
@@ -199,8 +198,6 @@ function UserDetails() {
                         <option value="Complicated">It's Complicated</option>
                     </select>
                 </div>
-
-
                 <button
                     type="submit"
                     disabled={formik.isSubmitting}

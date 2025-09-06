@@ -21,6 +21,7 @@ const CanvasVisualizer = ({
         if (!ctx) return;
 
         const audio = audioRef.current;
+        if (!audio) return;
         let audioContext = null;
         let analyser;
         let source;
@@ -92,10 +93,12 @@ const CanvasVisualizer = ({
 
         return () => {
             if (animationRef.current) cancelAnimationFrame(animationRef.current);
-            audio.removeEventListener("play", setupAudio);
+            if (audio) audio.removeEventListener("play", setupAudio);
             if (audioContext) audioContext.close();
         };
     }, [audioRef, barWidth, gap, minBarHeight, fps, sensitivity]);
+
+
 
     return (
         <canvas
