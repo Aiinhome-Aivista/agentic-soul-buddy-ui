@@ -6,24 +6,22 @@ export default function ExitModal({ OnClose }) {
     const { setLoadGuidance } = useContext(Context)
 
     return (
-        <div className="fixed inset-0 flex items-start justify-start p-2 bg-black/20  z-2 animate-fadeIn">
+        <div className="fixed inset-0 flex items-start justify-end p-2 bg-black/20  z-2 animate-fadeIn pt-[3%]">
             {/* Main Modal Container */}
             <div
-                className="glass-card flex flex-col items-center h-[20%] w-[12%] relative animate-slideUp overflow-hidden rounded-lg p-3"
-
-            >
-                <div className="font-semibold text-sm pb-[3%]">
-                    Do you really want to close the session?
+                className="glass-card flex flex-col items-start h-[23%] w-[13%] relative animate-slideUp overflow-hidden rounded-lg p-3">
+                <div className="text-xs pb-[7%]">
+                    Do you really want  to close the session?
                 </div>
-                <div>
+                <div className="flex flex-col gap-1 w-[100%] h-[50%]">
                     <button
-                        className="w-[100%] rounded-lg font-medium text-sm transition-all duration-300 transform hover:scale-102 cursor-pointer text-white bg-yellow-600"
+                        className="w-[90%] py-1 rounded-lg font-light text-xs transition-all duration-300 transform hover:scale-102 cursor-pointer text-white bg-gray-700 opacity-70"
                         onClick={() => setLoadGuidance(false)}
                     >
                         Yes
                     </button>
                     <button
-                        className="w-full rounded-lg font-medium text-sm transition-all duration-300 transform hover:scale-102 cursor-pointer text-white bg-yellow-200"
+                        className="w-[90%] py-1 rounded-lg font-light text-xs transition-all duration-300 transform hover:scale-102 cursor-pointer text-white bg-gray-700 opacity-70"
                         onClick={() => OnClose()}
                     >
                         No

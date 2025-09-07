@@ -6,6 +6,7 @@ import { ContextProvider } from "./common/helper/Context";
 const App = () => (
   <div className="overflow-hidden" style={{ width: '100%', height: '100%', position: 'relative', padding: 0, margin: 0 }}>
     <ContextProvider>
+      {/* <VantaBackground /> */}
       <div
         className="w-full h-full"
         style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }}

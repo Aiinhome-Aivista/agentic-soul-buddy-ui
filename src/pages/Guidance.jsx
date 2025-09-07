@@ -5,6 +5,7 @@ import { VoiceRecognizer } from '../common/helper/VoiceRecognizer'
 import CanvasVisualizer from '../components/CanvasVisualizer';
 import { Context } from '../common/helper/Context';
 import ExitModal from '../common/modal/ExitModal';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const Guidance = () => {
   const { setLoadGuidance } = useContext(Context);
@@ -33,12 +34,13 @@ const Guidance = () => {
 
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]">
-      <div className="flex items-start w-[100%]">
-        <ArrowBackIcon onClick={() => setOpenExitModal(true)} className='cursor-pointer' />
+      <div className={`flex items-start justify-end gap-[1%] w-[100%] ${openExitModal ? 'opacity-80' : 'opacity-80'}`}>
+        <p className='text-white'>Welcome, User</p>
+        <ExitToAppIcon onClick={() => setOpenExitModal(true)} className='cursor-pointer' />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-5xl font-bold text-yellow-400 pt-[20%]'>Welcome, User</p>
-        <p className='font-light text-yellow-100'>Speak with your AI spiritual guide. Press and hold to talk</p>
+        <p className='text-3xl font-bold text-yellow-400 pt-[20%]'>Speak with your AI spiritual guide.</p>
+        <p className='font-light text-yellow-100'>Share your thoughts, questions, or concerns...</p>
       </div>
       <div className="flex flex-col items-center h-[50%]">
         {/* <CanvasVisualizer audioRef={audioRef}
@@ -51,8 +53,8 @@ const Guidance = () => {
         <div className='pb-[1%]'>
           <MicIcon sx={{ fontSize: '5rem', color: isRecording ? 'red' : '#fefce8' }} onClick={handleMicClick} />
         </div>
-        <p className='pb-[70%] font-light text-xs text-yellow-100'>{isRecording ? 'Listening...' : 'Click the mic to start recording'}</p>
-        <p className='font-light text-yellow-100'>Share your thoughts, questions, or concerns...</p>
+        <p className='pb-[50%] font-light text-xs text-yellow-100'>{isRecording ? 'Listening...' : 'Click the mic to start recording'}</p>
+        <p className='font-light text-yellow-100'>Soothe your mind and relieve your stress.</p>
       </div>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
