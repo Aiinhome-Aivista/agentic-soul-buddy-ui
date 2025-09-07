@@ -6,10 +6,10 @@ export default function ExitModal({ OnClose }) {
     const { setLoadGuidance } = useContext(Context)
 
     return (
-        <div className="fixed inset-0 flex items-start justify-end p-2 bg-black/20  z-2 animate-fadeIn pt-[3%]">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-2 animate-fadeIn">
             {/* Main Modal Container */}
             <div
-                className="glass-card flex flex-col items-start h-[23%] w-[13%] relative animate-slideUp overflow-hidden rounded-lg p-3">
+                className="glass-card flex flex-col items-start h-[23%] w-[13%] relative animate-slideUp overflow-hidden rounded-lg p-5">
                 <div className="text-xs pb-[7%]">
                     Do you really want  to close the session?
                 </div>

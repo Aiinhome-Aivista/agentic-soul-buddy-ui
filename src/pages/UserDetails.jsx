@@ -62,10 +62,10 @@ function UserDetails() {
             onMouseEnter={handlePlay}
         >
             <div className="text-center mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-yellow-400 drop-shadow-lg"
+                <p className="text-3xl md:text-4xl font-bold text-yellow-400 drop-shadow-lg"
                     onClick={() => { setLoadGuidance(true) }}>
                     Welcome, Soul Seeker
-                </h1>
+                </p>
                 <p className="text-gray-300 mt-2">
                     Share your details to begin your personalized spiritual journey
                 </p>
