@@ -6,10 +6,14 @@ import CanvasVisualizer from '../components/CanvasVisualizer';
 import { Context } from '../common/helper/Context';
 import ExitModal from '../common/modal/ExitModal';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { apiService } from '../service/apiService';
+import { POST_url } from '../connection/connection';
+
 
 const Guidance = () => {
-  const { setLoadGuidance } = useContext(Context);
+  const { userData, recognizedText } = useContext(Context);
   const audioRef = useRef(null);
+  const [audio_url, setAudio_url] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [openExitModal, setOpenExitModal] = useState(false);
 
@@ -20,22 +24,49 @@ const Guidance = () => {
     });
   }, []);
 
-  const handleMicClick = () => {
+  const handleMicClick = async () => {
     setIsRecording((prevState) => !prevState);
+    if (isRecording) {
+      const payload = {
+        "user_id": userData?.user_id,
+        "user_input": recognizedText
+      }
+      try {
+        console.log(payload)
+        const response = await apiService({
+          url: POST_url.ask,
+          method: 'POST',
+          data: payload,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        if (response && !response.error) {
+          console.log(response.Data)
+          setAudio_url(response?.Data?.audio_url)
+          setTimeout(() => {
+            if (audioRef.current && response?.Data?.audio_url) {
+              audioRef.current.play().catch((error) => {
+                console.error('Audio playback failed:', error);
+              });
+            }
+          }, 100);
+        } else {
+          console.error('Submission failed:', response?.message);
+          alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
+        }
+      } catch (error) {
+        console.error('An error occurred during submission:', error);
+        alert('An error occurred. Please try again later.');
+      }
+    }
   };
 
-  const handlePlay = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.play().catch((error) => {
-      console.error('Audio playback failed:', error);
-    });
-  };
 
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%] ${openExitModal ? 'opacity-80' : 'opacity-80'}`}>
-        <p className='text-white'>Welcome, User</p>
+        <p className='text-white'>Welcome, {userData?.full_name}</p>
         <ExitToAppIcon onClick={() => setOpenExitModal(true)} className='cursor-pointer' />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
@@ -54,12 +85,12 @@ const Guidance = () => {
           <MicIcon sx={{ fontSize: '5rem', color: isRecording ? 'red' : '#fefce8' }} onClick={handleMicClick} />
         </div>
         <p className='pb-[50%] font-light text-xs text-yellow-100'>{isRecording ? 'Listening...' : 'Click the mic to start recording'}</p>
-        <p className='font-light text-yellow-100'>Soothe your mind and relieve your stress.</p>
       </div>
+      <p className='font-light text-yellow-100'>Soothe your mind and relieve your stress.</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         ref={audioRef}
-        src=""
+        src={audio_url}
         preload="auto"
       />
       {openExitModal && <ExitModal OnClose={() => setOpenExitModal(false)} />}

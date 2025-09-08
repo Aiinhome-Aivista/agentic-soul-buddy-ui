@@ -7,7 +7,7 @@ import { Context } from '../common/helper/Context';
 
 function UserDetails() {
     const audioRef = useRef(null);
-    const { setLoadGuidance } = useContext(Context)
+    const { setLoadGuidance, setUserData } = useContext(Context)
 
     useEffect(() => {
         handlePlay();
@@ -39,9 +39,9 @@ function UserDetails() {
                     method: 'POST',
                     data: values,
                 });
-
+                console.log(JSON.stringify(values))
                 if (response && !response.error) {
-                    console.log('Submission successful:', response);
+                    setUserData(response)
                     setLoadGuidance(true)
                 } else {
                     console.error('Submission failed:', response?.message);

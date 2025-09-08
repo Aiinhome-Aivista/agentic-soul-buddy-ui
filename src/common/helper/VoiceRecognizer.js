@@ -27,7 +27,7 @@ export const VoiceRecognizer = ({ isRecording, setIsRecording }) => {
 
         recognitionRef.current.onerror = (event) => {
             console.error('Speech recognition error:', event.error);
-            setIsRecording(false);
+            // Do not setIsRecording(false) here
         };
 
         recognitionRef.current.onstart = () => {
@@ -36,13 +36,13 @@ export const VoiceRecognizer = ({ isRecording, setIsRecording }) => {
 
         recognitionRef.current.onend = () => {
             setIsListening(false);
-            setIsRecording(false);
+            // Do not setIsRecording(false) here
         };
 
         return () => {
             recognitionRef.current?.abort();
         };
-    }, [setRecognizedText, setIsRecording]);
+    }, [setRecognizedText]); // Remove setIsRecording from dependency
 
     const debouncedIsRecording = useDebounce(isRecording, 200);
 
@@ -53,6 +53,7 @@ export const VoiceRecognizer = ({ isRecording, setIsRecording }) => {
             recognitionRef.current?.stop();
         }
     }, [debouncedIsRecording, isListening]);
+// ... existing code ...
 
     return null;
 };
