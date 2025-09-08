@@ -15,6 +15,7 @@ const Guidance = () => {
   const audioRef = useRef(null);
   const [audio_url, setAudio_url] = useState("");
   const [isRecording, setIsRecording] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [openExitModal, setOpenExitModal] = useState(false);
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const Guidance = () => {
   const handleMicClick = async () => {
     setIsRecording((prevState) => !prevState);
     if (isRecording) {
+      setIsLoading(true);
       const payload = {
         "user_id": userData?.user_id,
         "user_input": recognizedText
@@ -41,6 +43,7 @@ const Guidance = () => {
             'Content-Type': 'application/json'
           }
         });
+        setIsLoading(false);
         if (response && !response.error) {
           console.log(response.Data)
           setAudio_url(response?.Data?.audio_url)
@@ -56,6 +59,7 @@ const Guidance = () => {
           alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
         }
       } catch (error) {
+        setIsLoading(false);
         console.error('An error occurred during submission:', error);
         alert('An error occurred. Please try again later.');
       }
@@ -74,16 +78,21 @@ const Guidance = () => {
         <p className='font-light text-yellow-100'>Share your thoughts, questions, or concerns...</p>
       </div>
       <div className="flex flex-col items-center h-[50%]">
-        {/* <CanvasVisualizer audioRef={audioRef}
-          width={400}
-          height={100}
-          barWidth={9}
-          gap={35}
-          minBarHeight={1}
-          fps={60} /> */}
-        <div className='pb-[1%]'>
-          <MicIcon sx={{ fontSize: '5rem', color: isRecording ? 'red' : '#fefce8' }} onClick={handleMicClick} />
-        </div>
+        {isRecording ? (
+          <div className='pb-[1%]'>
+            <MicIcon sx={{ fontSize: '5rem', color: 'red' }} onClick={handleMicClick} />
+          </div>
+        ) : isLoading ? (
+          <div className='pb-[1%] text-yellow-100 font-bold'>Loading response...</div>
+        ) : audioRef.current && !audioRef.current.paused ? (
+          <div className='pb-[1%]'>
+            <CanvasVisualizer audioRef={audioRef} width={400} height={100} barWidth={9} gap={35} minBarHeight={1} fps={60} />
+          </div>
+        ) : (
+          <div className='pb-[1%]'>
+            <MicIcon sx={{ fontSize: '5rem', color: '#fefce8' }} onClick={handleMicClick} />
+          </div>
+        )}
         <p className='pb-[50%] font-light text-xs text-yellow-100'>{isRecording ? 'Listening...' : 'Click the mic to start recording'}</p>
       </div>
       <p className='font-light text-yellow-100'>Soothe your mind and relieve your stress.</p>
@@ -94,7 +103,7 @@ const Guidance = () => {
         preload="auto"
       />
       {openExitModal && <ExitModal OnClose={() => setOpenExitModal(false)} />}
-    </div>
+    </div >
   );
 };
 

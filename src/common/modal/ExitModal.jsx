@@ -6,7 +6,7 @@ export default function ExitModal({ OnClose }) {
     const { setLoadGuidance } = useContext(Context)
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-2 animate-fadeIn">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-15 animate-fadeIn">
             {/* Main Modal Container */}
             <div
                 className="glass-card flex flex-col items-start h-[23%] w-[13%] relative animate-slideUp overflow-hidden rounded-lg p-5">

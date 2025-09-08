@@ -62,8 +62,7 @@ function UserDetails() {
             onMouseEnter={handlePlay}
         >
             <div className="text-center mb-8">
-                <p className="text-3xl md:text-4xl font-bold text-yellow-400 drop-shadow-lg"
-                    onClick={() => { setLoadGuidance(true) }}>
+                <p className="text-3xl md:text-4xl font-bold text-yellow-400 drop-shadow-lg">
                     Welcome, Soul Seeker
                 </p>
                 <p className="text-gray-300 mt-2">
@@ -175,6 +174,7 @@ function UserDetails() {
                             <option value="Depressed">Depressed</option>
                             <option value="Stressed">Stressed</option>
                             <option value="Peaceful">Peaceful</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
                 </div>
