@@ -83,13 +83,13 @@ const Guidance = () => {
       <div className="flex flex-col items-center h-[50%]">
         {isRecording ? (
           <div className='pb-[1%] rounded-full bg-red-500/30 animate-pulse-circle'>
-            <MicIcon sx={{ fontSize: '5rem', color: 'red' }} onClick={handleMicClick} />
+            <MicIcon sx={{ fontSize: '5rem', color: '#ffffffff' }} onClick={handleMicClick} />
           </div>
         ) : isLoading ? (
           <TypingDots />
         ) : isPlaying ? (
           <div className='pb-[1%]'>
-            <CanvasVisualizer audioRef={audioRef} width={400} height={100} barWidth={9} gap={2} minBarHeight={2} sensitivity={15} />
+            <CanvasVisualizer audioRef={audioRef} width={270} height={100} barWidth={9} gap={2} minBarHeight={2} sensitivity={15} />
           </div>
         ) : (
           <div className='relative pb-[1%]'>
@@ -102,7 +102,8 @@ const Guidance = () => {
           </div>
         ) : isPlaying ? (
           <div className='pb-[50%] font-light text-xs text-white'>
-            <div>Cosmic wisdom is speaking...</div>
+            {/* <div>Cosmic wisdom is speaking...</div> */}
+            <div></div>
             <div className='flex gap-2 mt-2'>
               <button
                 onClick={handlePause}

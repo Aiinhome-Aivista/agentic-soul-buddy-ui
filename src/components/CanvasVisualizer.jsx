@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 const CanvasVisualizer = ({
     audioRef,
-    width = 400,
+    width = 300,
     height = 200,
     barWidth = 6,       // thickness of each bar
     gap = 2,            // space between bars
@@ -125,7 +125,7 @@ const CanvasVisualizer = ({
             ref={canvasRef}
             width={width}
             height={height}
-            className="relative z-10 rounded-lg shadow-lg bg-black/30"
+            className="relative z-10 rounded-lg shadow-lg bg-transparent"
         />
     );
 };
