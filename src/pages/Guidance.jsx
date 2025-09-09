@@ -8,6 +8,8 @@ import ExitModal from '../common/modal/ExitModal';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { apiService } from '../service/apiService';
 import { POST_url } from '../connection/connection';
+import LogoutIcon from '@mui/icons-material/Logout';
+import TypingDots from '../components/TypingDots';
 
 
 const Guidance = () => {
@@ -74,28 +76,60 @@ const Guidance = () => {
         <ExitToAppIcon onClick={() => setOpenExitModal(true)} className='cursor-pointer' />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-3xl font-bold text-yellow-400 pt-[20%]'>Speak with your AI spiritual guide.</p>
-        <p className='font-light text-yellow-100'>Share your thoughts, questions, or concerns...</p>
+        <p className='text-3xl font-bold text-yellow-400 pt-[20%]'>Speak with Cosmic Wisdom.</p>
+        <p className='font-light text-white'>Share your thoughts, questions, or concerns...</p>
       </div>
       <div className="flex flex-col items-center h-[50%]">
         {isRecording ? (
-          <div className='pb-[1%]'>
+          <div className='pb-[1%] rounded-full bg-red-500/30 animate-pulse-circle'>
             <MicIcon sx={{ fontSize: '5rem', color: 'red' }} onClick={handleMicClick} />
           </div>
         ) : isLoading ? (
-          <div className='pb-[1%] text-yellow-100 font-bold'>Loading response...</div>
+          <TypingDots />
         ) : audioRef.current && !audioRef.current.paused ? (
           <div className='pb-[1%]'>
             <CanvasVisualizer audioRef={audioRef} width={400} height={100} barWidth={9} gap={35} minBarHeight={1} fps={60} />
           </div>
         ) : (
-          <div className='pb-[1%]'>
-            <MicIcon sx={{ fontSize: '5rem', color: '#fefce8' }} onClick={handleMicClick} />
+          <div className='realtive pb-[1%]'>
+            <MicIcon sx={{ fontSize: '5rem', color: '#eae6b1ff' }} onClick={handleMicClick} />
           </div>
         )}
-        <p className='pb-[50%] font-light text-xs text-yellow-100'>{isRecording ? 'Listening...' : 'Click the mic to start recording'}</p>
+        {isRecording ? (
+          <div className='pb-[50%] font-light text-xs text-white'>
+            Analyzing voice patterns...
+          </div>
+        ) : audioRef.current && !audioRef.current.paused ? (
+          <div className='pb-[50%] font-light text-xs text-white'>
+            <div>Analyzing voice patterns (Playback)...</div>
+            <div className='flex gap-2 mt-2'>
+              <button
+                onClick={() => audioRef.current?.pause()}
+                className='px-3 py-1 text-sm bg-red-500/30 hover:bg-red-500/50 text-white rounded-full'
+              >
+                Pause
+              </button>
+              <button
+                onClick={() => {
+                  if (audioRef.current) {
+                    audioRef.current.currentTime = 0;
+                    audioRef.current.pause();
+                    setIsRecording(false);
+                  }
+                }}
+                className='px-3 py-1 text-sm bg-red-500/30 hover:bg-red-500/50 text-white rounded-full'
+              >
+                Stop
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className='pb-[50%] font-light text-xs text-white'>
+            Click the mic to start recording
+          </div>
+        )}
       </div>
-      <p className='font-light text-yellow-100'>Soothe your mind and relieve your stress.</p>
+      <p className='font-light text-white'>Soothe your mind and relieve your stress.</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         ref={audioRef}

@@ -63,7 +63,7 @@ function UserDetails() {
         >
             <div className="text-center mb-8">
                 <p className="text-3xl md:text-4xl font-bold text-yellow-400 drop-shadow-lg">
-                    Welcome, Soul Seeker
+                    Welcome to Cosmic Guidance
                 </p>
                 <p className="text-gray-300 mt-2">
                     Share your details to begin your personalized spiritual journey
