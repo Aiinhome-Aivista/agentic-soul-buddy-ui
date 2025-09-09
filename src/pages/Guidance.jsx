@@ -41,10 +41,8 @@ const Guidance = () => {
     if (isRecording) {
       setIsLoading(true);
       const payload = {
-        "user_id": 4,
-        "user_input": "recognizedText"
-        /* "user_id": userData?.user_id,
-        "user_input": recognizedText */
+        "user_id": userData?.user_id,
+        "user_input": recognizedText
       }
       try {
         console.log(payload)
