@@ -21,10 +21,11 @@ const Guidance = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    if (audioUrl && audioRef.current) {
-      handlePlay();
-    }
   }, [audioUrl]);
+
+  const handleAudioLoaded = () => {
+    audioRef.current?.play();
+  };
 
   const handlePlay = () => audioRef.current?.play();
   const handlePause = () => audioRef.current?.pause();
@@ -40,34 +41,36 @@ const Guidance = () => {
     setIsRecording((prevState) => !prevState);
     if (isRecording) {
       setIsLoading(true);
-      const payload = {
-        "user_id": userData?.user_id,
-        "user_input": recognizedText
-      }
-      try {
-        console.log(payload)
-        const response = await apiService({
-          url: POST_url.ask,
-          method: 'POST',
-          data: payload,
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        setIsLoading(false);
-        if (response && !response.error) {
-          console.log(response.Data)
-          setAudioUrl(response?.Data?.audio_url);
-          handlePlay();
-        } else {
-          console.error('Submission failed:', response?.message);
-          alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
+      if (recognizedText !== null) {
+        const payload = {
+          "user_id": userData?.user_id,
+          "user_input": recognizedText
         }
-      } catch (error) {
-        setIsLoading(false);
-        console.error('An error occurred during submission:', error);
-        alert('An error occurred. Please try again later.');
+        try {
+          console.log(payload)
+          const response = await apiService({
+            url: POST_url.ask,
+            method: 'POST',
+            data: payload,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          setIsLoading(false);
+          if (response && !response.error) {
+            console.log(response.Data)
+            setAudioUrl(response?.Data?.audio_url);
+          } else {
+            console.error('Submission failed:', response?.message);
+            alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
+          }
+        } catch (error) {
+          setIsLoading(false);
+          console.error('An error occurred during submission:', error);
+          alert('An error occurred. Please try again later.');
+        }
       }
+
     }
   };
 
@@ -128,9 +131,11 @@ const Guidance = () => {
       <p className='font-light text-white'>Soothe your mind and relieve your stress.</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
+        crossOrigin="anonymous"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onEnded={handleStop}
+        onLoadedMetadata={handleAudioLoaded} // <-- add this
         ref={audioRef}
         src={audioUrl}
         preload="auto"
