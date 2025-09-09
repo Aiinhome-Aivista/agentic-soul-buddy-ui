@@ -5,7 +5,7 @@ export const Context = createContext();
 export function ContextProvider({ children }) {
     const [loadGuidance, setLoadGuidance] = useState(false)
     const [recognizedText, setRecognizedText] = useState("")
-    const [userData, setUserData] = useState({})
+    const [userData, setUserData] = useState(null)
 
     return (
         <Context.Provider value={{

@@ -58,6 +58,7 @@ const Guidance = () => {
         if (response && !response.error) {
           console.log(response.Data)
           setAudioUrl(response?.Data?.audio_url);
+          handlePlay();
         } else {
           console.error('Submission failed:', response?.message);
           alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
@@ -77,7 +78,7 @@ const Guidance = () => {
         <ExitToAppIcon onClick={() => setOpenExitModal(true)} className='cursor-pointer' />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-5xl font-bold text-white pt-[12%]'>Speak with Cosmic Wisdom.</p>
+        <p className='text-5xl font-bold text-white pt-[12%]'>Speak with Cosmic Wisdom</p>
         <p className='font-light text-white'>Share your thoughts, questions, or concerns...</p>
       </div>
       <div className="flex flex-col items-center h-[50%]">
@@ -87,7 +88,7 @@ const Guidance = () => {
             <MicIcon
               sx={{ fontSize: '5rem', color: '#ffffffff' }}
               onClick={handleMicClick}
-              className='relative'
+              className='relative cursor-pointer'
             />
           </div>
         ) : isLoading ? (
@@ -98,7 +99,7 @@ const Guidance = () => {
           </div>
         ) : (
           <div className='relative pb-[1%]'>
-            <MicIcon sx={{ fontSize: '5rem', color: '#ffffffff' }} onClick={handleMicClick} />
+            <MicIcon sx={{ fontSize: '5rem', color: '#ffffffff' }} onClick={handleMicClick} className='cursor-pointer' />
           </div>
         )}
         {isRecording ? (
@@ -111,14 +112,8 @@ const Guidance = () => {
             <div></div>
             <div className='flex gap-2 mt-2'>
               <button
-                onClick={handlePause}
-                className='px-3 py-1 text-sm bg-red-500/30 hover:bg-red-500/50 text-white rounded-full'
-              >
-                Pause
-              </button>
-              <button
                 onClick={handleStop}
-                className='px-3 py-1 text-sm bg-red-500/30 hover:bg-red-500/50 text-white rounded-full'
+                className='px-3 py-1 text-sm bg-gray-400/30 hover:bg-gray-300/30 text-white rounded-full'
               >
                 Stop
               </button>

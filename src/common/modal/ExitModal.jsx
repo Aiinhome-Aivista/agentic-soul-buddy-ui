@@ -3,7 +3,7 @@ import "./modal.css";
 import { Context } from "../helper/Context";
 
 export default function ExitModal({ OnClose }) {
-    const { setLoadGuidance } = useContext(Context)
+    const { setLoadGuidance, setUserData } = useContext(Context)
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-15 animate-fadeIn">
@@ -16,7 +16,10 @@ export default function ExitModal({ OnClose }) {
                 <div className="flex flex-col gap-1 w-[100%] h-[50%]">
                     <button
                         className="w-[90%] py-1 rounded-lg font-light text-xs transition-all duration-300 transform hover:scale-102 cursor-pointer text-white bg-gray-400 opacity-70"
-                        onClick={() => setLoadGuidance(false)}
+                        onClick={() => {
+                            setUserData(null)
+                            setLoadGuidance(false)
+                        }}
                     >
                         Yes
                     </button>

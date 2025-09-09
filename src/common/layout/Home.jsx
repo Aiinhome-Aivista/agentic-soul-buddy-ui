@@ -4,11 +4,11 @@ import UserDetails from '../../pages/UserDetails'
 import Guidance from '../../pages/Guidance'
 
 function Home() {
-    const { loadGuidance } = useContext(Context)
+    const { loadGuidance, userData } = useContext(Context)
     return (
         <>
             {
-                loadGuidance ? <Guidance /> : <UserDetails />
+                loadGuidance || userData ? <Guidance /> : <UserDetails />
             }
         </>
     )

@@ -33,7 +33,6 @@ function UserDetails() {
         },
         onSubmit: async (values, { setSubmitting }) => {
             try {
-                console.log(values)
                 const response = await apiService({
                     url: POST_url.login,
                     method: 'POST',
@@ -41,8 +40,10 @@ function UserDetails() {
                 });
                 console.log(JSON.stringify(values))
                 if (response && !response.error) {
-                    setUserData(response)
-                    setLoadGuidance(true)
+                    if (response !== null) {
+                        setUserData(response)
+                        setLoadGuidance(true)
+                    }
                 } else {
                     console.error('Submission failed:', response?.message);
                     alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
@@ -75,7 +76,7 @@ function UserDetails() {
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col">
-                        <label htmlFor="name" className="text-sm text-gray-300 mb-1">
+                        <label htmlFor="name" className="text-sm text-gray-300 mb-1 pl-2">
                             Full Name
                         </label>
                         <input
@@ -86,10 +87,11 @@ function UserDetails() {
                             value={formik.values["Full Name"]}
                             placeholder='Enter your full name'
                             className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
+                            required
                         />
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="age" className="text-sm text-gray-300 mb-1">
+                        <label htmlFor="age" className="text-sm text-gray-300 mb-1 pl-2">
                             Age
                         </label>
                         <input
@@ -100,12 +102,13 @@ function UserDetails() {
                             value={formik.values.input.age}
                             placeholder="Your age"
                             className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
+                            required
                         />
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col">
-                        <label htmlFor="gender" className="text-sm text-gray-300 mb-1">
+                        <label htmlFor="gender" className="text-sm text-gray-300 mb-1 pl-2">
                             Gender
                         </label>
                         <select
@@ -114,6 +117,7 @@ function UserDetails() {
                             onChange={formik.handleChange}
                             value={formik.values.input.gender}
                             className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
+                            required
                         >
                             <option value="">Select gender</option>
                             <option value="male">Male</option>
@@ -123,7 +127,7 @@ function UserDetails() {
                         </select>
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="work" className="text-sm text-gray-300 mb-1">
+                        <label htmlFor="work" className="text-sm text-gray-300 mb-1 pl-2">
                             Profession
                         </label>
                         <input
@@ -134,12 +138,13 @@ function UserDetails() {
                             value={formik.values.input.work}
                             placeholder="Your profession"
                             className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
+                            required
                         />
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col">
-                        <label htmlFor="health_status" className="text-sm text-gray-300 mb-1">
+                        <label htmlFor="health_status" className="text-sm text-gray-300 mb-1 pl-2">
                             Health Status
                         </label>
                         <select
@@ -148,6 +153,7 @@ function UserDetails() {
                             onChange={formik.handleChange}
                             value={formik.values.input.health}
                             className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
+                            required
                         >
                             <option value="">Select health status</option>
                             <option value="Excellent">Excellent</option>
@@ -157,7 +163,7 @@ function UserDetails() {
                         </select>
                     </div>
                     <div className="flex flex-col">
-                        <label htmlFor="emotional_status" className="text-sm text-gray-300 mb-1">
+                        <label htmlFor="emotional_status" className="text-sm text-gray-300 mb-1 pl-2">
                             Current Emotional State
                         </label>
                         <select
@@ -180,7 +186,7 @@ function UserDetails() {
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="relationship_status" className="text-sm text-gray-300 mb-1">
+                    <label htmlFor="relationship_status" className="text-sm text-gray-300 mb-1 pl-2">
                         Relationship Status
                     </label>
                     <select
@@ -189,8 +195,9 @@ function UserDetails() {
                         onChange={formik.handleChange}
                         value={formik.values.input.relationship}
                         className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
+                        required
                     >
-                        <option value="">Select relationship status</option>
+                        <option value="" style={{color: 'gray'}}>Select relationship status</option>
                         <option value="Single">Single</option>
                         <option value="In a relationship">In a relationship</option>
                         <option value="Married">Married</option>
@@ -201,7 +208,7 @@ function UserDetails() {
                 <button
                     type="submit"
                     disabled={formik.isSubmitting}
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-gray-400 to-gray-200 text-black font-semibold shadow-lg hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-gray-200 to-gray-200 text-black font-semibold shadow-lg hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {formik.isSubmitting ? 'Submitting...' : 'Begin Your Journey'}
                 </button>
