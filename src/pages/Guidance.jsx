@@ -82,8 +82,13 @@ const Guidance = () => {
       </div>
       <div className="flex flex-col items-center h-[50%]">
         {isRecording ? (
-          <div className='pb-[1%] rounded-full bg-red-500/30 animate-pulse-circle'>
-            <MicIcon sx={{ fontSize: '5rem', color: '#ffffffff' }} onClick={handleMicClick} />
+          <div className='relative pb-[1%] rounded-full'>
+            <div className='absolute inset-0 bg-white/20 animate-pulse-circle rounded-full' />
+            <MicIcon
+              sx={{ fontSize: '5rem', color: '#ffffffff' }}
+              onClick={handleMicClick}
+              className='relative'
+            />
           </div>
         ) : isLoading ? (
           <TypingDots />
