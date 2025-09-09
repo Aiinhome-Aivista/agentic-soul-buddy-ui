@@ -62,7 +62,7 @@ function UserDetails() {
             onMouseEnter={handlePlay}
         >
             <div className="text-center mb-8">
-                <p className="text-3xl md:text-4xl font-bold text-yellow-400 drop-shadow-lg">
+                <p className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">
                     Welcome to Cosmic Guidance
                 </p>
                 <p className="text-gray-300 mt-2">
@@ -85,7 +85,7 @@ function UserDetails() {
                             onChange={formik.handleChange}
                             value={formik.values["Full Name"]}
                             placeholder='Enter your full name'
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
+                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
                         />
                     </div>
                     <div className="flex flex-col">
@@ -99,7 +99,7 @@ function UserDetails() {
                             onChange={(e) => formik.setFieldValue("input.age", Number(e.target.value))}
                             value={formik.values.input.age}
                             placeholder="Your age"
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
+                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
                         />
                     </div>
                 </div>
@@ -113,7 +113,7 @@ function UserDetails() {
                             name="input.gender"
                             onChange={formik.handleChange}
                             value={formik.values.input.gender}
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
+                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
                         >
                             <option value="">Select gender</option>
                             <option value="male">Male</option>
@@ -133,7 +133,7 @@ function UserDetails() {
                             onChange={formik.handleChange}
                             value={formik.values.input.work}
                             placeholder="Your profession"
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
+                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
                         />
                     </div>
                 </div>
@@ -147,7 +147,7 @@ function UserDetails() {
                             name="input.health"
                             onChange={formik.handleChange}
                             value={formik.values.input.health}
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
+                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
                         >
                             <option value="">Select health status</option>
                             <option value="Excellent">Excellent</option>
@@ -165,7 +165,7 @@ function UserDetails() {
                             name="input.emotional_state"
                             onChange={formik.handleChange}
                             value={formik.values.input.emotional_state}
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
+                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
                         >
                             <option value="">How are you feeling?</option>
                             <option value="Happy">Happy</option>
@@ -188,7 +188,7 @@ function UserDetails() {
                         name="input.relationship"
                         onChange={formik.handleChange}
                         value={formik.values.input.relationship}
-                        className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-400"
+                        className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
                     >
                         <option value="">Select relationship status</option>
                         <option value="Single">Single</option>
@@ -201,7 +201,7 @@ function UserDetails() {
                 <button
                     type="submit"
                     disabled={formik.isSubmitting}
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-semibold shadow-lg hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-gray-400 to-gray-200 text-black font-semibold shadow-lg hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {formik.isSubmitting ? 'Submitting...' : 'Begin Your Journey'}
                 </button>

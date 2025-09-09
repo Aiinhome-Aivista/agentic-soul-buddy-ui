@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import MicIcon from '@mui/icons-material/Mic';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { VoiceRecognizer } from '../common/helper/VoiceRecognizer'
-import CanvasVisualizer from '../components/CanvasVisualizer';
 import { Context } from '../common/helper/Context';
 import ExitModal from '../common/modal/ExitModal';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -10,30 +8,43 @@ import { apiService } from '../service/apiService';
 import { POST_url } from '../connection/connection';
 import LogoutIcon from '@mui/icons-material/Logout';
 import TypingDots from '../components/TypingDots';
+import CanvasVisualizer from '../components/CanvasVisualizer';
 
 
 const Guidance = () => {
   const { userData, recognizedText } = useContext(Context);
   const audioRef = useRef(null);
-  const [audio_url, setAudio_url] = useState("");
+  const [audioUrl, setAudioUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [openExitModal, setOpenExitModal] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    // 2. Attempt to play audio, catching potential browser errors for autoplay
-    audioRef.current?.play().catch((error) => {
-      console.error('Audio playback failed. User interaction may be required:', error);
-    });
-  }, []);
+    if (audioUrl && audioRef.current) {
+      handlePlay();
+    }
+  }, [audioUrl]);
+
+  const handlePlay = () => audioRef.current?.play();
+  const handlePause = () => audioRef.current?.pause();
+  const handleStop = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setAudioUrl(null);
+    }
+  };
 
   const handleMicClick = async () => {
     setIsRecording((prevState) => !prevState);
     if (isRecording) {
       setIsLoading(true);
       const payload = {
-        "user_id": userData?.user_id,
-        "user_input": recognizedText
+        "user_id": 4,
+        "user_input": "recognizedText"
+        /* "user_id": userData?.user_id,
+        "user_input": recognizedText */
       }
       try {
         console.log(payload)
@@ -48,14 +59,7 @@ const Guidance = () => {
         setIsLoading(false);
         if (response && !response.error) {
           console.log(response.Data)
-          setAudio_url(response?.Data?.audio_url)
-          setTimeout(() => {
-            if (audioRef.current && response?.Data?.audio_url) {
-              audioRef.current.play().catch((error) => {
-                console.error('Audio playback failed:', error);
-              });
-            }
-          }, 100);
+          setAudioUrl(response?.Data?.audio_url);
         } else {
           console.error('Submission failed:', response?.message);
           alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
@@ -68,7 +72,6 @@ const Guidance = () => {
     }
   };
 
-
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%] ${openExitModal ? 'opacity-80' : 'opacity-80'}`}>
@@ -76,7 +79,7 @@ const Guidance = () => {
         <ExitToAppIcon onClick={() => setOpenExitModal(true)} className='cursor-pointer' />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-3xl font-bold text-yellow-400 pt-[20%]'>Speak with Cosmic Wisdom.</p>
+        <p className='text-5xl font-bold text-white pt-[12%]'>Speak with Cosmic Wisdom.</p>
         <p className='font-light text-white'>Share your thoughts, questions, or concerns...</p>
       </div>
       <div className="flex flex-col items-center h-[50%]">
@@ -86,37 +89,31 @@ const Guidance = () => {
           </div>
         ) : isLoading ? (
           <TypingDots />
-        ) : audioRef.current && !audioRef.current.paused ? (
+        ) : isPlaying ? (
           <div className='pb-[1%]'>
-            <CanvasVisualizer audioRef={audioRef} width={400} height={100} barWidth={9} gap={35} minBarHeight={1} fps={60} />
+            <CanvasVisualizer audioRef={audioRef} width={400} height={100} barWidth={9} gap={2} minBarHeight={2} sensitivity={15} />
           </div>
         ) : (
-          <div className='realtive pb-[1%]'>
-            <MicIcon sx={{ fontSize: '5rem', color: '#eae6b1ff' }} onClick={handleMicClick} />
+          <div className='relative pb-[1%]'>
+            <MicIcon sx={{ fontSize: '5rem', color: '#ffffffff' }} onClick={handleMicClick} />
           </div>
         )}
         {isRecording ? (
           <div className='pb-[50%] font-light text-xs text-white'>
             Analyzing voice patterns...
           </div>
-        ) : audioRef.current && !audioRef.current.paused ? (
+        ) : isPlaying ? (
           <div className='pb-[50%] font-light text-xs text-white'>
-            <div>Analyzing voice patterns (Playback)...</div>
+            <div>Cosmic wisdom is speaking...</div>
             <div className='flex gap-2 mt-2'>
               <button
-                onClick={() => audioRef.current?.pause()}
+                onClick={handlePause}
                 className='px-3 py-1 text-sm bg-red-500/30 hover:bg-red-500/50 text-white rounded-full'
               >
                 Pause
               </button>
               <button
-                onClick={() => {
-                  if (audioRef.current) {
-                    audioRef.current.currentTime = 0;
-                    audioRef.current.pause();
-                    setIsRecording(false);
-                  }
-                }}
+                onClick={handleStop}
                 className='px-3 py-1 text-sm bg-red-500/30 hover:bg-red-500/50 text-white rounded-full'
               >
                 Stop
@@ -125,15 +122,18 @@ const Guidance = () => {
           </div>
         ) : (
           <div className='pb-[50%] font-light text-xs text-white'>
-            Click the mic to start recording
+            {/* Click the mic to start recording */}
           </div>
         )}
       </div>
       <p className='font-light text-white'>Soothe your mind and relieve your stress.</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onEnded={handleStop}
         ref={audioRef}
-        src={audio_url}
+        src={audioUrl}
         preload="auto"
       />
       {openExitModal && <ExitModal OnClose={() => setOpenExitModal(false)} />}

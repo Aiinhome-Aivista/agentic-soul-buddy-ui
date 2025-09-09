@@ -1,4 +1,4 @@
-import "./typingDots.css";
+import "../styles/TypingDots.css";
 
 export default function TypingDots() {
     return (

@@ -100,16 +100,21 @@ const CanvasVisualizer = ({
         // Start drawing when audio plays
         audio.addEventListener("play", setupAudio);
 
+        // If audio is already playing when the component mounts, start the visualizer.
+        if (!audio.paused) {
+            setupAudio();
+        }
+
         return () => {
             if (animationRef.current) cancelAnimationFrame(animationRef.current);
-            if (audio) audio.removeEventListener("play", setupAudio);
-            // Disconnect and clean up source node on component unmount
-            if (sourceRef.current) {
-                sourceRef.current.disconnect();
-                sourceRef.current = null;
+            audio?.removeEventListener("play", setupAudio);
+
+            // Closing the context is the most robust way to release the audio element
+            // and ensure it can be connected again on the next mount.
+            if (audioContextRef.current) {
+                audioContextRef.current.close();
+                audioContextRef.current = null; // Ensure it's recreated on next mount
             }
-            // We don't close the audio context, so it can be reused.
-            // It will be garbage collected when the page is left.
         };
     }, [audioRef, barWidth, gap, minBarHeight, fps, sensitivity, height, width]); // Added height and width
 
