@@ -1,5 +1,4 @@
 import { createContext, useState } from 'react'
-
 export const Context = createContext();
 
 export function ContextProvider({ children }) {
@@ -7,7 +6,9 @@ export function ContextProvider({ children }) {
     const [userData, setUserData] = useState(null)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [loginModal, setLoginModal] = useState(false)
-    const [signupCompletionModal, setSignupCompletionModal] = useState(false)
+    const [signupModal, setSignupModal] = useState(false)
+    const [tempUserName, setTempUserName] = useState("")
+    const [tempUserId, setTempUserId] = useState("")
 
     return (
         <Context.Provider value={{
@@ -15,7 +16,9 @@ export function ContextProvider({ children }) {
             userData, setUserData,
             isLoggedIn, setIsLoggedIn,
             loginModal, setLoginModal,
-            signupCompletionModal, setSignupCompletionModal
+            signupModal, setSignupModal,
+            tempUserName, setTempUserName,
+            tempUserId, setTempUserId
         }}>
             {children}
         </Context.Provider>
