@@ -5,7 +5,7 @@ import VideoBackground from "./common/background/Videobackground";
 import DarkVeil from "./common/background/DarkVeil";
 
 const App = () => (
-  <div className="overflow-hidden bg-black/60" style={{ width: '100%', height: '100%', position: 'relative', padding: 0, margin: 0 }}>
+  <div className="overflow-hidden bg-black/50" style={{ width: '100%', height: '100%', position: 'relative', padding: 0, margin: 0 }}>
     <ContextProvider>
       <div
         className="w-full h-full"

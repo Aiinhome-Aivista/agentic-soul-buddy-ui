@@ -7,7 +7,7 @@ export function ContextProvider({ children }) {
     const [userData, setUserData] = useState(null)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [loginModal, setLoginModal] = useState(false)
-    const [signupCompletionModal, setSignupCompletionModal] = useState(false)
+    const [signupModal, setSignupModal] = useState(false)
 
     return (
         <Context.Provider value={{
@@ -15,7 +15,7 @@ export function ContextProvider({ children }) {
             userData, setUserData,
             isLoggedIn, setIsLoggedIn,
             loginModal, setLoginModal,
-            signupCompletionModal, setSignupCompletionModal
+            signupModal, setSignupModal
         }}>
             {children}
         </Context.Provider>

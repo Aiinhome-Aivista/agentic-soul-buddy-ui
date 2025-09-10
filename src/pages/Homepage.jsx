@@ -10,9 +10,10 @@ import CanvasVisualizerSim from '../components/CanvasVisualizerSim';
 import LoginIcon from '../components/LoginIcon';
 import LogoutIcon from '../components/LogoutIcon';
 import LoginModal from '../common/modal/LoginModal';
+import SignupModal from '../common/modal/SignupMOdal';
 
 const Homepage = () => {
-  const { userData, recognizedText, isLoggedIn, loginModal, setLoginModal } = useContext(Context);
+  const { userData, recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal } = useContext(Context);
   const audioRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -66,7 +67,7 @@ const Homepage = () => {
         }
       }
     }
-    else { 
+    else {
       setLoginModal(true)
     }
   };
@@ -75,13 +76,13 @@ const Homepage = () => {
     <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%]`}>
         {isLoggedIn ? (
-          <LogoutIcon onClick={() => setLoginModal(true)} />
+          <LogoutIcon onClick="" />
         ) : (
           <LoginIcon onClick={() => setLoginModal(true)} />
         )}
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-4xl font-bold text-white pt-[12%]'>Cosmic Wisdom</p>
+        <p className='text-4xl font-bold text-white pt-[12%]' onClick={() => { setSignupModal(true) }}>Cosmic Wisdom</p>
         <p className='text-white text-xl font-light'>"Sharing ancient Indian knowledge..."</p>
       </div>
       <div className="flex flex-col items-center h-[50%]">
@@ -144,6 +145,7 @@ const Homepage = () => {
       />
       {openExitModal && <ExitModal OnClose={() => setOpenExitModal(false)} />}
       {loginModal && <LoginModal OnClose={() => setLoginModal(false)} />}
+      {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
     </div >
   );
 };
