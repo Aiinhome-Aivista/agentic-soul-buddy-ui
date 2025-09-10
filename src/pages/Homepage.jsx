@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import MicIcon from '@mui/icons-material/Mic';
 import { VoiceRecognizer } from '../common/helper/VoiceRecognizer'
 import { Context } from '../common/helper/Context';
-import ExitModal from '../common/modal/ExitModal';
 import { apiService } from '../service/apiService';
 import { POST_url } from '../connection/connection';
 import TypingDots from '../components/TypingDots';
@@ -13,13 +12,24 @@ import LoginModal from '../common/modal/LoginModal';
 import SignupModal from '../common/modal/SignupMOdal';
 
 const Homepage = () => {
-  const { userData, recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal } = useContext(Context);
+  const { recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal, setIsLoggedIn } = useContext(Context);
   const audioRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [openExitModal, setOpenExitModal] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [userId, setUserId] = useState(sessionStorage.getItem('userId'));
+  const [sessionId, setSessionId] = useState(sessionStorage.getItem('sessionId'));
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setUserId(sessionStorage.getItem('userId'));
+      setSessionId(sessionStorage.getItem('sessionId'));
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const handleStop = () => {
     if (audioRef.current) {
@@ -38,7 +48,8 @@ const Homepage = () => {
         setIsLoading(true);
         if (recognizedText !== null) {
           const payload = {
-            "user_id": userData?.user_id,
+            "user_id": userId,
+            "session_id": sessionId,
             "user_input": recognizedText
           }
           try {
@@ -76,16 +87,16 @@ const Homepage = () => {
     <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%]`}>
         {isLoggedIn ? (
-          <LogoutIcon onClick="" />
+          <LogoutIcon />
         ) : (
-          <LoginIcon onClick={() => setLoginModal(true)} />
+          <LoginIcon />
         )}
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
         <p className='text-4xl font-bold text-white pt-[12%]' onClick={() => { setSignupModal(true) }}>Cosmic Wisdom</p>
         <p className='text-white text-xl font-light'>"Sharing ancient Indian knowledge..."</p>
       </div>
-      <div className="flex flex-col items-center h-[50%]">
+      <div className="flex flex-col items-center h-[45%] pt-[2%]">
         {isRecording ? (
           <div className='relative pb-[1%] rounded-full'>
             <div className='absolute inset-0 bg-[#FFFFFF]/9 animate-pulse-circle rounded-full' />
@@ -131,7 +142,7 @@ const Homepage = () => {
           </div>
         )}
       </div>
-      <p className='text-xl text-white text-center font-light pb-[3%]'>Share your details to begin your personalized <br /> spiritual journey</p>
+      <p className='text-xl text-white text-center font-light pb-[5%]'>Share your details to begin your personalized <br /> spiritual journey</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         crossOrigin="anonymous"

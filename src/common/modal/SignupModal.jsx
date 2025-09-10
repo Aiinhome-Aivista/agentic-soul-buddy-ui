@@ -3,44 +3,75 @@ import "./modal.css";
 import { Context } from "../helper/Context";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useFormik } from 'formik';
+import { apiService } from "../../service/apiService";
+import { POST_url } from "../../connection/connection";
+import { Dropdown } from 'primereact/dropdown';
 
 export default function SignupModal({ OnClose }) {
-    const { } = useContext(Context)
+    const { tempUserName, tempUserId } = useContext(Context)
+
+    const Genders = [
+        { gender: 'Male' },
+        { gender: 'Female' },
+        { gender: 'Other' },
+        { gender: 'Prefer Not to Say' },
+    ];
+
+    const Health_Status = [
+        { health: 'Excellent' },
+        { health: 'Good' },
+        { health: 'Fair' },
+        { health: 'Poor' },
+    ];
+
+    const Relationship_Status = [
+        { relationship: 'Single' },
+        { relationship: 'In a relationship' },
+        { relationship: 'Married' },
+        { relationship: 'Divorced' },
+        { relationship: "It's Complicated" },
+    ];
 
     const formik = useFormik({
         initialValues: {
-            "Full Name": "",
+            full_name: tempUserName,
+            user_id: tempUserId,
             input: {
-                age: null,
+                age: '',
                 gender: "",
                 work: "",
                 health: "",
                 emotional_state: "",
-                relationship: "",
-            },
+                relationship: ""
+            }
         },
         onSubmit: async (values, { setSubmitting }) => {
+            console.log(JSON.stringify(values))
             try {
                 const response = await apiService({
-                    url: POST_url.login,
+                    url: POST_url.signup,
                     method: 'POST',
                     data: values,
                 });
-                console.log(JSON.stringify(values))
+                console.log(values)
                 if (response && !response.error) {
                     if (response !== null) {
-                        /* setUserData(response)
-                        setLoadGuidance(true) */
+                        sessionStorage.setItem('userId', response.user.uid);
+                        sessionStorage.setItem('sessionId', response.session_id);
+                        setIsLoggedIn(true)
+                        OnClose()
                     }
                 } else {
                     console.error('Submission failed:', response?.message);
                     alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
+                    OnClose()
                 }
             } catch (error) {
                 console.error('An error occurred during submission:', error);
-                alert('An error occurred. Please try again later.');
+                OnClose()
             } finally {
                 setSubmitting(false);
+                OnClose()
             }
         },
     });
@@ -50,116 +81,94 @@ export default function SignupModal({ OnClose }) {
         <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm z-15 animate-fadeIn">
             {/* Main Modal Container */}
             <div
-                className="glass-card flex flex-col items-center justify-center  w-[25%] relative animate-slideUp overflow-auto rounded-2xl p-2">
-                <div className="flex items-start justify-end w-[100%] h-[10%]">
-                    <CloseRoundedIcon onClick={OnClose} className="cursor-pointer modalCloseIcon" sx={{ backgroundColor: "rgba(255, 255, 255, 0.54)", borderRadius: '50%' }} />
+                className="glass-card flex flex-col items-center justify-center  w-[28%] relative animate-slideUp overflow-auto rounded-2xl p-2">
+                <div className="flex items-start justify-end w-[100%] h-[10%] p-0 m-0">
+                    <CloseRoundedIcon onClick={OnClose} className="cursor-pointer modalCloseIcon" sx={{ backgroundColor: "rgba(255, 255, 255, 0.54)", borderRadius: '50%', fontSize: '1.1rem' }} />
                 </div>
-                <div className="flex flex-col items-center justify-center gap-7 w-[100%] h-[90%] pb-[10%]">
-                    <div className="text-xl font-bold text-white">Complete Signup</div>
-                    <form onSubmit={formik.handleSubmit}>
-
-                        <input
-                            id="name"
-                            name="Full Name"
-                            type="text"
-                            onChange={formik.handleChange}
-                            value={formik.values["Full Name"]}
-                            placeholder='Enter your full name'
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
-                            required
-                        />
+                <form onSubmit={formik.handleSubmit}>
+                    <div className="flex flex-col items-center justify-center gap-4 w- h-[90%] pb-[10%]">
+                        <div className="text-xl font-bold text-white">Complete Signup</div>
                         <input
                             id="age"
                             name="input.age"
                             type="number"
-                            onChange={(e) => formik.setFieldValue("input.age", Number(e.target.value))}
+                            onChange={formik.handleChange}
                             value={formik.values.input.age}
-                            placeholder="Your age"
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
+                            placeholder="Age"
+                            className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
                             required
                         />
-                        <select
-                            id="gender"
-                            name="input.gender"
-                            onChange={formik.handleChange}
-                            value={formik.values.input.gender}
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
-                            required
-                        >
-                            <option value="">Select gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                            <option value="prefer not to say">Prefer not to say</option>
-                        </select>
-
                         <input
                             id="work"
                             name="input.work"
                             type="text"
                             onChange={formik.handleChange}
                             value={formik.values.input.work}
-                            placeholder="Your profession"
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
+                            placeholder="Profession"
+                            className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
                             required
                         />
-                        <select
-                            id="health_status"
+                        <Dropdown
+                            id="gender"
+                            name="input.gender"
+                            value={formik.values.input.gender}
+                            onChange={(e) => formik.setFieldValue('input.gender', e.value)}
+                            options={Genders}
+                            optionLabel="gender"
+                            optionValue="gender"
+                            placeholder="Gender"
+                            className="bg-inherit text-[#D9D9D9]/25 placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
+                            panelClassName="bg-[#434141] rounded-lg"
+                            checkmark={true}
+                            highlightOnSelect={false} />
+
+                        <Dropdown
+                            id="health"
                             name="input.health"
-                            onChange={formik.handleChange}
                             value={formik.values.input.health}
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
-                            required
-                        >
-                            <option value="">Select health status</option>
-                            <option value="Excellent">Excellent</option>
-                            <option value="Good">Good</option>
-                            <option value="Fair">Fair</option>
-                            <option value="Poor">Poor</option>
-                        </select>
+                            onChange={(e) => formik.setFieldValue('input.health', e.value)}
+                            options={Health_Status}
+                            optionLabel="health"
+                            optionValue="health"
+                            placeholder="Health Status"
+                            className="bg-inherit text-[#D9D9D9]/25 placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
+                            panelClassName="bg-[#434141] rounded-lg"
+                            checkmark={true}
+                            highlightOnSelect={false} />
 
-                        <select
-                            id="emotional_status"
+                        <input
+                            id="emotional_state"
                             name="input.emotional_state"
+                            type="text"
                             onChange={formik.handleChange}
+                            placeholder="How are you feeling?"
                             value={formik.values.input.emotional_state}
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
-                        >
-                            <option value="">How are you feeling?</option>
-                            <option value="Happy">Happy</option>
-                            <option value="Sad">Sad</option>
-                            <option value="Angry">Angry</option>
-                            <option value="Depressed">Depressed</option>
-                            <option value="Stressed">Stressed</option>
-                            <option value="Peaceful">Peaceful</option>
-                            <option value="Other">Other</option>
-                        </select>
+                            className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
+                        />
 
-                        <select
-                            id="relationship_status"
+                        <Dropdown
+                            id="relationship"
                             name="input.relationship"
-                            onChange={formik.handleChange}
                             value={formik.values.input.relationship}
-                            className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
-                            required
-                        >
-                            <option value="" style={{ color: 'gray' }}>Select relationship status</option>
-                            <option value="Single">Single</option>
-                            <option value="In a relationship">In a relationship</option>
-                            <option value="Married">Married</option>
-                            <option value="Divorced">Divorced</option>
-                            <option value="Complicated">It's Complicated</option>
-                        </select>
+                            onChange={(e) => formik.setFieldValue('input.relationship', e.value)}
+                            options={Relationship_Status}
+                            optionLabel="relationship"
+                            optionValue="relationship"
+                            placeholder="Relationship Status"
+                            className="bg-inherit text-[#D9D9D9]/25 placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
+                            panelClassName="bg-[#434141] rounded-lg"
+                            checkmark={true}
+                            highlightOnSelect={false} />
                         <button
                             type="submit"
                             disabled={formik.isSubmitting}
-                            className="w-full py-3 rounded-xl bg-gradient-to-r from-gray-300 to-gray-300 text-black font-semibold cursor-pointer shadow-lg hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/50 border-2 border-[#D9D9D9]/25 font-semibold cursor-pointer shadow-lg hover:bg- transition disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-[#D9D9D9]/25"
                         >
                             {formik.isSubmitting ? 'Submitting...' : 'Signup'}
                         </button>
-                    </form>
-                </div>
-            </div>
+                    </div>
+                </form>
+            </div >
         </div >
     );
 }
