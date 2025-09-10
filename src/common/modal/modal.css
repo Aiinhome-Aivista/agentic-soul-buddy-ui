@@ -92,9 +92,9 @@
 }
 
 .glass-card {
-  background: rgba(81, 81, 74, 0.374);
+  background: var(--modal-bg-color);
   backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(52px);
   position: relative;
   overflow: hidden;
 }
@@ -114,4 +114,8 @@
   left: 0;
   width: 1px;
   height: 100%;
+}
+
+.modalCloseIcon {
+  color: var(--modal-icon-color);
 }

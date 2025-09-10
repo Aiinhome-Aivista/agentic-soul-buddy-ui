@@ -3,7 +3,7 @@ import "./modal.css";
 import { Context } from "../helper/Context";
 
 export default function ExitModal({ OnClose }) {
-    const { setLoadGuidance, setUserData } = useContext(Context)
+    const {  } = useContext(Context)
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-15 animate-fadeIn">

@@ -197,7 +197,7 @@ function UserDetails() {
                         className="bg-[#2a2a3d] text-white rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-white"
                         required
                     >
-                        <option value="" style={{color: 'gray'}}>Select relationship status</option>
+                        <option value="" style={{ color: 'gray' }}>Select relationship status</option>
                         <option value="Single">Single</option>
                         <option value="In a relationship">In a relationship</option>
                         <option value="Married">Married</option>
@@ -208,7 +208,7 @@ function UserDetails() {
                 <button
                     type="submit"
                     disabled={formik.isSubmitting}
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-gray-200 to-gray-200 text-black font-semibold shadow-lg hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-gray-300 to-gray-300 text-black font-semibold cursor-pointer shadow-lg hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {formik.isSubmitting ? 'Submitting...' : 'Begin Your Journey'}
                 </button>
