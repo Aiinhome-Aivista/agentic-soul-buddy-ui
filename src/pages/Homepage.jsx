@@ -17,10 +17,7 @@ const Homepage = () => {
   const [audioUrl, setAudioUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [openExitModal, setOpenExitModal] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [userId, setUserId] = useState(sessionStorage.getItem('userId'));
-  const [sessionId, setSessionId] = useState(sessionStorage.getItem('sessionId'));
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -48,8 +45,8 @@ const Homepage = () => {
         setIsLoading(true);
         if (recognizedText !== null) {
           const payload = {
-            "user_id": userId,
-            "session_id": sessionId,
+            "user_id": sessionStorage.getItem('userId'),
+            "session_id": sessionStorage.getItem('sessionId'),
             "user_input": recognizedText
           }
           try {
@@ -93,8 +90,8 @@ const Homepage = () => {
         )}
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-4xl font-bold text-white pt-[12%]' onClick={() => { setSignupModal(true) }}>Cosmic Wisdom</p>
-        <p className='text-white text-xl font-light'>"Sharing ancient Indian knowledge..."</p>
+        <p className='text-4xl font-bold text-white pt-[12%]  cursor-default' onClick={() => { setSignupModal(true) }}>Cosmic Wisdom</p>
+        <p className='text-white text-xl font-light  cursor-default'>"Sharing ancient Indian knowledge..."</p>
       </div>
       <div className="flex flex-col items-center h-[45%] pt-[2%]">
         {isRecording ? (
@@ -111,30 +108,35 @@ const Homepage = () => {
         ) : isPlaying ? (
           <div className='pb-[1%]'>
             <CanvasVisualizerSim
-              width={400}
+              width={350}
               height={130}
-              barCount={32}
-              barWidth={8}
-              gap={5}
+              barCount={34}
+              barWidth={5}
+              gap={4}
               centerGap={5}
-              minBarHeight={0}
+              minBarHeight={5}
             />
           </div>
         ) : (
           <div className='relative pb-[1%]'>
-            <MicIcon sx={{ fontSize: '2.5rem', color: '#D9D9D9' }} onClick={handleMicClick} className='cursor-pointer' />
+            <MicIcon sx={{
+              fontSize: '2.5rem',
+              color: '#D9D9D9',
+              transition: 'color 0.2s, font-size 0.2s',
+              '&:hover': {
+                color: '#fdfdfdff',
+                fontSize: '2.6rem'
+              }
+            }} onClick={handleMicClick} className='cursor-pointer' />
           </div>
         )}
         {isPlaying ? (
           <div className='pb-[40%] font-light text-xs text-white'>
             <div></div>
-            <div className='flex gap-2 mt-2'>
-              <button
-                onClick={handleStop}
-                className='px-3 py-1 text-sm bg-gray-400/30 hover:bg-gray-300/30 text-white rounded-full cursor-pointer'
-              >
-                Stop
-              </button>
+            <div className='flex items-center rounded-3xl bg-[#474747]/22 border-2 border-gray-500 p-1 cursor-pointer'>
+              <div className='rounded-full h-[1rem] w-[1rem] bg-[#D9D9D9]/54'
+                onClick={handleStop}></div>
+              <p className='flex items-center justify-center text-sm text-[#7D7E7F] px-1'>Stop</p>
             </div>
           </div>
         ) : (
@@ -142,7 +144,7 @@ const Homepage = () => {
           </div>
         )}
       </div>
-      <p className='text-xl text-white text-center font-light pb-[5%]'>Share your details to begin your personalized <br /> spiritual journey</p>
+      <p className='text-xl text-white text-center font-light pb-[5%] cursor-default'>Share your details to begin your personalized <br /> spiritual journey</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         crossOrigin="anonymous"
@@ -154,7 +156,7 @@ const Homepage = () => {
         autoPlay
         preload="auto"
       />
-      {openExitModal && <ExitModal OnClose={() => setOpenExitModal(false)} />}
+
       {loginModal && <LoginModal OnClose={() => setLoginModal(false)} />}
       {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
     </div >

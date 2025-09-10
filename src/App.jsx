@@ -14,7 +14,7 @@ const App = () => (
           style={{ position: 'absolute', top: 0, left: 0, zIndex: -1, opacity: 0.6 }}
         >
           <VideoBackground />
-          {/* <DarkVeil hueShift={186} speed={1}/> */}
+          <DarkVeil hueShift={186} speed={1} />
         </div>
         <BrowserRouter>
           <Index />

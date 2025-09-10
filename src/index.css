@@ -21,14 +21,32 @@ body,
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
   --modal-bg-color: rgba(111, 111, 111, 0.34);
-  --modal-icon-color: rgba(111, 111, 111, 0.88);
+  --modal-icon-color: rgb(77, 77, 77, 0.9);
 }
 
 .animate-pulse-circle {
-  animation: pulse-circle 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: pulse-circle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes pulse-circle {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(1.4); opacity: 1; }
+  0% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 1; }
+}
+
+/* custom-number-input */
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.no-spinner[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* custom dropdown style */
+.p-dropdown-label {
+  color: rgba(217, 217, 217, 0.50)!important;
+}
+.p-dropdown .p-dropdown-label.p-placeholder {
+  color: rgba(217, 217, 217, 0.50) !important;
 }

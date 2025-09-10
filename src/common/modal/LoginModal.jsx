@@ -77,12 +77,12 @@ export default function LoginModal({ OnClose }) {
                     <CloseRoundedIcon onClick={OnClose} className="cursor-pointer modalCloseIcon" sx={{ backgroundColor: "rgba(255, 255, 255, 0.54)", borderRadius: '50%', fontSize: '1.1rem' }} />
                 </div>
                 <div className="flex flex-col items-center justify-center gap-7 w-[100%] h-[90%] pb-[10%]">
-                    <div className="text-2xl font-bold text-white">Login</div>
+                    <div className="text-2xl font-bold text-white  cursor-default">Login</div>
                     <div className="flex gap-3">
                         <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-[#D9D9D9]/12 text-[#FFFFFF]/54 p-1 cursor-pointer" onClick={handleGoogleSignIn}>G</div>
                         <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-[#D9D9D9]/12 text-[#FFFFFF]/54 p-1 cursor-pointer" onClick={handleFacebookSignIn}>f</div>
                     </div>
-                    <div className="text-base text-[#FFFFFF]/54 text-center">Authenticate with google or facebook</div>
+                    <div className="text-base text-[#FFFFFF]/54 text-center  cursor-default">Authenticate with google or facebook</div>
                 </div>
             </div>
         </div>
