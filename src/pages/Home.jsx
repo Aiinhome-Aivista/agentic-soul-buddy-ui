@@ -9,8 +9,8 @@ function Home() {
     const [sessionId, setSessionId] = useState(null);
 
     const SessionHolder = useCallback(() => {
-        const uid = sessionStorage.getItem('userId');
-        const sid = sessionStorage.getItem('sessionId');
+        const uid = localStorage.getItem('userId');
+        const sid = localStorage.getItem('sessionId');
         setUserId(uid);
         setSessionId(sid);
         if (uid && sid) {

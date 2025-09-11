@@ -10,7 +10,7 @@ import { Toast } from 'primereact/toast';
 import { Dropdown } from 'primereact/dropdown';
 
 export default function SignupModal({ OnClose }) {
-    const { tempUserName, tempUserId, setIsLoggedIn } = useContext(Context)
+    const { tempUserName, tempUserId, setIsLoggedIn, setAudioUrl } = useContext(Context)
     const toast = useRef(null);
 
     const Genders = [
@@ -80,10 +80,10 @@ export default function SignupModal({ OnClose }) {
                 console.log(values)
                 if (response && !response.error) {
                     if (response !== null) {
-                        sessionStorage.setItem('userId', response.user_id);
-                        sessionStorage.setItem('sessionId', response.session_id);
+                        localStorage.setItem('userId', response.user_id);
+                        localStorage.setItem('sessionId', response.session_id);
+                        setAudioUrl(response.Data.audio_url)
                         setIsLoggedIn(true)
-                        OnClose()
                     }
                 } else {
                     console.error('Submission failed:', response?.message);
@@ -114,8 +114,8 @@ export default function SignupModal({ OnClose }) {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm z-15 animate-fadeIn">
-            <Toast ref={toast} />            <div
-                className="glass-card flex flex-col items-center justify-center  w-[28%] relative animate-slideUp overflow-auto rounded-2xl p-2">
+            <Toast ref={toast} />
+            <div className="glass-card flex flex-col items-center justify-center  w-[28%] relative animate-slideUp overflow-auto rounded-2xl p-2">
                 <div className="flex items-start justify-end w-[100%] h-[10%] p-0 m-0">
                     <CloseRoundedIcon onClick={OnClose} className="cursor-pointer modalCloseIcon" sx={{ backgroundColor: "rgba(255, 255, 255, 0.54)", borderRadius: '50%', fontSize: '1.1rem' }} />
                 </div>
@@ -134,7 +134,7 @@ export default function SignupModal({ OnClose }) {
                             }}
                             value={formik.values.input.age}
                             placeholder="Age"
-                            className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 no-spinner"
+                            className="bg-inherit text-[#D9D9D9]/50 placeholder:text-[#D9D9D9]/50 focus:text-[#D9D9D9]/75 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 no-spinner"
                             min={0}
                         />
                         <input
@@ -152,7 +152,7 @@ export default function SignupModal({ OnClose }) {
                             }}
                             value={formik.values.input.work}
                             placeholder="Profession"
-                            className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
+                            className="bg-inherit text-[#D9D9D9]/50 placeholder:text-[#D9D9D9]/50 focus:text-[#D9D9D9]/75 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
                         />
                         <Dropdown
                             id="gender"
@@ -163,7 +163,7 @@ export default function SignupModal({ OnClose }) {
                             optionLabel="gender"
                             optionValue="gender"
                             placeholder="Gender"
-                            className="bg-inherit text-[#D9D9D9]/25 placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
+                            className="bg-inherit text-[#D9D9D9]/25 placeholder:text-[#D9D9D9]/50 focus:text-[#D9D9D9]/75 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
                             panelClassName="bg-[#434141] rounded-lg"
                             checkmark={true}
                             highlightOnSelect={false} />
@@ -176,7 +176,7 @@ export default function SignupModal({ OnClose }) {
                             optionLabel="health"
                             optionValue="health"
                             placeholder="Health Status"
-                            className="bg-inherit text-[#D9D9D9]/25 placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
+                            className="bg-inherit text-[#D9D9D9]/25 placeholder:text-[#D9D9D9]/50 focus:text-[#D9D9D9]/75 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
                             panelClassName="bg-[#434141] rounded-lg"
                             checkmark={true}
                             highlightOnSelect={false} />
@@ -194,7 +194,7 @@ export default function SignupModal({ OnClose }) {
                             }}
                             placeholder="How are you feeling?"
                             value={formik.values.input.emotional_state}
-                            className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
+                            className="bg-inherit text-[#D9D9D9]/50 placeholder:text-[#D9D9D9]/50 focus:text-[#D9D9D9]/75 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
                         />
 
                         <Dropdown
@@ -206,7 +206,7 @@ export default function SignupModal({ OnClose }) {
                             optionLabel="relationship"
                             optionValue="relationship"
                             placeholder="Relationship Status"
-                            className="bg-inherit text-[#D9D9D9]/25 placeholder:text-[#D9D9D9]/50 rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
+                            className="bg-inherit text-[#D9D9D9]/25 placeholder:text-[#D9D9D9]/50 focus:text-[#D9D9D9]/75rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
                             panelClassName="bg-[#434141] rounded-lg"
                             checkmark={true}
                             highlightOnSelect={false} />

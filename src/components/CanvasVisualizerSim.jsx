@@ -72,7 +72,7 @@ export default function CanvasVisualizerSim({
       const elapsed = timeMs - startTimeRef.current;
 
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = 'rgba(0,0,0,0.05)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0)';
       ctx.fillRect(0, 0, width, height);
 
       const amps = sampleAmplitudes(timeMs);

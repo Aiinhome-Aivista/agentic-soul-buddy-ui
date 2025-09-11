@@ -9,6 +9,8 @@ export function ContextProvider({ children }) {
     const [signupModal, setSignupModal] = useState(false)
     const [tempUserName, setTempUserName] = useState("")
     const [tempUserId, setTempUserId] = useState("")
+    const [audioUrl, setAudioUrl] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     return (
         <Context.Provider value={{
@@ -18,7 +20,9 @@ export function ContextProvider({ children }) {
             loginModal, setLoginModal,
             signupModal, setSignupModal,
             tempUserName, setTempUserName,
-            tempUserId, setTempUserId
+            tempUserId, setTempUserId,
+            audioUrl, setAudioUrl,
+            isLoading, setIsLoading
         }}>
             {children}
         </Context.Provider>

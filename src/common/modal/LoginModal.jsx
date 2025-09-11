@@ -8,7 +8,7 @@ import { apiService } from "../../service/apiService";
 import { POST_url } from "../../connection/connection";
 
 export default function LoginModal({ OnClose }) {
-    const { setIsLoggedIn, setSignupModal, setTempUserName, setTempUserId } = useContext(Context)
+    const { setIsLoggedIn, setSignupModal, setTempUserName, setTempUserId, setAudioUrl } = useContext(Context)
 
     const handleGoogleSignIn = async () => {
         try {
@@ -31,11 +31,11 @@ export default function LoginModal({ OnClose }) {
                     if (response !== null) {
                         console.log("api res on login", response);
                         if (response.status === "success") {
-                            sessionStorage.setItem('userId', result.user.uid);
-                            sessionStorage.setItem('sessionId', response.Data.session_id);
+                            localStorage.setItem('userId', result.user.uid);
+                            localStorage.setItem('sessionId', response.Data.session_id);
+                            setAudioUrl(response.Data.audio_url)
                             setIsLoggedIn(true)
-                            /* session_id
-                            user_id */
+                            OnClose();
                         }
                         if (response.status === "new_user") {
                             setSignupModal(true)
@@ -79,8 +79,8 @@ export default function LoginModal({ OnClose }) {
                 <div className="flex flex-col items-center justify-center gap-7 w-[100%] h-[90%] pb-[10%]">
                     <div className="text-2xl font-bold text-white  cursor-default">Login</div>
                     <div className="flex gap-3">
-                        <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-[#D9D9D9]/12 text-[#FFFFFF]/54 p-1 cursor-pointer" onClick={handleGoogleSignIn}>G</div>
-                        <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-[#D9D9D9]/12 text-[#FFFFFF]/54 p-1 cursor-pointer" onClick={handleFacebookSignIn}>f</div>
+                        <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-[#D9D9D9]/12 hover:bg-[#D9D9D9]/20 text-[#FFFFFF]/54 hover:text-[#FFFFFF]/64 p-1 cursor-pointer" onClick={handleGoogleSignIn}>G</div>
+                        <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-[#D9D9D9]/12 hover:bg-[#D9D9D9]/20 text-[#FFFFFF]/54 hover:text-[#FFFFFF]/64 p-1 cursor-pointer" onClick={handleFacebookSignIn}>f</div>
                     </div>
                     <div className="text-base text-[#FFFFFF]/54 text-center  cursor-default">Authenticate with google or facebook</div>
                 </div>

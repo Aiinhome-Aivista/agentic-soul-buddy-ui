@@ -1,12 +1,14 @@
 import React, { useContext } from 'react'
 import { Context } from '../common/helper/Context'
 
-function LogoutIcon() {
-    const { setIsLoggedIn } = useContext(Context)
+function LogoutIcon({ handleStop }) {
+    const { setIsLoggedIn, setAudioUrl } = useContext(Context)
 
     const handleLogout = () => {
+        handleStop();
+        setAudioUrl(null);
         setIsLoggedIn(false);
-        sessionStorage.clear();
+        localStorage.clear();
     }
 
     return (

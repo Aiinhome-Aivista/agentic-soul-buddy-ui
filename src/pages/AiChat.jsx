@@ -12,21 +12,26 @@ import LoginModal from '../common/modal/LoginModal';
 import SignupModal from '../common/modal/SignupMOdal';
 
 const AiChat = () => {
-  const { recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal, setIsLoggedIn } = useContext(Context);
+  const { recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal, audioUrl, setAudioUrl, isLoading, setIsLoading } = useContext(Context);
   const audioRef = useRef(null);
-  const [audioUrl, setAudioUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const handleStorageChange = () => {
-      setUserId(sessionStorage.getItem('userId'));
-      setSessionId(sessionStorage.getItem('sessionId'));
+      setUserId(localStorage.getItem('userId'));
+      setSessionId(localStorage.getItem('sessionId'));
     };
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setIsRecording(false);
+    }
+  }, [isLoggedIn]
+  );
 
   const handleStop = () => {
     if (audioRef.current) {
@@ -45,8 +50,8 @@ const AiChat = () => {
         setIsLoading(true);
         if (recognizedText !== null) {
           const payload = {
-            "user_id": sessionStorage.getItem('userId'),
-            "session_id": sessionStorage.getItem('sessionId'),
+            "user_id": localStorage.getItem('userId'),
+            "session_id": localStorage.getItem('sessionId'),
             "user_input": recognizedText
           }
           try {
@@ -84,7 +89,7 @@ const AiChat = () => {
     <div className="flex flex-col items-center w-[100%] h-[100%]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%]`}>
         {isLoggedIn ? (
-          <LogoutIcon />
+          <LogoutIcon handleStop={() => handleStop()} />
         ) : (
           <LoginIcon />
         )}
