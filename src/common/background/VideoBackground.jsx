@@ -1,5 +1,5 @@
 import React from "react";
-import "./VideoBackground.css";
+import "../../styles/videoBackground.css";
 import bgvideo from "../../assets/video/galaxy.mp4"
 
 export default function VideoBackground() {

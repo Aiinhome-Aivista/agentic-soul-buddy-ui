@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
-import "./modal.css";
+import "../../styles/modal.css";
 import { Context } from "../helper/Context";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { auth, googleProvider, facebookProvider } from "../../firebase";
@@ -29,10 +29,10 @@ export default function LoginModal({ OnClose }) {
                 console.log(payload)
                 if (response && !response.error) {
                     if (response !== null) {
-                        console.log(response);
+                        console.log("api res on login", response);
                         if (response.status === "success") {
                             sessionStorage.setItem('userId', result.user.uid);
-                            sessionStorage.setItem('sessionId', response.session_id);
+                            sessionStorage.setItem('sessionId', response.Data.session_id);
                             setIsLoggedIn(true)
                             /* session_id
                             user_id */

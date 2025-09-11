@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
-import "./modal.css";
+import "../../styles/modal.css";
 import { Context } from "../helper/Context";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useFormik } from 'formik';
@@ -121,7 +121,7 @@ export default function SignupModal({ OnClose }) {
                 </div>
                 <form onSubmit={formik.handleSubmit} className="w-full">
                     <div className="flex flex-col items-center justify-center gap-3 w-full h-[90%] px-[5%] pb-[7%]">
-                        <div className="text-xl font-bold text-white pb-[4%]  cursor-default">Complete Signup</div>
+                        <div className="text-xl font-bold text-white pb-[4%]  cursor-default">Let the Journey Begin</div>
                         <input
                             id="age"
                             name="input.age"
@@ -215,7 +215,7 @@ export default function SignupModal({ OnClose }) {
                                 type="submit"
                                 disabled={formik.isSubmitting}
                                 onClick={handleFormSubmit}
-                                className="w-full py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/50 border-2 border-[#D9D9D9]/25 font-semibold cursor-pointer shadow-lg hover:bg- transition disabled:opacity-50 disabled:cursor-not-allowed hover:ring-2 hover:ring-[#D9D9D9]/25"
+                                className="w-full py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/55 border-2 border-[#D9D9D9]/25 font-semibold cursor-pointer shadow-lg hover:bg- transition disabled:opacity-50 disabled:cursor-not-allowed hover:text-[#D9D9D9]/65 hover:ring-1 hover:ring-[#D9D9D9]/25"
                             >
                                 {formik.isSubmitting ? 'Submitting...' : 'Signup'}
                             </button>

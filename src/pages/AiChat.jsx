@@ -11,7 +11,7 @@ import LogoutIcon from '../components/LogoutIcon';
 import LoginModal from '../common/modal/LoginModal';
 import SignupModal from '../common/modal/SignupMOdal';
 
-const Homepage = () => {
+const AiChat = () => {
   const { recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal, setIsLoggedIn } = useContext(Context);
   const audioRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -81,7 +81,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-[100%] h-[100%] p-[0.5rem]">
+    <div className="flex flex-col items-center w-[100%] h-[100%]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%]`}>
         {isLoggedIn ? (
           <LogoutIcon />
@@ -91,7 +91,7 @@ const Homepage = () => {
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
         <p className='text-4xl font-bold text-white pt-[12%]  cursor-default' onClick={() => { setSignupModal(true) }}>Cosmic Wisdom</p>
-        <p className='text-white text-xl font-light  cursor-default'>"Sharing ancient Indian knowledge..."</p>
+        <p className='text-white text-xl font-light  cursor-default'>"Grow With Ancient Indian Guidance..."</p>
       </div>
       <div className="flex flex-col items-center h-[45%] pt-[2%]">
         {isRecording ? (
@@ -144,7 +144,7 @@ const Homepage = () => {
           </div>
         )}
       </div>
-      <p className='text-xl text-white text-center font-light pb-[5%] cursor-default'>Share your details to begin your personalized <br /> spiritual journey</p>
+      <p className='text-xl text-white text-center font-light pb-[5%] cursor-default'>Share your details to begin your personalized<br />journey of transformation</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         crossOrigin="anonymous"
@@ -163,4 +163,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default AiChat;
