@@ -8,7 +8,7 @@ import { apiService } from "../../service/apiService";
 import { POST_url } from "../../connection/connection";
 
 export default function LoginModal({ OnClose }) {
-    const { setIsLoggedIn, setSignupModal, setTempUserName, setTempUserId, setAudioUrl } = useContext(Context)
+    const { setIsLoggedIn, setSignupModal, setTempUserName, setTempUserId, setAudioUrl, setIsLoading } = useContext(Context)
 
     const handleGoogleSignIn = async () => {
         try {
@@ -31,11 +31,16 @@ export default function LoginModal({ OnClose }) {
                     if (response !== null) {
                         console.log("api res on login", response);
                         if (response.status === "success") {
-                            localStorage.setItem('userId', result.user.uid);
-                            localStorage.setItem('sessionId', response.Data.session_id);
-                            setAudioUrl(response.Data.audio_url)
                             setIsLoggedIn(true)
                             OnClose();
+                            localStorage.setItem('userId', result.user.uid);
+                            localStorage.setItem('sessionId', response.Data.session_id);
+                            setIsLoading(true);
+                            setTimeout(() => {
+                                setIsLoading(false);
+                                setAudioUrl(response.Data.audio_url);
+                            }, 3000);
+
                         }
                         if (response.status === "new_user") {
                             setSignupModal(true)

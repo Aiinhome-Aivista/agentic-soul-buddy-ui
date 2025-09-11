@@ -10,7 +10,7 @@ import { Toast } from 'primereact/toast';
 import { Dropdown } from 'primereact/dropdown';
 
 export default function SignupModal({ OnClose }) {
-    const { tempUserName, tempUserId, setIsLoggedIn, setAudioUrl } = useContext(Context)
+    const { tempUserName, tempUserId, setIsLoggedIn, setAudioUrl, setIsLoading } = useContext(Context)
     const toast = useRef(null);
 
     const Genders = [
@@ -80,10 +80,18 @@ export default function SignupModal({ OnClose }) {
                 console.log(values)
                 if (response && !response.error) {
                     if (response !== null) {
+                        setIsLoggedIn(true)
+                        OnClose()
                         localStorage.setItem('userId', response.user_id);
                         localStorage.setItem('sessionId', response.session_id);
-                        setAudioUrl(response.Data.audio_url)
-                        setIsLoggedIn(true)
+
+                        setIsLoading(true);
+                        setTimeout(() => {
+                            setIsLoading(false);
+                            setAudioUrl(response.Data.audio_url)
+                        }, 3000);
+
+
                     }
                 } else {
                     console.error('Submission failed:', response?.message);
