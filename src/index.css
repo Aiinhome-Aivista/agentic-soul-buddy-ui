@@ -50,3 +50,18 @@ body,
 .p-dropdown .p-dropdown-label.p-placeholder {
   color: rgba(217, 217, 217, 0.50) !important;
 }
+
+/* login logout icon animation */
+@layer utilities {
+  /* Spring-like easing to mimic a soft spring without JS */
+  .ease-spring-soft {
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Respect user preference: reduce motion removes transform transitions */
+  @media (prefers-reduced-motion: reduce) {
+    .ease-spring-soft {
+      transition: none;
+    }
+  }
+}

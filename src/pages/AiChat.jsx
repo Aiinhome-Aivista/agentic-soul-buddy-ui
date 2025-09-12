@@ -95,7 +95,7 @@ const AiChat = () => {
         )}
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-4xl font-bold text-white pt-[12%]  cursor-default' onClick={() => { setSignupModal(true) }}>Cosmic Wisdom</p>
+        <p className='text-4xl font-bold text-white pt-[12%]  cursor-default' >Cosmic Wisdom</p>
         <p className='text-white text-xl font-light  cursor-default'>"Grow With Ancient Indian Guidance..."</p>
       </div>
       <div className="flex flex-col items-center h-[45%] pt-[2%]">
@@ -149,7 +149,7 @@ const AiChat = () => {
           </div>
         )}
       </div>
-      <p className='text-xl text-white text-center font-light pb-[5%] cursor-default'>Share your details to begin your personalized<br />journey of transformation</p>
+      <p className='text-large text-white text-center font-light pb-[5%] cursor-default'>Share your details to begin your personalized<br />journey of transformation</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         crossOrigin="anonymous"
