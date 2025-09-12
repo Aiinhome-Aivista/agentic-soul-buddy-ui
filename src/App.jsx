@@ -2,7 +2,6 @@ import { BrowserRouter } from "react-router-dom";
 import Index from "./common/routes/Index";
 import { ContextProvider } from "./common/helper/Context";
 import VideoBackground from "./common/background/Videobackground";
-import DarkVeil from "./common/background/DarkVeil";
 import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 
 const App = () => (
