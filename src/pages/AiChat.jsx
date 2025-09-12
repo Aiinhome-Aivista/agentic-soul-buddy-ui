@@ -8,6 +8,7 @@ import TypingDots from '../components/TypingDots';
 import CanvasVisualizerSim from '../components/CanvasVisualizerSim';
 import LoginIcon from '../components/LoginIcon';
 import LogoutIcon from '../components/LogoutIcon';
+import LoginLogoutIcon from '../components/LoginLogoutIcon';
 import LoginModal from '../common/modal/LoginModal';
 import SignupModal from '../common/modal/SignupMOdal';
 
@@ -88,11 +89,12 @@ const AiChat = () => {
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%]`}>
-        {isLoggedIn ? (
+        {/* {isLoggedIn ? (
           <LogoutIcon handleStop={() => handleStop()} />
         ) : (
           <LoginIcon />
-        )}
+        )} */}
+        <LoginLogoutIcon />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
         <p className='text-4xl font-bold text-white pt-[12%]  cursor-default' >Cosmic Wisdom</p>
