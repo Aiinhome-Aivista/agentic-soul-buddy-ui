@@ -144,7 +144,7 @@ const AiChat = () => {
           </div>
         )}
       </div>
-      <p className='text-large text-[#D9D9D9] text-center font-light pb-[5%] cursor-default' onClick={() => setSignupModal(true)}>Share your details to begin your personalized<br />journey of transformation</p>
+      <p className='text-large text-[#D9D9D9] text-center font-light pb-[5%] cursor-default'>Share your details to begin your personalized<br />journey of transformation</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         crossOrigin="anonymous"
