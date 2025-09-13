@@ -6,8 +6,6 @@ import { apiService } from '../service/apiService';
 import { POST_url } from '../connection/connection';
 import TypingDots from '../components/TypingDots';
 import CanvasVisualizerSim from '../components/CanvasVisualizerSim';
-import LoginIcon from '../components/LoginIcon';
-import LogoutIcon from '../components/LogoutIcon';
 import LoginLogoutIcon from '../components/LoginLogoutIcon';
 import LoginModal from '../common/modal/LoginModal';
 import SignupModal from '../common/modal/SignupMOdal';
@@ -89,11 +87,6 @@ const AiChat = () => {
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%]`}>
-        {/* {isLoggedIn ? (
-          <LogoutIcon handleStop={() => handleStop()} />
-        ) : (
-          <LoginIcon />
-        )} */}
         <LoginLogoutIcon />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
@@ -151,7 +144,7 @@ const AiChat = () => {
           </div>
         )}
       </div>
-      <p className='text-large text-[#D9D9D9] text-center font-light pb-[5%] cursor-default'>Share your details to begin your personalized<br />journey of transformation</p>
+      <p className='text-large text-[#D9D9D9] text-center font-light pb-[5%] cursor-default' onClick={() => setSignupModal(true)}>Share your details to begin your personalized<br />journey of transformation</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         crossOrigin="anonymous"

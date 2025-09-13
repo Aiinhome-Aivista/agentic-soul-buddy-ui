@@ -1,54 +1,49 @@
 import React, { useContext } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Context } from "../common/helper/Context";
 
-function LoginLogoutIcon() {
-    const { isLoggedIn, setLoginModal, setIsLoggedIn } = useContext(Context);
+function LoginLogoutIcon({ handleStop }) {
+    const { isLoggedIn, setIsLoggedIn, setAudioUrl, setLoginModal } = useContext(Context);
 
     const handleClick = () => {
         if (isLoggedIn) {
             setIsLoggedIn(false);
-            sessionStorage.clear();
+            handleStop();
+            setAudioUrl(null);
+            localStorage.clear();
         } else {
-            setIsLoggedIn(true);
+            setLoginModal(true)
         }
     };
 
     return (
         <div
-            className="relative flex items-center justify-center w-[113px] h-[41px]  cursor-pointer overflow-hidden "
-               style={{
-    background:"rgba(36, 33, 33, 1)",
-        border: "2px solid #474747",
-        borderRadius: "29px",
-        
-      }}
-            onClick={handleClick}
-        >
-            {/* Sliding Circle (background only) */}
-            <motion.div
-                initial={false}
-                animate={{ x: isLoggedIn ? 77 : 0 }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="absolute top-[5px] left-[3px] h-[28px] w-[28px] rounded-full bg-[#d9d9d9]/54 "
-            />
+            className="relative flex items-center justify-between w-[4.3rem] h-[1.7rem] overflow-hidden rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 px-1">
+            {/* When logged out: knob left, show Login on the right */}
+            {!isLoggedIn && (
+                <>
+                    <span className="invisible text-[0.75rem] font-medium">.</span>
+                    <span className="cursor-default ml-auto text-[0.75rem] pr-[0.376rem] font-medium text-[#7D7E7F]">
+                        Login
+                    </span>
+                </>
+            )}
 
-            {/* Text always centered and above circle */}
-             <div className="flex items-center justify-center w-full z-10">
-             <span
-              style={{
-            fontSize: "18px",
-            fontWeight: 500,
-            fontFamily: "'Nunito', sans-serif",
-            color:"#7D7E7F"
-          }}
-          className={` ${
-            isLoggedIn ? "mr-6" : "ml-6"
-          }`}
-        >
-            {isLoggedIn ? "Logout" : "Login"}
-        </span>
-            </div>
+            {/* When logged in: knob right, show Logout on the left */}
+            {isLoggedIn && (
+                <>
+                    <span className="cursor-default text-[0.75rem] font-medium text-[#7D7E7F]">
+                        Logout
+                    </span>
+                    <span className="invisible text-[0.75rem] font-medium">.</span>
+                </>
+            )}
+
+            {/* Knob */}
+            <div
+                className={`cursor-pointer absolute top-[0.25rem] h-[1rem] w-[1rem] rounded-full bg-[#d9d9d9]/54 transition-transform duration-300 ease-in-out ${isLoggedIn ? "translate-x-[2.59rem]" : "translate-x-0"
+                    }`}
+                onClick={handleClick}
+            />
         </div>
     );
 }
