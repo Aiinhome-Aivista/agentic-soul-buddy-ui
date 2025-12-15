@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'primereact/card';
 
 const QuestionCard = ({ question, onSelectOption, onNext, selectedOptions = [] }) => {
-    const isMultiple = question.type === 'Multiple Select';
+    const isMultiple = question.type?.toLowerCase()?.includes('multiple');
     const isAgreement = question.type === 'Agreement Scale';
 
     const handleOptionClick = (option) => {
@@ -10,7 +10,7 @@ const QuestionCard = ({ question, onSelectOption, onNext, selectedOptions = [] }
     };
 
     return (
-        <div className="flex flex-col items-center w-full max-w-2xl px-4">
+        <div className="flex flex-col items-center w-full max-w-2xl px-4 pb-24">
             <h2 className="text-2xl font-semibold text-center text-gray-800 mb-8 leading-snug">
                 {question.text}
             </h2>
@@ -73,12 +73,14 @@ const QuestionCard = ({ question, onSelectOption, onNext, selectedOptions = [] }
             </div>
 
             {isMultiple && (
-                <button
-                    onClick={onNext}
-                    className="mt-8 px-8 py-3 bg-gray-900 text-white rounded-full font-medium hover:bg-black transition-colors"
-                >
-                    Continue
-                </button>
+                <div className="fixed bottom-0 left-0 w-full p-4 flex justify-center z-50 pointer-events-none">
+                    <button
+                        onClick={onNext}
+                        className="px-8 py-3 bg-gray-900 text-white rounded-full font-medium hover:bg-black transition-colors shadow-lg pointer-events-auto"
+                    >
+                        Continue
+                    </button>
+                </div>
             )}
         </div>
     );

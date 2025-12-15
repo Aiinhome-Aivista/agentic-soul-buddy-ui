@@ -23,7 +23,7 @@ const Questionnaire = () => {
     };
 
     const handleSelectOption = (option) => {
-        const isMultiple = currentQuestion.type === 'Multiple Select';
+        const isMultiple = currentQuestion.type?.toLowerCase()?.includes('multiple');
 
         if (isMultiple) {
             setAnswers(prev => {
@@ -60,7 +60,7 @@ const Questionnaire = () => {
     const currentAnswer = answers[currentQuestion.id];
 
     return (
-        <div className="min-h-screen bg-[#f8f6f2] flex flex-col font-sans">
+        <div className="h-screen bg-[#f8f6f2] flex flex-col font-sans overflow-hidden">
             {/* Header / Progress Bar */}
             <div className="w-full px-4 py-4 flex items-center justify-between border-b border-gray-100 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
                 <button
@@ -91,7 +91,7 @@ const Questionnaire = () => {
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col items-center justify-center py-10">
+            <div className="flex-1 flex flex-col items-center justify-start py-10 w-full overflow-y-auto">
                 <QuestionCard
                     question={currentQuestion}
                     onSelectOption={handleSelectOption}
