@@ -2,12 +2,13 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Context } from '../../common/helper/Context';
 import LoginModal from '../../common/modal/LoginModal';
+import SignupModal2 from '../../common/modal/signupafterquestions';
 import { questions } from './questions';
 import QuestionCard from './QuestionCard';
 
 const Questionnaire = () => {
     const navigate = useNavigate();
-    const { setLoginModal, loginModal } = useContext(Context);
+    const { setLoginModal, loginModal, setSignupModal2, signupModal2 } = useContext(Context);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState({});
 
@@ -48,7 +49,9 @@ const Questionnaire = () => {
         if (isLastQuestion) {
             // Finish flow - handle submission here
             console.log('Final Answers:', answers);
-            navigate('/');
+           
+            setSignupModal2(true);
+            // navigate('/');
             // Open Login Modal
             // setLoginModal(true);
 
@@ -96,6 +99,7 @@ const Questionnaire = () => {
                 />
             </div>
             {loginModal && <LoginModal OnClose={() => setLoginModal(false)} />}
+            {signupModal2 && <SignupModal2 OnClose={() => setSignupModal2(false)} />}
         </div >
     );
 };

@@ -7,6 +7,7 @@ export function ContextProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [loginModal, setLoginModal] = useState(false)
     const [signupModal, setSignupModal] = useState(false)
+    const [signupModal2, setSignupModal2] = useState(false)
     const [tempUserName, setTempUserName] = useState("")
     const [tempUserId, setTempUserId] = useState("")
     const [audioUrl, setAudioUrl] = useState(null);
@@ -19,6 +20,7 @@ export function ContextProvider({ children }) {
             isLoggedIn, setIsLoggedIn,
             loginModal, setLoginModal,
             signupModal, setSignupModal,
+            signupModal2, setSignupModal2,
             tempUserName, setTempUserName,
             tempUserId, setTempUserId,
             audioUrl, setAudioUrl,
