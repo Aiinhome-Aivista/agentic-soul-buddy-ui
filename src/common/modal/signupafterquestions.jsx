@@ -157,13 +157,13 @@ export default function SignupModal2({ OnClose }) {
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-5">
             <div className="glass-card flex flex-col items-center justify-center w-[25%] relative overflow-auto animate-slideUp rounded-2xl p-2 max-h-[90vh]">
-                <div className="flex items-start justify-end w-full pt-2 mr-2">
+                {/* <div className="flex items-start justify-end w-full pt-2 mr-2">
                     <CloseRoundedIcon
                         onClick={OnClose}
                         className="cursor-pointer modalCloseIcon hover:scale-110 transition-transform"
                         sx={{ backgroundColor: "rgba(255, 255, 255, 0.2)", borderRadius: '50%', fontSize: '1.2rem', padding: '2px', color: 'white' }}
                     />
-                </div>
+                </div> */}
 
                 <form onSubmit={formik.handleSubmit} className="w-full flex flex-col items-center pb-4">
                     <h2 className="text-xl font-bold text-[#D9D9D9] mb-4 cursor-default">Complete Your Profile</h2>

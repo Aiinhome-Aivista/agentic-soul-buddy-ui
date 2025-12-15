@@ -10,10 +10,11 @@ import CanvasVisualizerSim from '../components/CanvasVisualizerSim';
 import LoginLogoutIcon from '../components/LoginLogoutIcon';
 import LoginModal from '../common/modal/LoginModal';
 import SignupModal from '../common/modal/SignupMOdal';
+import SignupModal2 from '../common/modal/signupafterquestions';
 
 const AiChat = () => {
   const navigate = useNavigate();
-  const { recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal, audioUrl, setAudioUrl, isLoading, setIsLoading } = useContext(Context);
+  const { recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal, signupModal2, setSignupModal2, audioUrl, setAudioUrl, isLoading, setIsLoading } = useContext(Context);
   const audioRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -167,6 +168,7 @@ const AiChat = () => {
 
       {loginModal && <LoginModal OnClose={() => setLoginModal(false)} />}
       {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
+      {signupModal2 && <SignupModal2 OnClose={() => setSignupModal2(false)} />}
     </div >
   );
 };
