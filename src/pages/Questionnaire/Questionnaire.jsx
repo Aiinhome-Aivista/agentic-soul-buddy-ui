@@ -79,18 +79,19 @@ const Questionnaire = () => {
                 {/* Progress Bar Label */}
                 <div className="flex-1 mx-8 h-1 bg-white/20 rounded-full overflow-hidden">
                     <div
-                        className="h-full bg-white transition-all duration-300 ease-out rounded-full"
+                        className="h-full bg-white/60 transition-all duration-300 ease-out rounded-full"
                         style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
                     />
                 </div>
 
-                <span className="text-sm font-bold text-white/90 font-mono">
-                    {currentIndex + 1}/{questions.length}
-                </span>
+                <div className="text-sm font-bold font-mono">
+                    <span className="text-white">{currentIndex + 1}</span>
+                    <span className="text-white/60">/{questions.length}</span>
+                </div>
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col items-center justify-start py-10 w-full overflow-y-auto">
+            <div className="flex-1 flex flex-col items-center justify-start pb-10 w-full overflow-y-auto">
                 <QuestionCard
                     question={currentQuestion}
                     onSelectOption={handleSelectOption}
