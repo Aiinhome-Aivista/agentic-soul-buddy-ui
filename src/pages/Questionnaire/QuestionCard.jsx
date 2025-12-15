@@ -28,7 +28,7 @@ const QuestionCard = ({ question, onSelectOption, onNext, selectedOptions = [] }
             {isAgreement ? (
                 <div className="w-full flex flex-col gap-2">
                     {/* Icon Container */}
-                    <div className="w-full h-16 bg-white/10 rounded-2xl flex items-center justify-between px-2 sm:px-4 relative border border-white/10">
+                    <div className="w-full bg-white/10 rounded-2xl flex items-center justify-between p-1.5 sm:p-2 relative border border-white/10">
                         {question.options.map((option, index) => {
                             const isSelected = selectedOptions.includes(option);
 
