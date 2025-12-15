@@ -61,7 +61,7 @@ const Questionnaire = () => {
 
     return (
         <div
-            className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden">
+            className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-5">
             {/* Header / Progress Bar */}
             <div className="w-full px-8 py-6 flex items-center justify-between sticky top-0 z-10">
                 <button
