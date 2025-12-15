@@ -10,7 +10,7 @@ const QuestionCard = ({ question, onSelectOption, onNext, selectedOptions = [] }
     };
 
     return (
-        <div className="flex flex-col items-center w-full max-w-2xl px-4 pb-24">
+        <div className="flex flex-col items-center w-full max-w-lg px-4 pb-24">
             <h2 className="text-2xl font-semibold text-center text-gray-800 mb-8 leading-snug">
                 {question.text}
             </h2>
@@ -76,7 +76,12 @@ const QuestionCard = ({ question, onSelectOption, onNext, selectedOptions = [] }
                 <div className="fixed bottom-0 left-0 w-full p-4 flex justify-center z-50 pointer-events-none">
                     <button
                         onClick={onNext}
-                        className="px-8 py-3 bg-gray-900 text-white rounded-full font-medium hover:bg-black transition-colors shadow-lg pointer-events-auto"
+                        disabled={selectedOptions.length === 0}
+                        className={`px-8 py-3 rounded-full font-medium transition-all shadow-lg pointer-events-auto 
+                            ${selectedOptions.length > 0
+                                ? 'bg-[#40916c] text-white hover:bg-[#2d6a4f] hover:scale-105'
+                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'}
+                        `}
                     >
                         Continue
                     </button>
