@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Context } from '../../common/helper/Context';
+import LoginModal from '../../common/modal/LoginModal';
 import { questions } from './questions';
 import QuestionCard from './QuestionCard';
 
 const Questionnaire = () => {
     const navigate = useNavigate();
+    const { setLoginModal, loginModal } = useContext(Context);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState({});
 
@@ -45,8 +48,10 @@ const Questionnaire = () => {
         if (isLastQuestion) {
             // Finish flow - handle submission here
             console.log('Final Answers:', answers);
-            // Navigate to result or dashboard
-            navigate('/dashboard'); // Placeholder
+            navigate('/');
+            // Open Login Modal
+            // setLoginModal(true);
+         
         } else {
             setCurrentIndex((prev) => prev + 1);
         }
@@ -67,9 +72,9 @@ const Questionnaire = () => {
                     </svg>
                 </button>
 
-              
+
                 <div className="absolute left-1/2 transform -translate-x-1/2">
-                    <span className="font-serif italic text-xl font-bold text-gray-800">Soul Buddy</span>
+                    <span className="text-xl font-bold text-gray-800">Soul Buddy</span>
                 </div>
 
                 <span className="text-xs font-medium text-gray-500">
@@ -94,7 +99,8 @@ const Questionnaire = () => {
                     selectedOptions={Array.isArray(currentAnswer) ? currentAnswer : (currentAnswer ? [currentAnswer] : [])}
                 />
             </div>
-        </div>
+            {loginModal && <LoginModal OnClose={() => setLoginModal(false)} />}
+        </div >
     );
 };
 
