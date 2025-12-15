@@ -51,7 +51,7 @@ const Questionnaire = () => {
             navigate('/');
             // Open Login Modal
             // setLoginModal(true);
-         
+
         } else {
             setCurrentIndex((prev) => prev + 1);
         }
@@ -60,34 +60,30 @@ const Questionnaire = () => {
     const currentAnswer = answers[currentQuestion.id];
 
     return (
-        <div className="h-screen bg-[#f8f6f2] flex flex-col font-sans overflow-hidden">
+        <div
+            className="w-full h-full flex flex-col items-center justify-center relative overflow-hidden">
             {/* Header / Progress Bar */}
-            <div className="w-full px-4 py-4 flex items-center justify-between border-b border-gray-100 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+            <div className="w-full px-8 py-6 flex items-center justify-between sticky top-0 z-10">
                 <button
                     onClick={handleBack}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors backdrop-blur-md"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                 </button>
 
-
-                <div className="absolute left-1/2 transform -translate-x-1/2">
-                    <span className="text-xl font-bold text-gray-800">Soul Buddy</span>
+                {/* Progress Bar Label */}
+                <div className="flex-1 mx-8 h-1 bg-white/20 rounded-full overflow-hidden">
+                    <div
+                        className="h-full bg-white transition-all duration-300 ease-out rounded-full"
+                        style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
+                    />
                 </div>
 
-                <span className="text-xs font-medium text-gray-500">
-                    {currentIndex + 1} / {questions.length}
+                <span className="text-sm font-bold text-white/90 font-mono">
+                    {currentIndex + 1}/{questions.length}
                 </span>
-            </div>
-
-            {/* Progress Bar (Thin green line) */}
-            <div className="w-full h-1 bg-gray-200">
-                <div
-                    className="h-full bg-green-600 transition-all duration-300 ease-out"
-                    style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
-                />
             </div>
 
             {/* Main Content */}

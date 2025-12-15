@@ -93,7 +93,7 @@ const AiChat = () => {
           onClick={() => navigate('/questionnaire')}
           className="h-[1.7rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] hover:bg-[#474747]/40 transition-colors"
         >
-          Quiz
+          Sign Up
         </button>
         <LoginLogoutIcon />
       </div>
