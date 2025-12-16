@@ -10,3 +10,7 @@ export const POST_url = {
 export const POST_url1 = {
       signup: devUrl1 + "signup"
 };
+
+export const get_url1 = {
+      questions: devUrl1 + "fetch_questions"
+};

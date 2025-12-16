@@ -1,15 +1,44 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Context } from '../../common/helper/Context';
 import LoginModal from '../../common/modal/LoginModal';
-import { questions } from './questions';
 import QuestionCard from './QuestionCard';
+import { apiService } from '../../service/apiService';
+import { get_url1 } from '../../connection/connection';
 
 const Questionnaire = () => {
     const navigate = useNavigate();
     const { setLoginModal, loginModal, setSignupModal2, signupModal2 } = useContext(Context);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState({});
+    const [questions, setQuestions] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchQuestions = async () => {
+            try {
+                setLoading(true);
+                const response = await apiService({
+                    url: get_url1.questions,
+                    method: 'GET'
+                });
+
+                if (response.error) {
+                    setError(response.message || 'Failed to fetch questions');
+                } else {
+                    setQuestions(response);
+                }
+            } catch (err) {
+                setError('Failed to load questions. Please try again.');
+                console.error('Error fetching questions:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchQuestions();
+    }, []);
 
     const currentQuestion = questions[currentIndex];
     const isLastQuestion = currentIndex === questions.length - 1;
@@ -58,7 +87,37 @@ const Questionnaire = () => {
         }
     };
 
-    const currentAnswer = answers[currentQuestion.id];
+    if (loading) {
+        return (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm">
+                <div className="text-white text-xl font-semibold">Loading questions...</div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-black/10 backdrop-blur-sm">
+                <div className="text-red-400 text-xl font-semibold">{error}</div>
+                <button
+                    onClick={() => navigate('/')}
+                    className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white transition-colors"
+                >
+                    Go Back
+                </button>
+            </div>
+        );
+    }
+
+    if (!questions.length) {
+        return (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm">
+                <div className="text-white text-xl font-semibold">No questions available</div>
+            </div>
+        );
+    }
+
+    const currentAnswer = answers[currentQuestion?.id];
 
     return (
         <div
