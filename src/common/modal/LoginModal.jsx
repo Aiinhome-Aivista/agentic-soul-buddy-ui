@@ -5,10 +5,12 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { auth, googleProvider, facebookProvider } from "../../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { apiService } from "../../service/apiService";
-import { POST_url } from "../../connection/connection";
+import { POST_url1 } from "../../connection/connection";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginModal({ OnClose }) {
     const { setIsLoggedIn, setSignupModal, setTempUserName, setTempUserId, setAudioUrl, setIsLoading } = useContext(Context)
+    const navigate = useNavigate();
 
     const handleGoogleSignIn = async () => {
         try {
@@ -18,11 +20,12 @@ export default function LoginModal({ OnClose }) {
             const payload = {
                 "full_name": result.user.displayName,
                 "login_type": "google",
-                "user_id": result.user.uid
+                "user_id": result.user.uid,
+                "email": result.user.email,
             }
             try {
                 const response = await apiService({
-                    url: POST_url.login,
+                    url: POST_url1.login,
                     method: 'POST',
                     data: payload,
                 });
@@ -43,10 +46,11 @@ export default function LoginModal({ OnClose }) {
 
                         }
                         if (response.status === "new_user") {
-                            setSignupModal(true)
-                            setTempUserName(result.user.displayName)
-                            setTempUserId(result.user.uid)
-                            OnClose()
+                            navigate('/questionnaire')
+                            // setSignupModal(true)
+                            // setTempUserName(result.user.displayName)
+                            // setTempUserId(result.user.uid)
+                            // OnClose()
                         }
                     }
                 } else {

@@ -8,7 +8,8 @@ export const POST_url = {
 };
 
 export const POST_url1 = {
-      signup: devUrl1 + "signup"
+      signup: devUrl1 + "signup",
+      login: devUrl1 + "login"
 };
 
 export const get_url1 = {
