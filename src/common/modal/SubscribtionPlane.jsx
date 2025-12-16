@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
 import crown from "../../assets/icons/crown.svg";
+import { apiService } from "../../service/apiService";
+import { devUrl1 } from "../../env/env";
 
 const SubscriptionPlane = ({ OnClose }) => {
   const [selectedPlan, setSelectedPlan] = useState("1-month");
@@ -13,6 +15,7 @@ const SubscriptionPlane = ({ OnClose }) => {
         finalPrice: "₹935.54",
         price: "₹133.27",
         period: "Per day",
+        amount: 935.54,
         highlighted: false,
       },
       {
@@ -22,6 +25,7 @@ const SubscriptionPlane = ({ OnClose }) => {
         finalPrice: "₹935.54",
         price: "₹50.94",
         period: "Per day",
+        amount: 1527.00,
         highlighted: true,
       },
       {
@@ -31,15 +35,44 @@ const SubscriptionPlane = ({ OnClose }) => {
         finalPrice: "₹935.54",
         price: "₹29.60",
         period: "Per day",
+        amount: 2664.00,
         highlighted: false,
       },
     ],
     []
   );
 
-  const handleContinue = () => {
-    console.log("Selected plan:", selectedPlan);
-    OnClose?.();
+  const handleContinue = async () => {
+    try {
+      const userId = localStorage.getItem('userId');
+      const selectedPlanData = plans.find(p => p.id === selectedPlan);
+
+      if (!userId) {
+        console.error('User ID not found in localStorage');
+        return;
+      }
+
+      const payload = {
+        user_id: userId,
+        amount: selectedPlanData?.amount || 9.99,
+        transaction_id: "TID-123456789-20251215"
+      };
+
+      const response = await apiService({
+        url: devUrl1 + "subscribe",
+        method: 'POST',
+        data: payload
+      });
+
+      if (response && !response.error) {
+        console.log('Subscription successful:', response);
+        OnClose?.();
+      } else {
+        console.error('Subscription failed:', response?.message);
+      }
+    } catch (error) {
+      console.error('Error during subscription:', error);
+    }
   };
 
   const splitPrice = (p) => {
