@@ -41,7 +41,7 @@ export default function SignupModal2({ OnClose }) {
     const validationSchema = Yup.object({
         full_name: Yup.string().required("Full name is required."),
         email: Yup.string().email("Invalid email").required("Email is required."),
-        password: Yup.string().required("Password is required."),
+        // password: Yup.string().required("Password is required."),
         age: Yup.number()
             .min(18, "Age must be at least 18 years.")
             .max(120, "Invalid age!")
@@ -60,7 +60,7 @@ export default function SignupModal2({ OnClose }) {
         initialValues: {
             full_name: "",
             email: "",
-            password: "",
+            // password: "",
             age: "",
             gender: "",
             work: "",
@@ -108,7 +108,7 @@ export default function SignupModal2({ OnClose }) {
         const priority = [
             'full_name',
             'email',
-            'password',
+            // 'password',
             'age',
             'gender',
             'work',
@@ -195,7 +195,7 @@ export default function SignupModal2({ OnClose }) {
                         />
 
                         {/* Password */}
-                        <input
+                        {/* <input
                             id="password"
                             name="password"
                             type="password"
@@ -204,7 +204,7 @@ export default function SignupModal2({ OnClose }) {
                             value={formik.values.password}
                             placeholder="Password"
                             className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
-                        />
+                        /> */}
 
                         {/* Age */}
                         <input
