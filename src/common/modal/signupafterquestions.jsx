@@ -9,7 +9,7 @@ import { apiService } from "../../service/apiService";
 import { POST_url1 } from "../../connection/connection";
 import { Dropdown } from "primereact/dropdown";
 
-export default function SignupModal2({ OnClose, onSuccess }) {
+export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const { tempUserName, tempUserId, setIsLoggedIn, setAudioUrl, setIsLoading } =
     useContext(Context);
 
@@ -85,6 +85,35 @@ export default function SignupModal2({ OnClose, onSuccess }) {
           setIsLoggedIn(true);
           localStorage.setItem("userId", response.user_id);
           localStorage.setItem("sessionId", response.session_id);
+
+          // Submit Questionnaire Responses
+          if (answers) {
+            try {
+              const formattedResponses = Object.keys(answers).map((questionId) => {
+                const val = answers[questionId];
+                return {
+                  question_id: Number(questionId),
+                  answer_value: Array.isArray(val) ? val.join(", ") : val
+                };
+              });
+
+              const responsePayload = {
+                user_id: response.user_id,
+                responses: formattedResponses
+              };
+
+              console.log("Submitting responses payload:", responsePayload);
+
+              await apiService({
+                url: POST_url1.submit_response,
+                method: 'POST',
+                data: responsePayload
+              });
+
+            } catch (resErr) {
+              console.error("Error submitting responses:", resErr);
+            }
+          }
 
           setIsLoading(true);
           setTimeout(() => {
