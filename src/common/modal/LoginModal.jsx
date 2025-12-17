@@ -15,7 +15,7 @@ export default function LoginModal({ OnClose }) {
     const handleGoogleSignIn = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
-            //console.log("User:", result.user);
+            console.log("User:", result.user);
             //apicall
             const payload = {
                 "full_name": result.user.displayName,
@@ -46,6 +46,8 @@ export default function LoginModal({ OnClose }) {
 
                         }
                         if (response.status === "new_user") {
+                            localStorage.setItem("signupName", result.user.displayName);
+                            localStorage.setItem("signupEmail", result.user.email);
                             navigate('/questionnaire')
                             // setSignupModal(true)
                             // setTempUserName(result.user.displayName)
