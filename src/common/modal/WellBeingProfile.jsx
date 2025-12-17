@@ -77,7 +77,7 @@ export default function WellBeingProfile({ onClose }) {
                 <div className="grid grid-cols-2 gap-3 w-full mb-6">
                     {/* Card 1 */}
                     <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                        <div className="bg-green-400/20 p-2 rounded-lg text-green-300">
+                        <div className="bg-white/10 p-2 rounded-lg text-white">
                             <CrisisAlertIcon />
                         </div>
                         <div>
@@ -88,7 +88,7 @@ export default function WellBeingProfile({ onClose }) {
 
                     {/* Card 2 */}
                     <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                        <div className="bg-green-400/20 p-2 rounded-lg text-green-300">
+                        <div className="bg-white/10 p-2 rounded-lg text-white   ">
                             <CalendarMonthIcon />
                         </div>
                         <div>
@@ -99,7 +99,7 @@ export default function WellBeingProfile({ onClose }) {
 
                     {/* Card 3 */}
                     <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                        <div className="bg-green-400/20 p-2 rounded-lg text-green-300">
+                        <div className="bg-white/10 p-2 rounded-lg text-white">
                             <BoltIcon />
                         </div>
                         <div>
@@ -110,7 +110,7 @@ export default function WellBeingProfile({ onClose }) {
 
                     {/* Card 4 */}
                     <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                        <div className="bg-green-400/20 p-2 rounded-lg text-green-300">
+                        <div className="bg-white/10 p-2 rounded-lg text-white">
                             <BatteryAlertIcon />
                         </div>
                         <div>
