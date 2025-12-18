@@ -196,7 +196,8 @@ export default function WellBeingProfile({ onClose, onContinue }) {
                                 <div className="absolute top-0 flex flex-col items-center" style={{ left: styles.gaugePos, transform: 'translateX(-50%)' }}>
                                     <div className="bg-white text-black text-xs px-2 py-1 rounded mb-1 whitespace-nowrap">Your level</div>
                                     <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-6 border-t-white"></div>
-                                </div>
+                                        </div>
+                                        <br />
                                 <div className="h-2 w-full rounded-full bg-gradient-to-r from-blue-200 via-green-200 to-red-400 relative">
                                     <div
                                         className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white border-2 ${styles.alertIconBg.replace('bg-', 'border-')} rounded-full shadow`}
