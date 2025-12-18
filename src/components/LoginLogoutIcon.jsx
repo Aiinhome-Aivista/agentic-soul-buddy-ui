@@ -6,10 +6,21 @@ function LoginLogoutIcon({ handleStop }) {
 
     const handleClick = () => {
         if (isLoggedIn) {
+            // Clear all storage first
+            localStorage.removeItem('userId');
+            localStorage.removeItem('sessionId');
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Then update state
             setIsLoggedIn(false);
             handleStop();
             setAudioUrl(null);
-            localStorage.clear();
+            
+            // Force page reload to ensure complete logout
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
         } else {
             setLoginModal(true)
         }
@@ -31,7 +42,7 @@ function LoginLogoutIcon({ handleStop }) {
             {/* When logged in: knob right, show Logout on the left */}
             {isLoggedIn && (
                 <>
-                    <span className="cursor-default text-[0.75rem] font-medium text-[#7D7E7F]">
+                    <span className="cursor-pointer text-[0.75rem] font-medium text-[#7D7E7F]" onClick={handleClick}>
                         Logout
                     </span>
                     <span className="invisible text-[0.75rem] font-medium">.</span>
