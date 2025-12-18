@@ -59,8 +59,8 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
   const formik = useFormik({
     initialValues: {
-      full_name: localStorage.getItem("signupName") || "",
-      email: localStorage.getItem("signupEmail") || "",
+      full_name: sessionStorage.getItem("signupName") || "",
+      email: sessionStorage.getItem("signupEmail") || "",
       // password: "",
       age: "",
       gender: "",
@@ -222,8 +222,8 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               onChange={formik.handleChange}
               value={formik.values.full_name}
               placeholder="Full Name"
-              readOnly={!!localStorage.getItem("signupName")}
-              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${localStorage.getItem("signupName") ? "opacity-50 cursor-not-allowed" : ""
+              readOnly={!!sessionStorage.getItem("signupName")}
+              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupName") ? "opacity-50 cursor-not-allowed" : ""
                 }`}
             />
 
@@ -236,8 +236,8 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               onChange={formik.handleChange}
               value={formik.values.email}
               placeholder="Email Address"
-              readOnly={!!localStorage.getItem("signupEmail")}
-              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${localStorage.getItem("signupEmail") ? "opacity-50 cursor-not-allowed" : ""
+              readOnly={!!sessionStorage.getItem("signupEmail")}
+              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupEmail") ? "opacity-50 cursor-not-allowed" : ""
                 }`}
             />
 

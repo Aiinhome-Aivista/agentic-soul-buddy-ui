@@ -46,8 +46,8 @@ export default function LoginModal({ OnClose }) {
 
                         }
                         if (response.status === "new_user") {
-                            localStorage.setItem("signupName", result.user.displayName);
-                            localStorage.setItem("signupEmail", result.user.email);
+                            sessionStorage.setItem("signupName", result.user.displayName);
+                            sessionStorage.setItem("signupEmail", result.user.email);
                             navigate('/questionnaire')
                             // setSignupModal(true)
                             // setTempUserName(result.user.displayName)
