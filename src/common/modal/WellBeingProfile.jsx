@@ -164,9 +164,9 @@ export default function WellBeingProfile({ onClose, onContinue }) {
                             <h2 className="text-xl font-bold text-white text-center w-full">
                                 Summary of your Well-being Profile
                             </h2>
-                            <button onClick={onClose} className="absolute right-4 top-4 hover:bg-white/10 rounded-full p-1 transition">
+                            {/* <button onClick={onClose} className="absolute right-4 top-4 hover:bg-white/10 rounded-full p-1 transition">
                                 <CloseRoundedIcon sx={{ color: "white", fontSize: "1.5rem" }} />
-                            </button>
+                            </button> */}
                         </div>
 
                         {/* Main Gauge Card */}
