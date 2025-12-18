@@ -16,12 +16,15 @@ export const VoiceRecognizer = ({ isRecording, setIsRecording }) => {
 
         recognitionRef.current = new SpeechRecognition();
         recognitionRef.current.lang = 'en-US';
-        recognitionRef.current.interimResults = false;
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
         recognitionRef.current.maxAlternatives = 1;
 
         recognitionRef.current.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            setRecognizedText(transcript)
+            const transcript = Array.from(event.results)
+                .map(result => result[0].transcript)
+                .join('');
+            setRecognizedText(transcript);
             console.log('Recognized text:', transcript);
         };
 
