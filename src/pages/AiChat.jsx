@@ -70,8 +70,8 @@ const AiChat = () => {
             });
             setIsLoading(false);
             if (response && !response.error) {
-              console.log(response.Data)
-              setAudioUrl(response.Data.audio_url);
+              console.log(response)
+              setAudioUrl(response.audio_url);
             } else {
               console.error('Submission failed:', response?.message);
               console.log(`Submission failed: ${response?.message || 'An error occurred.'}`);
