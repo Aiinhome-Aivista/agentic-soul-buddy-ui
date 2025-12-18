@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import BoltIcon from '@mui/icons-material/Bolt';
@@ -6,8 +6,97 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CrisisAlertIcon from '@mui/icons-material/CrisisAlert';
 import BatteryAlertIcon from '@mui/icons-material/BatteryAlert';
 import PersonIcon from "../../assets/icons/Untitled design.svg";
+import { apiService } from "../../service/apiService";
+import { POST_url1 } from "../../connection/connection";
 
 export default function WellBeingProfile({ onClose }) {
+    const [profileData, setProfileData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const userId = localStorage.getItem("userId");
+                const payload = {
+                    "user_id": userId
+                };
+
+                const response = await apiService({
+                    url: POST_url1.wellbeing,
+                    method: 'POST',
+                    data: payload,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response && (response.status === 'success' || response.statusCode === 200)) {
+                    setProfileData(response.data);
+                } else {
+                    console.error("Failed to load profile:", response);
+                }
+            } catch (error) {
+                console.error("Error fetching wellbeing profile:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProfile();
+    }, []);
+
+    const getLevelStyles = (level) => {
+        const lvl = level ? level.toLowerCase() : 'low';
+        switch (lvl) {
+            case 'high':
+                return {
+                    badgeBg: 'bg-red-400/20',
+                    badgeText: 'text-red-300',
+                    gaugePos: '90%',
+                    alertBg: 'bg-red-400/10',
+                    alertBorder: 'border-red-400/20',
+                    alertIconBg: 'bg-red-400',
+                    alertTextHead: 'text-red-200',
+                    alertTextBody: 'text-red-100/80'
+                };
+            case 'medium':
+                return {
+                    badgeBg: 'bg-orange-400/20',
+                    badgeText: 'text-orange-300',
+                    gaugePos: '60%',
+                    alertBg: 'bg-orange-400/10',
+                    alertBorder: 'border-orange-400/20',
+                    alertIconBg: 'bg-orange-400',
+                    alertTextHead: 'text-orange-200',
+                    alertTextBody: 'text-orange-100/80'
+                };
+            case 'normal':
+                return {
+                    badgeBg: 'bg-blue-400/20',
+                    badgeText: 'text-blue-300',
+                    gaugePos: '35%',
+                    alertBg: 'bg-blue-400/10',
+                    alertBorder: 'border-blue-400/20',
+                    alertIconBg: 'bg-blue-400',
+                    alertTextHead: 'text-blue-200',
+                    alertTextBody: 'text-blue-100/80'
+                };
+            default: // Low
+                return {
+                    badgeBg: 'bg-green-400/20',
+                    badgeText: 'text-green-300',
+                    gaugePos: '10%',
+                    alertBg: 'bg-green-400/10',
+                    alertBorder: 'border-green-400/20',
+                    alertIconBg: 'bg-green-400',
+                    alertTextHead: 'text-green-200',
+                    alertTextBody: 'text-green-100/80'
+                };
+        }
+    };
+
+    const styles = getLevelStyles(profileData?.negative_effects_level);
+
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-50">
             <div className="glass-card flex flex-col items-center w-[30%] relative overflow-hidden rounded-3xl p-6 max-h-[90vh]">
@@ -22,106 +111,118 @@ export default function WellBeingProfile({ onClose }) {
                     </button>
                 </div>
 
-                {/* Main Gauge Card */}
-                <div className="rounded-2xl p-4 w-full mb-4 shadow-sm relative bg-white/5 border border-white/10">
-                    <div className="flex justify-between items-center mb-2">
-                        <span className="font-bold text-white">Negative effects level</span>
-                        <span className="bg-red-400/20 text-red-300 px-2 py-0.5 rounded text-sm font-semibold">High</span>
-                    </div>
-                    <br></br>
+                {loading ? (
+                    <div className="text-white py-10">Loading...</div>
+                ) : !profileData ? (
+                    <div className="text-white py-10">No profile data available.</div>
+                ) : (
+                    <>
+                        {/* Main Gauge Card */}
+                        <div className="rounded-2xl p-4 w-full mb-4 shadow-sm relative bg-white/5 border border-white/10">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="font-bold text-white">Negative effects level</span>
+                                <span className={`${styles.badgeBg} ${styles.badgeText} px-2 py-0.5 rounded text-sm font-semibold`}>
+                                    {profileData.negative_effects_level}
+                                </span>
+                            </div>
+                            <br></br>
 
-                    {/* Person Image Placeholder */}
-                    <div className="flex justify-center mb-4 relative">
-                        <div className="w-40 h-50  rounded-lg overflow-hidden relative flex items-center justify-center">
-                            <img
-                                src={PersonIcon}
-                                alt="Person"
-                                className="w-full h-full object-contain"
-                            />
-                        </div>
-                    </div>
+                            {/* Person Image Placeholder */}
+                            <div className="flex justify-center mb-4 relative">
+                                <div className="w-40 h-50 rounded-lg overflow-hidden relative flex items-center justify-center">
+                                    <img
+                                        src={PersonIcon}
+                                        alt="Person"
+                                        className="w-full h-full object-contain"
+                                    />
+                                </div>
+                            </div>
 
 
-                    {/* Gauge Slider */}
-                    <div className="relative pt-6 pb-2 px-2">
-                        {/* Tooltip for 'Your level' */}
-                        <div className="absolute right-[10%] top-0 flex flex-col items-center">
-                            <div className="bg-white text-black text-xs px-2 py-1 rounded mb-1">Your level</div>
-                            <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-6 border-t-white"></div>
-                        </div>
-                        <br></br>
+                            {/* Gauge Slider */}
+                            <div className="relative pt-6 pb-2 px-2">
+                                {/* Tooltip for 'Your level' */}
+                                <div className="absolute top-0 flex flex-col items-center" style={{ left: styles.gaugePos, transform: 'translateX(-50%)' }}>
+                                    <div className="bg-white text-black text-xs px-2 py-1 rounded mb-1 whitespace-nowrap">Your level</div>
+                                    <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-6 border-t-white"></div>
+                                        </div>
+                                        <br />
+                                <div className="h-2 w-full rounded-full bg-gradient-to-r from-blue-200 via-green-200 to-red-400 relative">
+                                    <div
+                                        className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white border-2 ${styles.alertIconBg.replace('bg-', 'border-')} rounded-full shadow`}
+                                        style={{ left: styles.gaugePos }}
+                                    ></div>
+                                </div>
+                                <div className="flex justify-between text-xs text-white/50 mt-1 font-medium">
+                                    <span>Low</span>
+                                    <span>Normal</span>
+                                    <span>Medium</span>
+                                    <span>High</span>
+                                </div>
+                            </div>
 
-                        <div className="h-2 w-full rounded-full bg-gradient-to-r from-blue-200 via-green-200 to-red-400 relative">
-                            <div className="absolute right-[10%] top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-red-400 rounded-full shadow"></div>
+                            {/* Alert Box */}
+                            <div className={`${styles.alertBg} ${styles.alertBorder} border rounded-xl p-3 mt-4 flex gap-3 items-start`}>
+                                <div className={`${styles.alertIconBg} rounded-full p-1 text-white shrink-0`}>
+                                    <WarningRoundedIcon sx={{ fontSize: "1rem" }} />
+                                </div>
+                                <div>
+                                    <div className={`font-bold ${styles.alertTextHead} text-sm`}>{profileData.negative_effects_level} level</div>
+                                    <p className={`${styles.alertTextBody} text-xs mt-1 leading-snug`}>
+                                        {profileData.explanation}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex justify-between text-xs text-white/50 mt-1 font-medium">
-                            <span>Low</span>
-                            <span>Normal</span>
-                            <span>Medium</span>
-                            <span>High</span>
-                        </div>
-                    </div>
 
-                    {/* Alert Box */}
-                    <div className="bg-red-400/10 border border-red-400/20 rounded-xl p-3 mt-4 flex gap-3 items-start">
-                        <div className="bg-red-400 rounded-full p-1 text-white shrink-0">
-                            <WarningRoundedIcon sx={{ fontSize: "1rem" }} />
-                        </div>
-                        <div>
-                            <div className="font-bold text-red-200 text-sm">HIGH level</div>
-                            <p className="text-red-100/80 text-xs mt-1 leading-snug">
-                                High levels of negative effects can lead to constant procrastination, increased worrying, reduced energy and well-being
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                        {/* Stats Grid */}
+                        <div className="grid grid-cols-2 gap-3 w-full mb-6">
+                            {/* Card 1 */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
+                                <div className="bg-white/10 p-2 rounded-lg text-white">
+                                    <CrisisAlertIcon />
+                                </div>
+                                <div>
+                                    <div className="text-xs text-white/60">Main difficulty</div>
+                                    <div className="font-bold text-white text-sm">{profileData.main_difficulty}</div>
+                                </div>
+                            </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-3 w-full mb-6">
-                    {/* Card 1 */}
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                        <div className="bg-white/10 p-2 rounded-lg text-white">
-                            <CrisisAlertIcon />
-                        </div>
-                        <div>
-                            <div className="text-xs text-white/60">Main difficulty</div>
-                            <div className="font-bold text-white text-sm">Worry</div>
-                        </div>
-                    </div>
+                            {/* Card 2 */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
+                                <div className="bg-white/10 p-2 rounded-lg text-white   ">
+                                    <CalendarMonthIcon />
+                                </div>
+                                <div>
+                                    <div className="text-xs text-white/60">Challenging period</div>
+                                    <div className="font-bold text-white text-sm">{profileData.challenging_period}</div>
+                                </div>
+                            </div>
 
-                    {/* Card 2 */}
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                        <div className="bg-white/10 p-2 rounded-lg text-white   ">
-                            <CalendarMonthIcon />
-                        </div>
-                        <div>
-                            <div className="text-xs text-white/60">Challenging period</div>
-                            <div className="font-bold text-white text-sm">Few weeks</div>
-                        </div>
-                    </div>
+                            {/* Card 3 */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
+                                <div className="bg-white/10 p-2 rounded-lg text-white">
+                                    <BoltIcon />
+                                </div>
+                                <div>
+                                    <div className="text-xs text-white/60">Trigger</div>
+                                    <div className="font-bold text-white text-sm truncate max-w-[80px]" title={profileData.trigger}>{profileData.trigger}</div>
+                                </div>
+                            </div>
 
-                    {/* Card 3 */}
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                        <div className="bg-white/10 p-2 rounded-lg text-white">
-                            <BoltIcon />
+                            {/* Card 4 */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
+                                <div className="bg-white/10 p-2 rounded-lg text-white">
+                                    <BatteryAlertIcon />
+                                </div>
+                                <div>
+                                    <div className="text-xs text-white/60">Energy level</div>
+                                    <div className="font-bold text-white text-sm">{profileData.energy_level}</div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <div className="text-xs text-white/60">Trigger</div>
-                            <div className="font-bold text-white text-sm truncate max-w-[80px]">Family</div>
-                        </div>
-                    </div>
-
-                    {/* Card 4 */}
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                        <div className="bg-white/10 p-2 rounded-lg text-white">
-                            <BatteryAlertIcon />
-                        </div>
-                        <div>
-                            <div className="text-xs text-white/60">Energy level</div>
-                            <div className="font-bold text-white text-sm">Low</div>
-                        </div>
-                    </div>
-                </div>
+                    </>
+                )}
 
                 {/* Footer Button */}
                 <button
