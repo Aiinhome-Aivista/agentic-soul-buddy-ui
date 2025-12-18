@@ -37,17 +37,18 @@ export default function LoginModal({ OnClose }) {
                             setIsLoggedIn(true)
                             OnClose();
                             localStorage.setItem('userId', result.user.uid);
-                            localStorage.setItem('sessionId', response.Data.session_id);
+                            localStorage.setItem('sessionId', response.session_id);
                             setIsLoading(true);
                             setTimeout(() => {
                                 setIsLoading(false);
-                                setAudioUrl(response.Data.audio_url);
+                                setAudioUrl(response.audio_url);
                             }, 3000);
 
                         }
                         if (response.status === "new_user") {
                             sessionStorage.setItem("signupName", result.user.displayName);
                             sessionStorage.setItem("signupEmail", result.user.email);
+                            localStorage.setItem('sessionId', response.session_id);
                             navigate('/questionnaire')
                             // setSignupModal(true)
                             // setTempUserName(result.user.displayName)

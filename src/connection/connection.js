@@ -12,7 +12,8 @@ export const POST_url1 = {
       login: devUrl1 + "login",
       subscription: devUrl1 + "subscribe",
       submit_response: devUrl1 + "submit_response",
-      wellbeing: devUrl1 + "wellbeing-profile"
+      wellbeing: devUrl1 + "wellbeing-profile",
+      ask: devUrl1 + "voice-ask"
 };
 
 export const get_url1 = {

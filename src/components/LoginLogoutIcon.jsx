@@ -11,12 +11,12 @@ function LoginLogoutIcon({ handleStop }) {
             localStorage.removeItem('sessionId');
             localStorage.clear();
             sessionStorage.clear();
-            
+
             // Then update state
             setIsLoggedIn(false);
-            handleStop();
+            if (handleStop) handleStop();
             setAudioUrl(null);
-            
+
             // Force page reload to ensure complete logout
             setTimeout(() => {
                 window.location.reload();

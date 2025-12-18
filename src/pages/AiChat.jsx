@@ -4,7 +4,7 @@ import MicIcon from '@mui/icons-material/Mic';
 import { VoiceRecognizer } from '../common/helper/VoiceRecognizer'
 import { Context } from '../common/helper/Context';
 import { apiService } from '../service/apiService';
-import { POST_url } from '../connection/connection';
+import { POST_url1 } from '../connection/connection';
 import TypingDots from '../components/TypingDots';
 import CanvasVisualizerSim from '../components/CanvasVisualizerSim';
 import LoginLogoutIcon from '../components/LoginLogoutIcon';
@@ -55,13 +55,13 @@ const AiChat = () => {
         if (recognizedText !== null) {
           const payload = {
             "user_id": localStorage.getItem('userId'),
-            "session_id": localStorage.getItem('sessionId'),
-            "user_input": recognizedText
+            // "session_id": localStorage.getItem('sessionId'),
+            "text": recognizedText
           }
           try {
             console.log(payload)
             const response = await apiService({
-              url: POST_url.ask,
+              url: POST_url1.ask,
               method: 'POST',
               data: payload,
               headers: {

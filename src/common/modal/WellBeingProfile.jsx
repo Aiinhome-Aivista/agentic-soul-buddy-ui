@@ -124,7 +124,23 @@ export default function WellBeingProfile({ onClose, onContinue }) {
 
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-50">
-            <div className={`glass-card flex flex-col items-center ${loading ? 'w-[30%] h-[30%] justify-center' : 'w-[30%] justify-start'} relative overflow-hidden rounded-3xl p-6 max-h-[90vh] transition-all duration-500`}>
+            <div className={`glass-card flex flex-col items-center ${loading ? 'w-[30%] h-[30%] justify-center' : 'w-[30%] justify-start'} relative overflow-y-auto rounded-3xl p-6 max-h-[90vh] transition-all duration-500 custom-scrollbar`}>
+                <style jsx>{`
+                    .custom-scrollbar::-webkit-scrollbar {
+                        width: 6px;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-track {
+                        background: rgba(255, 255, 255, 0.05);
+                        border-radius: 3px;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-thumb {
+                        background: rgba(255, 255, 255, 0.2);
+                        border-radius: 3px;
+                    }
+                    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                        background: rgba(255, 255, 255, 0.3);
+                    }
+                `}</style>
 
                 {loading ? (
                     <div className="flex flex-col items-center justify-center w-full h-full gap-6">
@@ -196,8 +212,8 @@ export default function WellBeingProfile({ onClose, onContinue }) {
                                 <div className="absolute top-0 flex flex-col items-center" style={{ left: styles.gaugePos, transform: 'translateX(-50%)' }}>
                                     <div className="bg-white text-black text-xs px-2 py-1 rounded mb-1 whitespace-nowrap">Your level</div>
                                     <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-6 border-t-white"></div>
-                                        </div>
-                                        <br />
+                                </div>
+                                <br />
                                 <div className="h-2 w-full rounded-full bg-gradient-to-r from-blue-200 via-green-200 to-red-400 relative">
                                     <div
                                         className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white border-2 ${styles.alertIconBg.replace('bg-', 'border-')} rounded-full shadow`}
