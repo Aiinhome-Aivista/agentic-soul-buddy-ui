@@ -8,10 +8,30 @@ import BatteryAlertIcon from '@mui/icons-material/BatteryAlert';
 import PersonIcon from "../../assets/icons/Untitled design.svg";
 import { apiService } from "../../service/apiService";
 import { POST_url1 } from "../../connection/connection";
+import { Stepper, Step, StepLabel } from "@mui/material";
 
-export default function WellBeingProfile({ onClose }) {
+export default function WellBeingProfile({ onClose, onContinue }) {
     const [profileData, setProfileData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [activeStep, setActiveStep] = useState(0);
+
+    const steps = [
+        'Analyzing Responses',
+        'Calculating Metrics',
+        'Generating Profile'
+    ];
+
+    useEffect(() => {
+        // Stepper animation
+        if (loading) {
+            const interval = setInterval(() => {
+                setActiveStep((prev) => {
+                    return prev < steps.length - 1 ? prev + 1 : prev;
+                });
+            }, 800);
+            return () => clearInterval(interval);
+        }
+    }, [loading]);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -31,13 +51,18 @@ export default function WellBeingProfile({ onClose }) {
                 });
 
                 if (response && (response.status === 'success' || response.statusCode === 200)) {
-                    setProfileData(response.data);
+                    // Ensure the stepper finishes visually before showing data (optional polish)
+                    setActiveStep(steps.length);
+                    setTimeout(() => {
+                        setProfileData(response.data);
+                        setLoading(false);
+                    }, 500);
                 } else {
                     console.error("Failed to load profile:", response);
+                    setLoading(false); // meaningful error handling would be better
                 }
             } catch (error) {
                 console.error("Error fetching wellbeing profile:", error);
-            } finally {
                 setLoading(false);
             }
         };
@@ -99,24 +124,51 @@ export default function WellBeingProfile({ onClose }) {
 
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-50">
-            <div className="glass-card flex flex-col items-center w-[30%] relative overflow-hidden rounded-3xl p-6 max-h-[90vh]">
-
-                {/* Header */}
-                <div className="w-full flex justify-between items-start mb-4">
-                    <h2 className="text-xl font-bold text-white text-center w-full">
-                        Summary of your Well-being Profile
-                    </h2>
-                    <button onClick={onClose} className="absolute right-4 top-4 hover:bg-white/10 rounded-full p-1 transition">
-                        <CloseRoundedIcon sx={{ color: "white", fontSize: "1.5rem" }} />
-                    </button>
-                </div>
+            <div className={`glass-card flex flex-col items-center ${loading ? 'w-[30%] h-[30%] justify-center' : 'w-[30%] justify-start'} relative overflow-hidden rounded-3xl p-6 max-h-[90vh] transition-all duration-500`}>
 
                 {loading ? (
-                    <div className="text-white py-10">Loading...</div>
+                    <div className="flex flex-col items-center justify-center w-full h-full gap-6">
+                        <h2 className="text-xl font-bold text-white text-center animate-pulse">
+                            Generating your profile...
+                        </h2>
+                        <div className="w-full">
+                            <Stepper activeStep={activeStep} alternativeLabel>
+                                {steps.map((label) => (
+                                    <Step key={label}>
+                                        <StepLabel
+                                            sx={{
+                                                '& .MuiStepLabel-label': { color: 'rgba(255,255,255,0.7) !important' },
+                                                '& .MuiStepLabel-label.Mui-active': { color: '#ffffff !important', fontWeight: 'bold' },
+                                                '& .MuiStepLabel-label.Mui-completed': { color: '#ffffff !important' },
+                                                '& .MuiStepIcon-root': { color: 'rgba(255,255,255,0.3)' },
+                                                '& .MuiStepIcon-root.Mui-active': { color: '#D9D9D9' },
+                                                '& .MuiStepIcon-root.Mui-completed': { color: '#D9D9D9' },
+                                            }}
+                                        >
+                                            {label}
+                                        </StepLabel>
+                                    </Step>
+                                ))}
+                            </Stepper>
+                        </div>
+                    </div>
                 ) : !profileData ? (
-                    <div className="text-white py-10">No profile data available.</div>
+                    <div className="flex flex-col items-center justify-center h-40">
+                        <div className="text-white mb-4">No profile data available.</div>
+                        <button onClick={onClose} className="px-4 py-2 bg-white/10 rounded-full text-white hover:bg-white/20">Close</button>
+                    </div>
                 ) : (
                     <>
+                        {/* Header */}
+                        <div className="w-full flex justify-between items-start mb-4">
+                            <h2 className="text-xl font-bold text-white text-center w-full">
+                                Summary of your Well-being Profile
+                            </h2>
+                            <button onClick={onClose} className="absolute right-4 top-4 hover:bg-white/10 rounded-full p-1 transition">
+                                <CloseRoundedIcon sx={{ color: "white", fontSize: "1.5rem" }} />
+                            </button>
+                        </div>
+
                         {/* Main Gauge Card */}
                         <div className="rounded-2xl p-4 w-full mb-4 shadow-sm relative bg-white/5 border border-white/10">
                             <div className="flex justify-between items-center mb-2">
@@ -125,7 +177,6 @@ export default function WellBeingProfile({ onClose }) {
                                     {profileData.negative_effects_level}
                                 </span>
                             </div>
-                            <br></br>
 
                             {/* Person Image Placeholder */}
                             <div className="flex justify-center mb-4 relative">
@@ -145,8 +196,7 @@ export default function WellBeingProfile({ onClose }) {
                                 <div className="absolute top-0 flex flex-col items-center" style={{ left: styles.gaugePos, transform: 'translateX(-50%)' }}>
                                     <div className="bg-white text-black text-xs px-2 py-1 rounded mb-1 whitespace-nowrap">Your level</div>
                                     <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-6 border-t-white"></div>
-                                        </div>
-                                        <br />
+                                </div>
                                 <div className="h-2 w-full rounded-full bg-gradient-to-r from-blue-200 via-green-200 to-red-400 relative">
                                     <div
                                         className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white border-2 ${styles.alertIconBg.replace('bg-', 'border-')} rounded-full shadow`}
@@ -221,16 +271,16 @@ export default function WellBeingProfile({ onClose }) {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Footer Button */}
+                        <button
+                            onClick={onContinue || onClose}
+                            className="w-full py-3 rounded-full bg-[#D9D9D9] text-black/95 font-bold text-lg hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.2) transition-colors"
+                        >
+                            Continue
+                        </button>
                     </>
                 )}
-
-                {/* Footer Button */}
-                <button
-                    onClick={onClose}
-                    className="w-full py-3 rounded-full bg-[#D9D9D9] text-black/95 font-bold text-lg hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.2) transition-colors"
-                >
-                    Continue
-                </button>
 
             </div>
         </div>

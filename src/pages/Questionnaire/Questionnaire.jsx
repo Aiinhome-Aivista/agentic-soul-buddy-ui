@@ -8,6 +8,8 @@ import QuestionCard from './QuestionCard';
 import { apiService } from '../../service/apiService';
 import { get_url1 } from '../../connection/connection';
 
+import WellBeingProfile from '../../common/modal/WellBeingProfile';
+
 const Questionnaire = () => {
     const navigate = useNavigate();
     const { setLoginModal, loginModal, setSignupModal2, signupModal2 } = useContext(Context);
@@ -17,6 +19,7 @@ const Questionnaire = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [subscriptionModal, setSubscriptionModal] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -92,6 +95,11 @@ const Questionnaire = () => {
 
     const handleSignupSuccess = () => {
         setSignupModal2(false);
+        setShowProfile(true);
+    };
+
+    const handleProfileContinue = () => {
+        setShowProfile(false);
         setSubscriptionModal(true);
     };
 
@@ -134,7 +142,7 @@ const Questionnaire = () => {
 
     return (
         <>
-            {!signupModal2 && !subscriptionModal ? (
+            {!signupModal2 && !subscriptionModal && !showProfile ? (
                 <div
                     className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-5">
                     {/* Header / Progress Bar */}
@@ -178,6 +186,11 @@ const Questionnaire = () => {
                     OnClose={() => setSignupModal2(false)}
                     onSuccess={handleSignupSuccess}
                     answers={answers}
+                />
+            ) : showProfile ? (
+                <WellBeingProfile
+                    onClose={() => setShowProfile(false)}
+                    onContinue={handleProfileContinue}
                 />
             ) : subscriptionModal ? (
                 <SubscriptionPlane OnClose={handleSubscriptionClose} />
