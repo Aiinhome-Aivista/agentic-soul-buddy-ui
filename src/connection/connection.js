@@ -9,7 +9,9 @@ export const POST_url = {
 
 export const POST_url1 = {
       signup: devUrl1 + "signup",
+      login: devUrl1 + "login",
       subscription: devUrl1 + "subscribe",
+      submit_response: devUrl1 + "submit_response",
 };
 
 export const get_url1 = {

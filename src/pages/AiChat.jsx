@@ -11,6 +11,7 @@ import LoginLogoutIcon from '../components/LoginLogoutIcon';
 import LoginModal from '../common/modal/LoginModal';
 import SignupModal from '../common/modal/SignupMOdal';
 import SignupModal2 from '../common/modal/signupafterquestions';
+import WellBeingProfile from '../common/modal/WellBeingProfile';
 
 const AiChat = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const AiChat = () => {
   const audioRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -89,6 +91,8 @@ const AiChat = () => {
 
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%]">
+
+
       <div className={`flex items-start justify-end gap-[1%] w-[100%]`}>
         {!isLoggedIn && (
           <button
@@ -98,6 +102,12 @@ const AiChat = () => {
             Sign Up
           </button>
         )}
+        <button
+          onClick={() => setShowProfile(true)}
+          className="h-[1.7rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] hover:bg-[#474747]/40 transition-colors"
+        >
+          Profile
+        </button>
         <LoginLogoutIcon />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
@@ -170,7 +180,9 @@ const AiChat = () => {
 
       {loginModal && <LoginModal OnClose={() => setLoginModal(false)} />}
       {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
+      {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
       {signupModal2 && <SignupModal2 OnClose={() => setSignupModal2(false)} />}
+      {showProfile && <WellBeingProfile onClose={() => setShowProfile(false)} />}
     </div >
   );
 };

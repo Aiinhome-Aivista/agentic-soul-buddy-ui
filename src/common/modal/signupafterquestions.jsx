@@ -9,7 +9,7 @@ import { apiService } from "../../service/apiService";
 import { POST_url1 } from "../../connection/connection";
 import { Dropdown } from "primereact/dropdown";
 
-export default function SignupModal2({ OnClose, onSuccess }) {
+export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const { tempUserName, tempUserId, setIsLoggedIn, setAudioUrl, setIsLoading } =
     useContext(Context);
 
@@ -59,8 +59,8 @@ export default function SignupModal2({ OnClose, onSuccess }) {
 
   const formik = useFormik({
     initialValues: {
-      full_name: "",
-      email: "",
+      full_name: sessionStorage.getItem("signupName") || "",
+      email: sessionStorage.getItem("signupEmail") || "",
       // password: "",
       age: "",
       gender: "",
@@ -85,6 +85,35 @@ export default function SignupModal2({ OnClose, onSuccess }) {
           setIsLoggedIn(true);
           localStorage.setItem("userId", response.user_id);
           localStorage.setItem("sessionId", response.session_id);
+
+          // Submit Questionnaire Responses
+          if (answers) {
+            try {
+              const formattedResponses = Object.keys(answers).map((questionId) => {
+                const val = answers[questionId];
+                return {
+                  question_id: Number(questionId),
+                  answer_value: Array.isArray(val) ? val.join(", ") : val
+                };
+              });
+
+              const responsePayload = {
+                user_id: response.user_id,
+                responses: formattedResponses
+              };
+
+              console.log("Submitting responses payload:", responsePayload);
+
+              await apiService({
+                url: POST_url1.submit_response,
+                method: 'POST',
+                data: responsePayload
+              });
+
+            } catch (resErr) {
+              console.error("Error submitting responses:", resErr);
+            }
+          }
 
           setIsLoading(true);
           setTimeout(() => {
@@ -193,7 +222,9 @@ export default function SignupModal2({ OnClose, onSuccess }) {
               onChange={formik.handleChange}
               value={formik.values.full_name}
               placeholder="Full Name"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+              readOnly={!!sessionStorage.getItem("signupName")}
+              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupName") ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             />
 
             {/* Email */}
@@ -205,7 +236,9 @@ export default function SignupModal2({ OnClose, onSuccess }) {
               onChange={formik.handleChange}
               value={formik.values.email}
               placeholder="Email Address"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+              readOnly={!!sessionStorage.getItem("signupEmail")}
+              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupEmail") ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             />
 
             {/* Password */}
@@ -322,15 +355,14 @@ export default function SignupModal2({ OnClose, onSuccess }) {
       </div>
 
       {/* Error Banner */}
-      {firstError?(
+      {firstError ? (
         <div
           className={`glass-card flex justify-between items-center w-[25%] rounded-2xl p-2 mt-4
            transition-opacity duration-300 ease-in-out
-           ${
-             bannerVisible && firstError
-               ? "opacity-100"
-               : "opacity-0 pointer-events-none"
-           }`}
+           ${bannerVisible && firstError
+              ? "opacity-100"
+              : "opacity-0 pointer-events-none"
+            }`}
         >
           <div className="flex gap-2 h-full items-center">
             <WarningRoundedIcon
@@ -351,7 +383,7 @@ export default function SignupModal2({ OnClose, onSuccess }) {
             onClick={() => setBannerVisible(false)}
           />
         </div>
-      ):null}
+      ) : null}
     </div>
   );
 }
