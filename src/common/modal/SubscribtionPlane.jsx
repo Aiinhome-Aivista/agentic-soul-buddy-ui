@@ -84,8 +84,8 @@ const SubscriptionPlane = ({ OnClose }) => {
   };
 
   return (
-    <div className="fixed p-4 inset-0 z-50 flex items-center h-full justify-center bg-black/30 backdrop-blur-md">
-      <div className="w-full flex flex-col justify-between h-full max-w-md ">
+    <div className="fixed p-4 inset-0 z-50 flex items-center h-full justify-center bg-black/30 backdrop-blur-md animate-fadeIn">
+      <div className="w-full flex flex-col justify-between h-full max-w-md animate-slideUp">
         {/* Header (optional; keep if you want) */}
         <h2 className="text-center text-[15px] mt-3 font-medium text-white/80 mb-4">
           Your personalised plan is ready!
@@ -103,16 +103,19 @@ const SubscriptionPlane = ({ OnClose }) => {
                 onClick={() => setSelectedPlan(plan.id)}
                 className={[
                   "relative w-full text-left rounded-2xl",
-                  "border transition-colors",
-                  isSelected ? "border-white/90" : "border-white/10",
+                  "border transition-all duration-300 ease-out",
+                  isSelected ? "border-white/90 shadow-lg shadow-white/10" : "border-white/10",
                   "bg-white/[0.05]",
+                  "hover:scale-[1.02] hover:bg-white/[0.08]",
+                  !isSelected && "hover:border-white/20",
+                  "active:scale-[0.98]",
                 ].join(" ")}
               >
-                <div className="flex items-center justify-between gap-3 p-3">
+                <div className="flex items-center justify-between h-18 gap-3 p-3">
                   {/* Left: radio + text */}
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0 h-full">
                     {/* radio */}
-                    <div className="flex flex-col justify-between h-16">
+                    <div className="flex flex-col justify-between h-full ">
                       <div
                         className={[
                           "grid place-items-center w-[18px] h-[18px] rounded-full border",
@@ -137,7 +140,7 @@ const SubscriptionPlane = ({ OnClose }) => {
                       )}
                     </div>
 
-                    <div className="min-w-0">
+                    <div className="min-w-0 h-full">
                       <div
                         className={[
                           "text-[12px] tracking-[0.22em] font-semibold",
@@ -164,7 +167,7 @@ const SubscriptionPlane = ({ OnClose }) => {
                   {/* Right: price badge */}
                   <div
                     className={[
-                      "shrink-0 flex gap-2 rounded-xl px-2.5 py-4 text-center",
+                      "shrink-0 flex gap-2 h-full rounded-xl px-2.5 py-4 text-center",
                       isSelected ? "bg-white/90" : "bg-white/10",
                     ].join(" ")}
                   >
@@ -204,9 +207,11 @@ const SubscriptionPlane = ({ OnClose }) => {
         {/* Continue button (disabled look like screenshot can be done via opacity) */}
         <button
           onClick={handleContinue}
-          className="mt-5 w-full mb-[20vh] rounded-2xl py-4 text-[16px] font-semibold
+          className="mt-5 w-full mb-[20vh] rounded-xl py-2.5 text-[16px] font-semibold
                      bg-[#D9D9D9] text-black/95 border border-white/10
-                     active:scale-[0.99] transition"
+                     hover:bg-white hover:shadow-lg hover:shadow-white/20
+                     active:scale-[0.97] transition-all duration-300 ease-out
+                     transform hover:scale-[1.01]"
         >
           Continue
         </button>
