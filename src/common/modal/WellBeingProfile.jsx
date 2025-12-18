@@ -5,6 +5,7 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CrisisAlertIcon from '@mui/icons-material/CrisisAlert';
 import BatteryAlertIcon from '@mui/icons-material/BatteryAlert';
+import PersonIcon from "../../assets/icons/Untitled design.svg";
 
 export default function WellBeingProfile({ onClose }) {
     return (
@@ -30,14 +31,16 @@ export default function WellBeingProfile({ onClose }) {
                     <br></br>
 
                     {/* Person Image Placeholder */}
-                    {/* <div className="flex justify-center mb-4 relative"> */}
-                        {/* <div className="w-32 h-40 bg-gray-200 rounded-lg overflow-hidden relative"> */}
-                            {/* Placeholder for person image - using usage of colored div or SVG if no image available */}
-                            {/* <svg className="w-full h-full text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                            </svg> */}
-                        {/* </div> */}
-                    {/* </div> */}
+                    <div className="flex justify-center mb-4 relative">
+                        <div className="w-40 h-50  rounded-lg overflow-hidden relative flex items-center justify-center">
+                            <img
+                                src={PersonIcon}
+                                alt="Person"
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
+                    </div>
+
 
                     {/* Gauge Slider */}
                     <div className="relative pt-6 pb-2 px-2">
