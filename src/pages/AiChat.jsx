@@ -37,6 +37,15 @@ const AiChat = () => {
   }, [isLoggedIn]
   );
 
+  /* New useEffect for Auto Greeting */
+  useEffect(() => {
+    const hasGreeted = sessionStorage.getItem('hasGreeted');
+    if (isLoggedIn && !hasGreeted) {
+      handleVoiceQuery("");
+      sessionStorage.setItem('hasGreeted', 'true');
+    }
+  }, [isLoggedIn]);
+
   const handleStop = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -47,40 +56,45 @@ const AiChat = () => {
     }
   };
 
+  const handleVoiceQuery = async (textValue) => {
+    setIsLoading(true);
+    const payload = {
+      "user_id": localStorage.getItem('userId'),
+      // "session_id": localStorage.getItem('sessionId'),
+      "text": textValue
+    }
+    try {
+      console.log(payload)
+      const response = await apiService({
+        url: POST_url1.ask,
+        method: 'POST',
+        data: payload,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      setIsLoading(false);
+      if (response && !response.error) {
+        console.log(response)
+        setAudioUrl(response.audio_url);
+      } else {
+        console.error('Submission failed:', response?.message);
+        console.log(`Submission failed: ${response?.message || 'An error occurred.'}`);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error('An error occurred during submission:', error);
+      console.log('An error occurred. Please try again later.');
+    }
+  };
+
   const handleMicClick = async () => {
     if (isLoggedIn) {
       setIsRecording((prevState) => !prevState);
       if (isRecording) {
-        setIsLoading(true);
+        // Was recording, now stopping -> send query
         if (recognizedText !== null) {
-          const payload = {
-            "user_id": localStorage.getItem('userId'),
-            // "session_id": localStorage.getItem('sessionId'),
-            "text": recognizedText
-          }
-          try {
-            console.log(payload)
-            const response = await apiService({
-              url: POST_url1.ask,
-              method: 'POST',
-              data: payload,
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            });
-            setIsLoading(false);
-            if (response && !response.error) {
-              console.log(response)
-              setAudioUrl(response.audio_url);
-            } else {
-              console.error('Submission failed:', response?.message);
-              console.log(`Submission failed: ${response?.message || 'An error occurred.'}`);
-            }
-          } catch (error) {
-            setIsLoading(false);
-            console.error('An error occurred during submission:', error);
-            console.log('An error occurred. Please try again later.');
-          }
+          handleVoiceQuery(recognizedText);
         }
       }
     }
