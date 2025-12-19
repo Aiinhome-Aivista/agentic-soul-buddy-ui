@@ -223,7 +223,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               value={formik.values.full_name}
               placeholder="Full Name"
               readOnly={!!sessionStorage.getItem("signupName")}
-              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupName") ? "opacity-50 cursor-not-allowed" : ""
+              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupName") ? "opacity-50 cursor-not-allowed" : ""
                 }`}
             />
 
@@ -237,7 +237,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               value={formik.values.email}
               placeholder="Email Address"
               readOnly={!!sessionStorage.getItem("signupEmail")}
-              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupEmail") ? "opacity-50 cursor-not-allowed" : ""
+              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupEmail") ? "opacity-50 cursor-not-allowed" : ""
                 }`}
             />
 
@@ -250,7 +250,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
                             onChange={formik.handleChange}
                             value={formik.values.password}
                             placeholder="Password"
-                            className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+                            className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
                         /> */}
 
             {/* Age */}
@@ -267,7 +267,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               }}
               value={formik.values.age}
               placeholder="Age"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all no-spinner"
+              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all no-spinner"
               min={0}
             />
 
@@ -282,8 +282,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               optionLabel="gender"
               optionValue="gender"
               placeholder="Gender"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-1 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
-              panelClassName="bg-[#434141] rounded-lg text-white"
+              className="w-full"
             />
 
             {/* Profession */}
@@ -295,7 +294,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               onChange={formik.handleChange}
               value={formik.values.work}
               placeholder="Profession"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
             />
 
             {/* Health Dropdown */}
@@ -309,8 +308,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               optionLabel="health"
               optionValue="health"
               placeholder="Health Status"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-1 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
-              panelClassName="bg-[#434141] rounded-lg text-white"
+              className="w-full"
             />
 
             {/* Relationship Dropdown */}
@@ -324,8 +322,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               optionLabel="relationship"
               optionValue="relationship"
               placeholder="Relationship Status"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-1 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25"
-              panelClassName="bg-[#434141] rounded-lg text-white"
+              className="w-full"
             />
 
             {/* Emotional State */}
@@ -337,7 +334,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               onChange={formik.handleChange}
               placeholder="How are you feeling? (Optional)"
               value={formik.values.emotional_state}
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-lg w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
             />
 
             <div className="pt-4 w-full">
