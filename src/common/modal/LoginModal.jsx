@@ -36,7 +36,8 @@ export default function LoginModal({ OnClose }) {
                         if (response.status === "success") {
                             setIsLoggedIn(true)
                             OnClose();
-                            localStorage.setItem('userId', result.user.uid);
+                            // Use backend's user_id for returning users
+                            localStorage.setItem('userId', response.user_id || result.user.uid);
                             localStorage.setItem('sessionId', response.session_id);
                             setIsLoading(true);
                             setTimeout(() => {
@@ -48,6 +49,8 @@ export default function LoginModal({ OnClose }) {
                         if (response.status === "new_user") {
                             sessionStorage.setItem("signupName", result.user.displayName);
                             sessionStorage.setItem("signupEmail", result.user.email);
+                            // Store Firebase UID for signup process
+                            sessionStorage.setItem("firebaseUid", result.user.uid);
                             localStorage.setItem('sessionId', response.session_id);
                             navigate('/questionnaire')
                             // setSignupModal(true)

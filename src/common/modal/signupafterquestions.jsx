@@ -68,7 +68,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       health: "",
       emotional_state: "",
       relationship: "",
-      user_id: tempUserId, // Hidden field if needed by API logic
+      user_id: sessionStorage.getItem("firebaseUid") || tempUserId, // Send Firebase UID to backend
     },
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
@@ -83,8 +83,13 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
         if (response && !response.error && response !== null) {
           setIsLoggedIn(true);
+          // Store backend's user_id (not Firebase UID)
           localStorage.setItem("userId", response.user_id);
           localStorage.setItem("sessionId", response.session_id);
+          // Clean up temporary Firebase UID from sessionStorage
+          sessionStorage.removeItem("firebaseUid");
+          sessionStorage.removeItem("signupName");
+          sessionStorage.removeItem("signupEmail");
 
           // Submit Questionnaire Responses
           if (answers) {
