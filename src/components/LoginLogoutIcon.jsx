@@ -28,7 +28,7 @@ function LoginLogoutIcon({ handleStop }) {
 
     return (
         <div
-            className="relative flex items-center gap-2 w-[4.3rem] h-[1.7rem] overflow-hidden rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 px-1.5 cursor-pointer"
+            className="relative flex items-center gap-2 w-[4.8rem] h-[1.7rem] overflow-hidden rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 px-1.5 cursor-pointer"
             onClick={handleClick}>
             {/* When logged out: knob left, show Login on the right */}
             {!isLoggedIn && (
@@ -43,7 +43,7 @@ function LoginLogoutIcon({ handleStop }) {
             {/* When logged in: knob right, show Logout on the left */}
             {isLoggedIn && (
                 <>
-                    <span className="text-[0.75rem] font-medium text-[#7D7E7F] pointer-events-none pl-1">
+                    <span className="pr-[0.5rem] text-[0.75rem] font-medium text-[#7D7E7F] pointer-events-none">
                         Logout
                     </span>
                     <span className="invisible text-[0.75rem] font-medium">.</span>
@@ -52,7 +52,7 @@ function LoginLogoutIcon({ handleStop }) {
 
             {/* Knob */}
             <div
-                className={`absolute top-[0.25rem] left-[0.2rem] h-[1rem] w-[1rem] rounded-full bg-[#d9d9d9]/54 transition-transform duration-300 ease-in-out pointer-events-none ${isLoggedIn ? "translate-x-[2.4rem]" : "translate-x-0"
+                className={`absolute top-[0.25rem] left-[0.25rem] h-[1rem] w-[1rem] rounded-full bg-[#d9d9d9]/54 transition-transform duration-300 ease-in-out pointer-events-none ${isLoggedIn ? "translate-x-[2.8rem]" : "translate-x-0"
                     }`}
             />
         </div>
