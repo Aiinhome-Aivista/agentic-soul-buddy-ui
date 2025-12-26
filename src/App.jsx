@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import Index from "./common/routes/Index";
 import { ContextProvider } from "./common/helper/Context";
-import VideoBackground from "./common/background/Videobackground";
+import VideoBackground from "./common/background/VideoBackground";
 import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 
 const App = () => (
