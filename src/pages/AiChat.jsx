@@ -9,7 +9,7 @@ import TypingDots from '../components/TypingDots';
 import CanvasVisualizerSim from '../components/CanvasVisualizerSim';
 import LoginLogoutIcon from '../components/LoginLogoutIcon';
 import LoginModal from '../common/modal/LoginModal';
-import SignupModal from '../common/modal/SignupMOdal';
+// import SignupModal from '../common/modal/SignupMOdal';
 import SignupModal2 from '../common/modal/signupafterquestions';
 import WellBeingProfile from '../common/modal/WellBeingProfile';
 
