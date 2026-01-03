@@ -6,7 +6,7 @@ import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 
 const App = () => (
   <PrimeReactProvider>
-    <div className="overflow-hidden bg-black/50" style={{ width: '100%', height: '100%', position: 'relative', padding: 0, margin: 0 }}>
+    <div className="overflow-y-auto bg-black/50" style={{ width: '100%', height: '100%', position: 'relative', padding: 0, margin: 0 }}>
       <ContextProvider>
         <div
           className="w-full h-full"
