@@ -24,10 +24,10 @@ export default function DisclaimerModal({ OnClose, onConfirm }) {
                         <div>
                             <p className="font-bold mb-2">1. Not Medical or Mental Health Advice</p>
                             <p>
-                                The content, insights, and conversations provided by "Cosmic Wisdom" (the "Application") are for informational, educational, and entertainment purposes only. The Artificial Intelligence (AI) used in this Application is designed to provide supportive and empathetic conversation based on user input. <b>It is NOT a substitute for professional medical advice, diagnosis, or treatment.</b>
+                                The content, insights, and conversations provided by "Cosmic Wisdom" are for informational, educational, and entertainment purposes only. The Artificial Intelligence (AI) used in this Application is designed to provide supportive and empathetic conversation based on user input.
                             </p>
-                            <p className="mt-2 text-red-300">
-                                If you are experiencing a medical emergency, a mental health crisis, or thoughts of self-harm, please discontinue use of this Application immediately and contact a certified healthcare professional, emergency services, or a suicide prevention hotline in your country.
+                            <p className="font-bold mb-2">
+                                It is NOT a substitute for professional medical advice, diagnosis, or treatment.If you are experiencing a medical emergency, a mental health crisis, or thoughts of self-harm, please discontinue use of this Application immediately and contact a certified healthcare professional, emergency services, or a suicide prevention hotline in your country.
                             </p>
                         </div>
 
