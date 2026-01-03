@@ -64,6 +64,10 @@ function LoginLogoutIcon({ handleStop }) {
                 // Handle account action
                 console.log('Account clicked');
                 break;
+            case 'Terms & Conditions':
+                // Handle settings action
+                console.log('Terms & Conditions clicked');
+                break;
             case 'disclaimer':
                 if (setDisclaimerModal) setDisclaimerModal(true);
                 break;
@@ -150,6 +154,13 @@ function LoginLogoutIcon({ handleStop }) {
                         >
                             <ManageAccountsOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Account</span>
+                        </button>
+                        <button
+                            onClick={() => handleMenuClick('Terms & Conditions')}
+                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                        >
+                            <InfoOutlinedIcon sx={{ fontSize: '1rem' }} />
+                            <span className="text-[13px]">Terms & Conditions</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('disclaimer')}
