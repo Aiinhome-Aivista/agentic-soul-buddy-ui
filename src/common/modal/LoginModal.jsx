@@ -38,6 +38,7 @@ export default function LoginModal({ OnClose }) {
                             OnClose();
                             // Use backend's user_id for returning users
                             localStorage.setItem('userId', response.user_id || result.user.uid);
+                            localStorage.setItem('name', response.full_name);
                             localStorage.setItem('sessionId', response.session_id);
                             setIsLoading(true);
                             setTimeout(() => {
