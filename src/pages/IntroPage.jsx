@@ -1,10 +1,25 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const IntroPage = () => {
     const navigate = useNavigate();
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
+
+    const handleEnterSpace = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setTransitionOrigin({
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2
+        });
+        setIsTransitioning(true);
+        
+        setTimeout(() => {
+            navigate('/home');
+        }, 800);
+    };
 
     useEffect(() => {
         // Check for saved dark mode preference or system preference
@@ -35,6 +50,29 @@ const IntroPage = () => {
 
     return (
         <div className={`min-h-screen bg-background-light dark:bg-background-dark text-text-main dark:text-gray-100 font-display overflow-x-hidden selection:bg-secondary/30 ${isDarkMode ? 'dark' : ''}`}>
+            {/* Page Transition Overlay */}
+            {isTransitioning && (
+                <div 
+                    className="fixed inset-0 z-[100] pointer-events-none bg-primary-dark"
+                    style={{
+                        clipPath: `circle(150% at ${transitionOrigin.x}px ${transitionOrigin.y}px)`,
+                        animation: 'expandFromButton 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+                    }}
+                />
+            )}
+            <style>
+                {`
+                    @keyframes expandFromButton {
+                        from {
+                            clip-path: circle(0% at ${transitionOrigin.x}px ${transitionOrigin.y}px);
+                        }
+                        to {
+                            clip-path: circle(150% at ${transitionOrigin.x}px ${transitionOrigin.y}px);
+                        }
+                    }
+                `}
+            </style>
+
             {/* Header */}
             <header className="w-full border-b border-border-light dark:border-white/5 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
@@ -48,7 +86,7 @@ const IntroPage = () => {
                         {/* <Link to="/wave" className="text-sm font-medium text-text-muted hover:text-primary-dark transition-colors">Login</Link> */}
                     </nav>
                     <div className="flex items-center gap-4">
-                        <button onClick={() => navigate('/home')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
+                        <button onClick={handleEnterSpace} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
                             <span>Begin</span>
                         </button>
                         <button className="md:hidden text-text-main dark:text-white">
@@ -79,7 +117,7 @@ const IntroPage = () => {
                             </p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-5 justify-center md:justify-start items-center">
-                            <button onClick={() => navigate('/home')} className="flex min-w-[180px] cursor-pointer items-center justify-center rounded-full h-14 px-8 bg-primary-dark text-white text-base font-medium shadow-lg shadow-primary-dark/20 hover:bg-primary-deep hover:translate-y-[-1px] transition-all duration-300">
+                            <button onClick={handleEnterSpace} className="flex min-w-[180px] cursor-pointer items-center justify-center rounded-full h-14 px-8 bg-primary-dark text-white text-base font-medium shadow-lg shadow-primary-dark/20 hover:bg-primary-deep hover:translate-y-[-1px] transition-all duration-300">
                                 <span className="tracking-wide">Begin with Stillness</span>
                             </button>
                             <span className="text-sm text-text-muted italic">Join 12,000+ others finding quiet.</span>
@@ -346,7 +384,7 @@ const IntroPage = () => {
                         Begin your journey to inner oneness today. No pressure. No rush. Just peace.
                     </p>
                     <div className="flex flex-col w-full items-center gap-4">
-                        <button onClick={() => navigate('/home')} className="w-full max-w-xs h-14 rounded-full bg-primary-dark text-white text-lg font-medium shadow-xl shadow-primary-dark/25 hover:scale-105 hover:bg-primary-deep transition-all duration-300 cursor-pointer">
+                        <button onClick={handleEnterSpace} className="w-full max-w-xs h-14 rounded-full bg-primary-dark text-white text-lg font-medium shadow-xl shadow-primary-dark/25 hover:scale-105 hover:bg-primary-deep transition-all duration-300 cursor-pointer">
                             Enter the Space
                         </button>
                         <p className="text-xs text-text-muted dark:text-gray-500">Free 7-day sanctuary pass included.</p>
