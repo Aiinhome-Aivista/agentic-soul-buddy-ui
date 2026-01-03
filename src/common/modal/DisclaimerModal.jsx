@@ -32,7 +32,7 @@ export default function DisclaimerModal({ OnClose, onConfirm }) {
                         </div>
 
                         <div>
-                            <p className="font-bold mb-2">2. AI Limitations & Accuracy</p>
+                            <p className="font-bold mb-2"> 2. AI Limitations & Accuracy</p>
                             <p>
                                 This Application utilizes Large Language Models (LLMs) and RAG (Retrieval-Augmented Generation) technologies. While we strive for accuracy, AI systems can occasionally generate incorrect, misleading, or "hallucinated" information. You should not rely solely on the Application's responses for critical life decisions (financial, legal, or health-related).
                             </p>
