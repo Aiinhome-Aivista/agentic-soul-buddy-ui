@@ -34,7 +34,7 @@ export default function ContactModal() {
                         </div>
                         <div className="flex flex-col">
                             <span className="text-sm text-white/50">Email Address</span>
-                            <span className="text-white font-medium select-all">soulBuddy@gmail.com</span>
+                            <span className="text-white font-medium select-all">support@soulbuddy.app</span>
                         </div>
                     </div>
 
