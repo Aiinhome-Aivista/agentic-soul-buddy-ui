@@ -10,11 +10,13 @@ export default function CanvasVisualizerSim({
   sensitivity = 0.5,
   style = {},
   className = '',
+  analyser = null,
 }) {
   const canvasRef = useRef(null);
   const rafRef = useRef(null);
   const startTimeRef = useRef(null);
   const [isRunning, setIsRunning] = useState(true);
+  const dataArrayRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -33,7 +35,37 @@ export default function CanvasVisualizerSim({
     resize();
     window.addEventListener('resize', resize);
 
+    if (analyser) {
+      analyser.fftSize = 512;
+      const bufferLength = analyser.frequencyBinCount;
+      if (!dataArrayRef.current || dataArrayRef.current.length !== bufferLength) {
+        dataArrayRef.current = new Uint8Array(bufferLength);
+      }
+    }
+
     function sampleAmplitudes(time) {
+      if (analyser && dataArrayRef.current) {
+        analyser.getByteFrequencyData(dataArrayRef.current);
+        const amps = new Array(barCount);
+        const totalBins = dataArrayRef.current.length;
+        // Use a subset of bins to avoid high freq noise/emptiness
+        const effectiveBins = Math.floor(totalBins * 0.7);
+        const step = Math.max(1, Math.floor(effectiveBins / barCount));
+
+        for (let i = 0; i < barCount; i++) {
+          let sum = 0;
+          const startBin = i * step;
+          let count = 0;
+          for (let j = 0; j < step && (startBin + j) < effectiveBins; j++) {
+            sum += dataArrayRef.current[startBin + j];
+            count++;
+          }
+          const val = count > 0 ? sum / count : 0;
+          amps[i] = val / 255;
+        }
+        return amps;
+      }
+
       const amps = new Array(barCount);
       const t = time / 1000;
       const envelope = 0.6 + 0.4 * (0.5 + 0.5 * Math.sin(t * 0.25));
@@ -52,6 +84,9 @@ export default function CanvasVisualizerSim({
     }
 
     function drawRoundedRect(x, y, w, h, r) {
+      if (h <= 0) return;
+      if (r > w / 2) r = w / 2;
+      if (r > h / 2) r = h / 2;
       ctx.beginPath();
       ctx.moveTo(x + r, y);
       ctx.lineTo(x + w - r, y);
@@ -88,9 +123,9 @@ export default function CanvasVisualizerSim({
 
       for (let i = 0; i < barCount; i++) {
         const amp = Math.min(1, amps[i] * sensitivity);
-        const barHeightPx = Math.max(minBarHeight, amp * (height - 4)); // full height span
+        const barHeightPx = Math.max(minBarHeight, amp * (height - 4));
         const x = startX + i * (barWidth + gap);
-        const y = centerY - barHeightPx / 2; // centered merged bar
+        const y = centerY - barHeightPx / 2;
         const radius = Math.min(6, barWidth / 2);
 
         ctx.fillStyle = 'rgba(15,23,42,0.18)';
@@ -100,22 +135,25 @@ export default function CanvasVisualizerSim({
         drawRoundedRect(x, y, barWidth, barHeightPx, radius);
 
         ctx.fillStyle = 'rgba(255,255,255,0.06)';
-        ctx.fillRect(x, y, barWidth, Math.min(6, barHeightPx));
+        if (barHeightPx > 6) {
+          ctx.fillRect(x, y, barWidth, 6);
+        }
       }
 
-      // Optional: keep wave overlay
-      ctx.beginPath();
-      const waveAmp = 8;
-      for (let i = 0; i < barCount; i++) {
-        const x = startX + i * (barWidth + gap) + barWidth / 2;
-        const phase = elapsed / 1200 + i * 0.25;
-        const y = centerY + Math.sin(phase) * waveAmp;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+      if (!analyser) {
+        ctx.beginPath();
+        const waveAmp = 8;
+        for (let i = 0; i < barCount; i++) {
+          const x = startX + i * (barWidth + gap) + barWidth / 2;
+          const phase = elapsed / 1200 + i * 0.25;
+          const y = centerY + Math.sin(phase) * waveAmp;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = 'rgba(96,165,250,0.12)';
+        ctx.stroke();
       }
-      ctx.lineWidth = 1.5;
-      ctx.strokeStyle = 'rgba(96,165,250,0.12)';
-      ctx.stroke();
 
       rafRef.current = requestAnimationFrame(draw);
     }
@@ -125,7 +163,7 @@ export default function CanvasVisualizerSim({
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', resize);
     };
-  }, [width, height, barCount, barWidth, gap, minBarHeight, sensitivity, isRunning]);
+  }, [width, height, barCount, barWidth, gap, minBarHeight, sensitivity, isRunning, analyser]);
 
   return (
     <div className={`w-[${width}px] ${className}`} style={{ backgroundColor: 'transparent', width: width, ...style }}>

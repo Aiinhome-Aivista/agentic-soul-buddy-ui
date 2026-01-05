@@ -23,6 +23,12 @@ const AiChat = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [disclaimerModal, setDisclaimerModal] = useState(false);
 
+  // Audio Visualization Refs
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const sourceRef = useRef(null);
+  const [analyser, setAnalyser] = useState(null);
+
   const handleDisclaimerConfirm = () => {
     setDisclaimerModal(false);
     navigate('/questionnaire');
@@ -35,6 +41,35 @@ const AiChat = () => {
     };
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // Initialize Audio Context and connections
+  useEffect(() => {
+    if (audioRef.current && !audioContextRef.current) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioContext();
+      audioContextRef.current = ctx;
+
+      const analyserNode = ctx.createAnalyser();
+      analyserNode.fftSize = 256;
+      analyserRef.current = analyserNode;
+      setAnalyser(analyserNode);
+
+      try {
+        const source = ctx.createMediaElementSource(audioRef.current);
+        sourceRef.current = source;
+        source.connect(analyserNode);
+        analyserNode.connect(ctx.destination);
+      } catch (err) {
+        console.warn("MediaElementSource error:", err);
+      }
+    }
+
+    return () => {
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
+        audioContextRef.current.close().catch(e => console.error(e));
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -60,6 +95,13 @@ const AiChat = () => {
       setAudioUrl(null);
       // Setting isPlaying to false ensures the visualizer unmounts correctly.
       setIsPlaying(false);
+    }
+  };
+
+  const handleAudioPlay = () => {
+    setIsPlaying(true);
+    if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume();
     }
   };
 
@@ -184,6 +226,7 @@ const AiChat = () => {
         ) : isPlaying ? (
           <div className='pb-[1%]'>
             <CanvasVisualizerSim
+              analyser={analyser}
               width={350}
               height={130}
               barCount={34}
@@ -203,6 +246,7 @@ const AiChat = () => {
             </div>
           </div>
         )}
+
         {isPlaying ? (
           <div className='pb-[40%] font-light text-xs text-white'>
             <div></div>
@@ -221,7 +265,7 @@ const AiChat = () => {
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         crossOrigin="anonymous"
-        onPlay={() => setIsPlaying(true)}
+        onPlay={handleAudioPlay}
         onPause={() => setIsPlaying(false)}
         onEnded={handleStop}
         ref={audioRef}
