@@ -10,7 +10,7 @@ import DisclaimerModal from '../modal/DisclaimerModal'
 
 const DisclaimerWrapper = () => {
     const navigate = useNavigate();
-    return <DisclaimerModal OnClose={() => navigate(-1)} onConfirm={() => navigate(-1)} />;
+    return <DisclaimerModal OnClose={() => navigate(-1)} onConfirm={() => navigate(-1)} hideFooter={true} />;
 };
 
 function Index() {
