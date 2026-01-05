@@ -71,7 +71,7 @@ export default function FaqModal({ onClose }) {
 
                 {/* Content */}
                 <div className="flex flex-col gap-6 w-full px-8 py-6 overflow-y-auto custom-scrollbar" style={{ maxHeight: 'calc(100vh - 120px)' }}>
-                    <style jsx>{`
+                    <style>{`
                         .custom-scrollbar::-webkit-scrollbar {
                           width: 6px;
                         }
@@ -95,7 +95,7 @@ export default function FaqModal({ onClose }) {
                     ) : (
                         faqData.map((category, catIndex) => (
                             <div key={catIndex} className="flex flex-col gap-3">
-                                <h3 className="text-xl font-bold text-white/90 px-1 sticky top-0 bg-[#352F44]/50 backdrop-blur-sm py-2 rounded-lg -mx-1 z-10">{category.category}</h3>
+                                <h3 className="text-xl font-bold text-white/90 px-1 py-2">{category.category}</h3>
                                 <div className="flex flex-col gap-3">
                                     {category.faqs.map((faq, faqIndex) => {
                                         const uniqueId = `${catIndex}-${faqIndex}`;
@@ -108,7 +108,7 @@ export default function FaqModal({ onClose }) {
                                             >
                                                 <button
                                                     onClick={() => toggleQuestion(uniqueId)}
-                                                    className="w-full flex items-center justify-between p-5 text-left"
+                                                    className="w-full flex items-center justify-between p-5 text-left cursor-pointer"
                                                 >
                                                     <span className="text-lg font-medium text-white pr-4">{faq.question}</span>
                                                     <ExpandMoreIcon
