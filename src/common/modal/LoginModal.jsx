@@ -7,10 +7,13 @@ import { signInWithPopup } from "firebase/auth";
 import { apiService } from "../../service/apiService";
 import { POST_url1 } from "../../connection/connection";
 import { useNavigate } from "react-router-dom";
+import DisclaimerModal from "./DisclaimerModal";
 
 export default function LoginModal({ OnClose }) {
     const { setIsLoggedIn, setSignupModal, setTempUserName, setTempUserId, setAudioUrl, setIsLoading } = useContext(Context)
     const navigate = useNavigate();
+    const [showDisclaimer, setShowDisclaimer] = useState(false);
+    const [pendingUserData, setPendingUserData] = useState(null);
 
     const handleGoogleSignIn = async () => {
         try {
@@ -48,32 +51,47 @@ export default function LoginModal({ OnClose }) {
 
                         }
                         if (response.status === "new_user") {
-                            sessionStorage.setItem("signupName", result.user.displayName);
-                            sessionStorage.setItem("signupEmail", result.user.email);
-                            // Store Firebase UID for signup process
-                            sessionStorage.setItem("firebaseUid", result.user.uid);
-                            localStorage.setItem('sessionId', response.session_id);
-                            navigate('/questionnaire')
-                            // setSignupModal(true)
-                            // setTempUserName(result.user.displayName)
-                            // setTempUserId(result.user.uid)
-                            // OnClose()
+                            setPendingUserData({
+                                displayName: result.user.displayName,
+                                email: result.user.email,
+                                uid: result.user.uid,
+                                sessionId: response.session_id
+                            });
+                            setShowDisclaimer(true);
                         }
                     }
                 } else {
                     console.error('Submission failed:', response?.message);
                     alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
+                    OnClose();
                 }
             } catch (error) {
                 console.error('An error occurred during submission:', error);
                 alert('An error occurred. Please try again later.');
-            } finally {
                 OnClose();
             }
         } catch (error) {
             console.error("Google Sign-In Error:", error);
         }
     }
+
+    const handleDisclaimerConfirm = () => {
+        if (pendingUserData) {
+            sessionStorage.setItem("signupName", pendingUserData.displayName);
+            sessionStorage.setItem("signupEmail", pendingUserData.email);
+            // Store Firebase UID for signup process
+            sessionStorage.setItem("firebaseUid", pendingUserData.uid);
+            localStorage.setItem('sessionId', pendingUserData.sessionId);
+            navigate('/questionnaire');
+            // OnClose(); // Do not close here, let navigation happen. But if we want to ensure modal unmounts:
+            // Since we navigate, the component holding LoginModal (AiChat) might unmount or re-render. 
+            // In AiChat, loginModal state is true. If we navigate to /questionnaire, AiChat unmounts.
+            // So OnClose is not strictly necessary but good practice if logic changes.
+            // However, we can just call OnClose() to be sure context updates.
+            OnClose();
+        }
+    };
+
     const handleFacebookSignIn = async () => {
         try {
             const result = await signInWithPopup(auth, facebookProvider);
@@ -83,6 +101,15 @@ export default function LoginModal({ OnClose }) {
             console.error("Facebook Sign-In Error:", error);
         }
     };
+
+    if (showDisclaimer) {
+        return (
+            <DisclaimerModal
+                OnClose={OnClose}
+                onConfirm={handleDisclaimerConfirm}
+            />
+        );
+    }
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm z-15 animate-fadeIn">
