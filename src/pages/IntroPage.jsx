@@ -6,7 +6,48 @@ const IntroPage = () => {
     const navigate = useNavigate();
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
+    // Testimonials Logic
+    const testimonials = [
+        {
+            quote: "I didn't realize how much noise I was carrying until I found this quiet corner. It's the only app that feels like an exhale.",
+            name: "Elena R.",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA8joqQH76wY929nfMjdCWo90o3YvVrmxLVPT6leihiEFLEotvvSkJl5aSyKDHUcIL2WaaKCKI60M2m4vwYnu7NSD5Xy--Ck59MHJBuQec18_i_gzEO8qoH8bujRpFwmVND68NVoOeXIGiT5PKnRuzNS7LnolI4ZJZ8LssidI1De_1-EYMxLLu78_B7qCOKHQq2qWGRR37gMiZdg210fN7YwbgZVa2vCiwh6X9IE3t31aSri0GpGi2cipvNINfq6wdpAYZP9ThecLd-",
+            type: "image"
+        },
+        {
+            quote: "Finally, a space that doesn't demand my attention but gently invites it. The assessment was deeply affirming.",
+            name: "Marcus T.",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBN7p8auJo-NBCsnU4RY-wGmsGfInt9QvOJxcOChQiBqmPg7R8GyeKICVAJt6nwfu3bVlL_p0JrvKrCJTKBuX_p85SshYp-6oN20vebjaoOXblJIfmhF_n9Vcws1kuSq-4yT8FHNUYQhVLqfDny4U3sHoNwsNN8-yPBzkpX50aJOe56EarGsiGN5iI6tgxvLHppDncvC5OmmolYLpGZ90jQKHk3ZYUVGLot6z-EPvkMuXts9p6w9flUSisZvqiZk1zB7Plpx40u4Wcv",
+            type: "image"
+        },
+        {
+            quote: "It feels less like a subscription and more like a membership to a secret garden. My safe harbor.",
+            name: "Sarah J.",
+            initials: "SJ",
+            type: "initials"
+        },
+        {
+            quote: "The daily rituals have become my anchor. In a chaotic world, this is the one place I know I can find peace.",
+            name: "David K.",
+            initials: "DK",
+            type: "initials"
+        },
+        {
+            quote: "I love that it doesn't gamify my wellbeing. No streaks, no pressure, just genuine support when I need it.",
+            name: "Maya L.",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuA8joqQH76wY929nfMjdCWo90o3YvVrmxLVPT6leihiEFLEotvvSkJl5aSyKDHUcIL2WaaKCKI60M2m4vwYnu7NSD5Xy--Ck59MHJBuQec18_i_gzEO8qoH8bujRpFwmVND68NVoOeXIGiT5PKnRuzNS7LnolI4ZJZ8LssidI1De_1-EYMxLLu78_B7qCOKHQq2qWGRR37gMiZdg210fN7YwbgZVa2vCiwh6X9IE3t31aSri0GpGi2cipvNINfq6wdpAYZP9ThecLd-",
+            type: "image"
+        },
+        {
+            quote: "Sleeping better, thinking clearer. The audio soundscapes are pure magic.",
+            name: "James P.",
+            initials: "JP",
+            type: "initials"
+        }
+    ];
 
+    // Double the testimonials for seamless loop
+    const loopedTestimonials = [...testimonials, ...testimonials];
     // Set up scroll-triggered animations
     useEffect(() => {
         const observerCallback = (entries) => {
@@ -403,30 +444,43 @@ const IntroPage = () => {
                 </div>
             </section>
 
-            {/* Testimonials */}
-            <section className="py-20 px-6 md:px-12 max-w-[1000px] mx-auto w-full text-center">
-                <p className="scroll-animate scroll-animate-fade text-sm font-bold uppercase tracking-widest text-text-muted mb-10">Whispers from the community</p>
-                <div className="grid md:grid-cols-3 gap-8">
-                    <div className="scroll-animate delay-1 flex flex-col gap-4 p-6 rounded-2xl bg-white/5 border border-white/5 shadow-sm hover:shadow-md transition-shadow">
-                        <p className="text-text-muted italic text-sm leading-relaxed">"I didn't realize how much noise I was carrying until I found this quiet corner. It's the only app that feels like an exhale."</p>
-                        <div className="flex items-center justify-center gap-3 mt-auto">
-                            <div className="w-8 h-8 rounded-full bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8joqQH76wY929nfMjdCWo90o3YvVrmxLVPT6leihiEFLEotvvSkJl5aSyKDHUcIL2WaaKCKI60M2m4vwYnu7NSD5Xy--Ck59MHJBuQec18_i_gzEO8qoH8bujRpFwmVND68NVoOeXIGiT5PKnRuzNS7LnolI4ZJZ8LssidI1De_1-EYMxLLu78_B7qCOKHQq2qWGRR37gMiZdg210fN7YwbgZVa2vCiwh6X9IE3t31aSri0GpGi2cipvNINfq6wdpAYZP9ThecLd-')" }}></div>
-                            <span className="text-xs font-bold text-white">Elena R.</span>
-                        </div>
-                    </div>
-                    <div className="scroll-animate delay-2 flex flex-col gap-4 p-6 rounded-2xl bg-white/5 border border-white/5 shadow-sm hover:shadow-md transition-shadow">
-                        <p className="text-text-muted italic text-sm leading-relaxed">"Finally, a space that doesn't demand my attention but gently invites it. The assessment was deeply affirming."</p>
-                        <div className="flex items-center justify-center gap-3 mt-auto">
-                            <div className="w-8 h-8 rounded-full bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBN7p8auJo-NBCsnU4RY-wGmsGfInt9QvOJxcOChQiBqmPg7R8GyeKICVAJt6nwfu3bVlL_p0JrvKrCJTKBuX_p85SshYp-6oN20vebjaoOXblJIfmhF_n9Vcws1kuSq-4yT8FHNUYQhVLqfDny4U3sHoNwsNN8-yPBzkpX50aJOe56EarGsiGN5iI6tgxvLHppDncvC5OmmolYLpGZ90jQKHk3ZYUVGLot6z-EPvkMuXts9p6w9flUSisZvqiZk1zB7Plpx40u4Wcv')" }}></div>
-                            <span className="text-xs font-bold text-white">Marcus T.</span>
-                        </div>
-                    </div>
-                    <div className="scroll-animate delay-3 flex flex-col gap-4 p-6 rounded-2xl bg-white/5 border border-white/5 shadow-sm hover:shadow-md transition-shadow">
-                        <p className="text-text-muted italic text-sm leading-relaxed">"It feels less like a subscription and more like a membership to a secret garden. My safe harbor."</p>
-                        <div className="flex items-center justify-center gap-3 mt-auto">
-                            <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xs font-bold text-gray-600">SJ</div>
-                            <span className="text-xs font-bold text-white">Sarah J.</span>
-                        </div>
+            <section className="py-20 bg-background-light dark:bg-background-dark overflow-hidden">
+                <div className="max-w-[1280px] mx-auto text-center mb-10 px-6">
+                    <p className="text-sm font-bold uppercase tracking-widest text-text-muted">Whispers from the community</p>
+                </div>
+
+                <div className="relative w-full overflow-hidden mask-gradient">
+                    <style>{`
+                        @keyframes scroll {
+                            0% { transform: translateX(0); }
+                            100% { transform: translateX(-50%); }
+                        }
+                        .animate-scroll {
+                            animation: scroll 40s linear infinite;
+                        }
+                        .mask-gradient {
+                            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+                        }
+                        .animate-scroll:hover {
+                            animation-play-state: paused;
+                        }
+                    `}</style>
+                    <div className="flex gap-6 w-max animate-scroll px-4">
+                        {loopedTestimonials.map((testimonial, index) => (
+                            <div key={index} className="flex flex-col gap-4 p-6 rounded-2xl bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow min-w-[300px] w-[350px] md:w-[400px]">
+                                <p className="text-text-muted italic text-sm leading-relaxed text-left">"{testimonial.quote}"</p>
+                                <div className="flex items-center gap-3 mt-auto">
+                                    {testimonial.type === 'image' ? (
+                                        <div className="w-8 h-8 rounded-full bg-cover bg-center shrink-0" style={{ backgroundImage: `url('${testimonial.image}')` }}></div>
+                                    ) : (
+                                        <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 shrink-0">
+                                            {testimonial.initials}
+                                        </div>
+                                    )}
+                                    <span className="text-xs font-bold text-text-main dark:text-white">{testimonial.name}</span>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
