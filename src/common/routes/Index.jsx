@@ -10,6 +10,7 @@ import DisclaimerModal from '../modal/DisclaimerModal'
 import ContactModal from '../modal/ContactModal'
 import WellBeingProfile from '../modal/WellBeingProfile'
 import TermsModal from '../modal/TermsModal'
+import FaqModal from '../modal/FaqModal'
 import { useContext } from 'react'
 import { Context } from '../helper/Context'
 
@@ -24,7 +25,7 @@ const TermsWrapper = () => {
 };
 
 function Index() {
-    const { contactModal, profileModal, setProfileModal } = useContext(Context);
+    const { contactModal, profileModal, setProfileModal, faqModal, setFaqModal } = useContext(Context);
     return (
         <>
             <Routes>
@@ -38,6 +39,7 @@ function Index() {
             </Routes>
             {contactModal && <ContactModal />}
             {profileModal && <WellBeingProfile onClose={() => setProfileModal(false)} />}
+            {faqModal && <FaqModal onClose={() => setFaqModal(false)} />}
         </>
     )
 }
