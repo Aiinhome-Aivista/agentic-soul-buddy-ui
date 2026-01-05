@@ -411,59 +411,61 @@ const AiChat = () => {
       {/* Main Chat Area */}
       <div className="flex-1 w-full max-w-2xl mx-auto flex flex-col items-center justify-center px-6 relative z-10">
         
-        {/* Conversation Avatars */}
-        <div className="flex items-center justify-center gap-8 mb-8">
-          {/* AI Avatar */}
-          <div className={`flex flex-col items-center transition-all duration-500 ${isPlaying ? 'scale-110' : 'scale-100 opacity-70'}`}>
-            <div className={`relative w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-2xl ${isPlaying ? 'shadow-violet-500/50 ring-4 ring-violet-400/30' : 'shadow-violet-500/20'}`}>
-              {isPlaying && (
-                <div className="absolute inset-0 rounded-full bg-violet-400/20 animate-ping"></div>
-              )}
-              <span className="text-3xl">🌙</span>
+        {/* Conversation Avatars - Only show when logged in */}
+        {isLoggedIn && (
+          <div className="flex items-center justify-center gap-8 mb-8">
+            {/* AI Avatar */}
+            <div className={`flex flex-col items-center transition-all duration-500 ${isPlaying ? 'scale-110' : 'scale-100 opacity-70'}`}>
+              <div className={`relative w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-2xl ${isPlaying ? 'shadow-violet-500/50 ring-4 ring-violet-400/30' : 'shadow-violet-500/20'}`}>
+                {isPlaying && (
+                  <div className="absolute inset-0 rounded-full bg-violet-400/20 animate-ping"></div>
+                )}
+                <span className="text-3xl">🌙</span>
+              </div>
+              <span className="mt-2 text-violet-300 text-sm font-medium">Cosmic AI</span>
+              {isPlaying && <span className="text-violet-400 text-xs animate-pulse">Speaking...</span>}
             </div>
-            <span className="mt-2 text-violet-300 text-sm font-medium">Cosmic AI</span>
-            {isPlaying && <span className="text-violet-400 text-xs animate-pulse">Speaking...</span>}
-          </div>
 
-          {/* Connection indicator */}
-          <div className="flex flex-col items-center gap-1">
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-2 rounded-full transition-all duration-300 ${
-                    (isRecording || isPlaying) 
-                      ? isRecording ? 'bg-emerald-400' : 'bg-violet-400'
-                      : 'bg-gray-600'
-                  }`}
-                  style={{
-                    height: (isRecording || isPlaying) ? `${8 + Math.sin(Date.now() / 200 + i) * 8}px` : '4px',
-                    animation: (isRecording || isPlaying) ? `wave 0.5s ease-in-out ${i * 0.1}s infinite` : 'none'
-                  }}
-                />
-              ))}
+            {/* Connection indicator */}
+            <div className="flex flex-col items-center gap-1">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className={`w-2 rounded-full transition-all duration-300 ${
+                      (isRecording || isPlaying) 
+                        ? isRecording ? 'bg-emerald-400' : 'bg-violet-400'
+                        : 'bg-gray-600'
+                    }`}
+                    style={{
+                      height: (isRecording || isPlaying) ? `${8 + Math.sin(Date.now() / 200 + i) * 8}px` : '4px',
+                      animation: (isRecording || isPlaying) ? `wave 0.5s ease-in-out ${i * 0.1}s infinite` : 'none'
+                    }}
+                  />
+                ))}
+              </div>
+              <span className="text-gray-500 text-xs">
+                {isRecording ? 'Listening...' : isPlaying ? 'Speaking...' : isLoading ? 'Thinking...' : 'Voice Chat'}
+              </span>
             </div>
-            <span className="text-gray-500 text-xs">
-              {isRecording ? 'Listening...' : isPlaying ? 'Speaking...' : isLoading ? 'Thinking...' : 'Voice Chat'}
-            </span>
-          </div>
 
-          {/* User Avatar */}
-          <div className={`flex flex-col items-center transition-all duration-500 ${isRecording ? 'scale-110' : 'scale-100 opacity-70'}`}>
-            <div className={`relative w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-2xl ${isRecording ? 'shadow-emerald-500/50 ring-4 ring-emerald-400/30' : 'shadow-emerald-500/20'}`}>
-              {isRecording && (
-                <div className="absolute inset-0 rounded-full bg-emerald-400/20 animate-ping"></div>
-              )}
-              {userName ? (
-                <span className="text-2xl font-bold text-white">{getInitials(userName)}</span>
-              ) : (
-                <span className="text-3xl">👤</span>
-              )}
+            {/* User Avatar */}
+            <div className={`flex flex-col items-center transition-all duration-500 ${isRecording ? 'scale-110' : 'scale-100 opacity-70'}`}>
+              <div className={`relative w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-2xl ${isRecording ? 'shadow-emerald-500/50 ring-4 ring-emerald-400/30' : 'shadow-emerald-500/20'}`}>
+                {isRecording && (
+                  <div className="absolute inset-0 rounded-full bg-emerald-400/20 animate-ping"></div>
+                )}
+                {userName ? (
+                  <span className="text-2xl font-bold text-white">{getInitials(userName)}</span>
+                ) : (
+                  <span className="text-3xl">👤</span>
+                )}
+              </div>
+              <span className="mt-2 text-emerald-300 text-sm font-medium">{userName || 'You'}</span>
+              {isRecording && <span className="text-emerald-400 text-xs animate-pulse">Speaking...</span>}
             </div>
-            <span className="mt-2 text-emerald-300 text-sm font-medium">{userName || 'You'}</span>
-            {isRecording && <span className="text-emerald-400 text-xs animate-pulse">Speaking...</span>}
           </div>
-        </div>
+        )}
 
         {/* Status Card */}
         <div className="w-full max-w-md mb-8">

@@ -191,16 +191,17 @@ function LoginLogoutIcon({ handleStop }) {
     // When logged out, show sign in toggle
     return (
         <div
-            className="relative flex items-center gap-2 w-[4.8rem] h-[1.7rem] overflow-hidden rounded-[1rem] border-2 border-border-light dark:border-[#333333] bg-white/50 dark:bg-[#474747]/22 px-1.5 cursor-pointer"
+            className="relative flex items-center gap-2 px-4 py-2 overflow-hidden rounded-full border border-white/20 bg-gradient-to-r from-violet-500/20 to-purple-500/20 backdrop-blur-md cursor-pointer hover:from-violet-500/30 hover:to-purple-500/30 hover:border-white/30 hover:scale-105 transition-all duration-300 group"
             onClick={handleSignIn}>
-            <span className="invisible text-[0.75rem] font-medium">.</span>
-            <span className="ml-auto text-[0.75rem] font-medium text-text-muted dark:text-[#7D7E7F] pointer-events-none transition-colors">
+            {/* Glow effect on hover */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-400/0 to-purple-400/0 group-hover:from-violet-400/10 group-hover:to-purple-400/10 transition-all duration-300"></div>
+            {/* Icon */}
+            <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                <PersonOutlineRoundedIcon sx={{ fontSize: '0.85rem', color: '#d9d9d9' }} />
+            </div>
+            <span className="text-[0.8rem] font-medium text-white/90 group-hover:text-white transition-colors">
                 Sign In
             </span>
-            {/* Knob */}
-            <div
-                className="absolute top-[0.25rem] left-[0.25rem] h-[1rem] w-[1rem] rounded-full bg-primary-dark/50 dark:bg-[#d9d9d9]/54 transition-transform duration-300 ease-in-out pointer-events-none"
-            />
         </div>
     );
 }
