@@ -1,4 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Context } from "../common/helper/Context";
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
@@ -10,6 +11,7 @@ function LoginLogoutIcon({ handleStop }) {
     const { isLoggedIn, setIsLoggedIn, setAudioUrl, setLoginModal, setDisclaimerModal } = useContext(Context);
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
+    const navigate = useNavigate();
 
     // Get user name from localStorage and extract initials
     const userName = localStorage.getItem('name') || '';
@@ -69,7 +71,7 @@ function LoginLogoutIcon({ handleStop }) {
                 console.log('Terms & Conditions clicked');
                 break;
             case 'disclaimer':
-                if (setDisclaimerModal) setDisclaimerModal(true);
+                navigate('/disclaimer');
                 break;
             case 'contact':
                 // Handle contact action
@@ -93,9 +95,8 @@ function LoginLogoutIcon({ handleStop }) {
             <div className="relative" ref={dropdownRef}>
                 {/* Header - Name Section (always visible) */}
                 <div
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-2xl border-2 border-[#333333] bg-[#474747]/22 backdrop-blur-md cursor-pointer hover:bg-[#474747]/40 transition-all duration-300 ${
-                        showDropdown ? 'opacity-0' : 'opacity-100'
-                    }`}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-2xl border-2 border-[#333333] bg-[#474747]/22 backdrop-blur-md cursor-pointer hover:bg-[#474747]/40 transition-all duration-300 ${showDropdown ? 'opacity-0' : 'opacity-100'
+                        }`}
                     onClick={() => setShowDropdown(!showDropdown)}
                 >
                     {/* Initials Icon */}
@@ -111,7 +112,7 @@ function LoginLogoutIcon({ handleStop }) {
                 </div>
 
                 {/* Expandable Menu - Absolute positioned overlay */}
-                <div 
+                <div
                     className="absolute top-0 right-0 flex flex-col rounded-2xl border-2 border-[#333333] bg-[#2a2a2a]/95 backdrop-blur-xl z-50"
                     style={{
                         width: '200px',
