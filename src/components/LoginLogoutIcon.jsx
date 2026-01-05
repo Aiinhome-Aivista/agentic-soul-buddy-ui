@@ -199,7 +199,7 @@ function LoginLogoutIcon({ handleStop }) {
             <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
                 <PersonOutlineRoundedIcon sx={{ fontSize: '0.85rem', color: '#d9d9d9' }} />
             </div>
-            <span className="text-[0.8rem] font-medium text-white/90 group-hover:text-white transition-colors">
+            <span className="text-[14px] font-medium text-white/90 group-hover:text-white transition-colors">
                 Sign In
             </span>
         </div>
