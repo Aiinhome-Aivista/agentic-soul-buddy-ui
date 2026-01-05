@@ -8,6 +8,7 @@ import Questionnaire from '../../pages/Questionnaire/Questionnaire'
 import SubscriptionPlane from '../modal/SubscribtionPlane'
 import DisclaimerModal from '../modal/DisclaimerModal'
 import ContactModal from '../modal/ContactModal'
+import WellBeingProfile from '../modal/WellBeingProfile'
 import { useContext } from 'react'
 import { Context } from '../helper/Context'
 
@@ -17,7 +18,7 @@ const DisclaimerWrapper = () => {
 };
 
 function Index() {
-    const { contactModal } = useContext(Context);
+    const { contactModal, profileModal, setProfileModal } = useContext(Context);
     return (
         <>
             <Routes>
@@ -29,6 +30,7 @@ function Index() {
                 <Route path="/disclaimer" element={<DisclaimerWrapper />} />
             </Routes>
             {contactModal && <ContactModal />}
+            {profileModal && <WellBeingProfile onClose={() => setProfileModal(false)} />}
         </>
     )
 }

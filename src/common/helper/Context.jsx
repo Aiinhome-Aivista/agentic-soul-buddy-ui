@@ -13,6 +13,7 @@ export function ContextProvider({ children }) {
     const [audioUrl, setAudioUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [contactModal, setContactModal] = useState(false);
+    const [profileModal, setProfileModal] = useState(false);
 
     return (
         <Context.Provider value={{
@@ -26,7 +27,8 @@ export function ContextProvider({ children }) {
             tempUserId, setTempUserId,
             audioUrl, setAudioUrl,
             isLoading, setIsLoading,
-            contactModal, setContactModal
+            contactModal, setContactModal,
+            profileModal, setProfileModal
         }}>
             {children}
         </Context.Provider>
