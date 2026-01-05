@@ -20,12 +20,33 @@ const AiChat = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [disclaimerModal, setDisclaimerModal] = useState(false);
+  const [userName, setUserName] = useState('');
+
+  // Get user initials from name
+  const getInitials = (name) => {
+    if (!name) return '👤';
+    const words = name.trim().split(/\s+/);
+    if (words.length === 1) {
+      return words[0].charAt(0).toUpperCase();
+    }
+    return (words[0].charAt(0) + words[words.length - 1].charAt(0)).toUpperCase();
+  };
+
+  // Load user name from localStorage
+  useEffect(() => {
+    const name = localStorage.getItem('name');
+    if (name) {
+      setUserName(name);
+    }
+  }, [isLoggedIn]);
   
   // Audio analysis state
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const sourceRef = useRef(null);
   const animationRef = useRef(null);
+  const micStreamRef = useRef(null);
+  const micAnalyserRef = useRef(null);
   const [audioLevels, setAudioLevels] = useState(Array(16).fill(0));
 
   // Audio-reactive visualizer component
@@ -164,9 +185,14 @@ const AiChat = () => {
     };
   }, [isPlaying]);
 
-  // Recording visualization effect
+  // Recording visualization effect with real microphone audio
   useEffect(() => {
     if (!isRecording) {
+      // Cleanup mic stream when not recording
+      if (micStreamRef.current) {
+        micStreamRef.current.getTracks().forEach(track => track.stop());
+        micStreamRef.current = null;
+      }
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
@@ -174,25 +200,85 @@ const AiChat = () => {
       return;
     }
 
-    // Animated fallback for recording (could be enhanced with getUserMedia)
-    const recordingAnimation = () => {
-      if (!isRecording) return;
-      
-      const time = Date.now() / 1000;
-      const newLevels = Array(16).fill(0).map((_, i) => {
-        // Create a more organic, speech-like pattern
-        const base = 0.2 + 0.3 * Math.sin(time * 4 + i * 0.3);
-        const variation = Math.random() * 0.4;
-        return Math.min(1, base + variation);
-      });
-      
-      setAudioLevels(newLevels);
-      animationRef.current = requestAnimationFrame(recordingAnimation);
+    const setupMicAnalysis = async () => {
+      try {
+        // Get microphone access
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        micStreamRef.current = stream;
+
+        // Create audio context if needed
+        if (!audioContextRef.current) {
+          audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        const audioContext = audioContextRef.current;
+        
+        // Resume context if suspended
+        if (audioContext.state === 'suspended') {
+          await audioContext.resume();
+        }
+
+        // Create analyser for microphone
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 64;
+        analyser.smoothingTimeConstant = 0.75;
+        
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(analyser);
+        // Don't connect to destination to avoid feedback
+        
+        micAnalyserRef.current = analyser;
+
+        // Animation loop for reading microphone audio data
+        const updateLevels = () => {
+          if (!micAnalyserRef.current || !isRecording) return;
+
+          const dataArray = new Uint8Array(micAnalyserRef.current.frequencyBinCount);
+          micAnalyserRef.current.getByteFrequencyData(dataArray);
+
+          // Sample 16 bars from the frequency data
+          const barCount = 16;
+          const step = Math.floor(dataArray.length / barCount);
+          const newLevels = [];
+          
+          for (let i = 0; i < barCount; i++) {
+            const value = dataArray[i * step] || 0;
+            // Normalize to 0-1 with amplification for voice frequencies
+            newLevels.push(Math.min(1, (value / 255) * 1.8));
+          }
+          
+          setAudioLevels(newLevels);
+          animationRef.current = requestAnimationFrame(updateLevels);
+        };
+
+        updateLevels();
+      } catch (err) {
+        console.warn('Microphone access not available, using fallback animation:', err);
+        // Fallback animation when microphone access fails
+        const fallbackAnimation = () => {
+          if (!isRecording) return;
+          
+          const time = Date.now() / 1000;
+          const newLevels = Array(16).fill(0).map((_, i) => {
+            const base = 0.2 + 0.3 * Math.sin(time * 4 + i * 0.3);
+            const variation = Math.random() * 0.4;
+            return Math.min(1, base + variation);
+          });
+          
+          setAudioLevels(newLevels);
+          animationRef.current = requestAnimationFrame(fallbackAnimation);
+        };
+        fallbackAnimation();
+      }
     };
-    
-    recordingAnimation();
+
+    setupMicAnalysis();
 
     return () => {
+      if (micStreamRef.current) {
+        micStreamRef.current.getTracks().forEach(track => track.stop());
+        micStreamRef.current = null;
+      }
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
@@ -368,9 +454,13 @@ const AiChat = () => {
               {isRecording && (
                 <div className="absolute inset-0 rounded-full bg-emerald-400/20 animate-ping"></div>
               )}
-              <span className="text-3xl">👤</span>
+              {userName ? (
+                <span className="text-2xl font-bold text-white">{getInitials(userName)}</span>
+              ) : (
+                <span className="text-3xl">👤</span>
+              )}
             </div>
-            <span className="mt-2 text-emerald-300 text-sm font-medium">You</span>
+            <span className="mt-2 text-emerald-300 text-sm font-medium">{userName || 'You'}</span>
             {isRecording && <span className="text-emerald-400 text-xs animate-pulse">Speaking...</span>}
           </div>
         </div>
