@@ -77,7 +77,7 @@ const IntroPage = () => {
             y: rect.top + rect.height / 2
         });
         setIsTransitioning(true);
-        
+
         setTimeout(() => {
             navigate('/home');
         }, 800);
@@ -87,7 +87,7 @@ const IntroPage = () => {
         <div className="min-h-screen bg-background-dark text-gray-100 font-display overflow-x-hidden selection:bg-secondary/30">
             {/* Page Transition Overlay */}
             {isTransitioning && (
-                <div 
+                <div
                     className="fixed inset-0 z-[100] pointer-events-none bg-primary-dark"
                     style={{
                         clipPath: `circle(150% at ${transitionOrigin.x}px ${transitionOrigin.y}px)`,
@@ -444,7 +444,7 @@ const IntroPage = () => {
                 </div>
             </section>
 
-            <section className="py-20 bg-background-light dark:bg-background-dark overflow-hidden">
+            <section className="py-20 dark:bg-background-dark overflow-hidden">
                 <div className="max-w-[1280px] mx-auto text-center mb-10 px-6">
                     <p className="text-sm font-bold uppercase tracking-widest text-text-muted">Whispers from the community</p>
                 </div>
@@ -467,7 +467,14 @@ const IntroPage = () => {
                     `}</style>
                     <div className="flex gap-6 w-max animate-scroll px-4">
                         {loopedTestimonials.map((testimonial, index) => (
-                            <div key={index} className="flex flex-col gap-4 p-6 rounded-2xl bg-white dark:bg-white/5 border border-gray-100 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow min-w-[300px] w-[350px] md:w-[400px]">
+                            <div
+                                key={index}
+                                className="flex flex-col gap-4 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow min-w-[300px] w-[350px] md:w-[400px] border"
+                                style={{
+                                    backgroundColor: 'color-mix(in oklab, var(--color-white) 5%, transparent)',
+                                    borderColor: 'color-mix(in oklab, var(--color-white) 5%, transparent)'
+                                }}
+                            >
                                 <p className="text-text-muted italic text-sm leading-relaxed text-left">"{testimonial.quote}"</p>
                                 <div className="flex items-center gap-3 mt-auto">
                                     {testimonial.type === 'image' ? (
@@ -477,7 +484,7 @@ const IntroPage = () => {
                                             {testimonial.initials}
                                         </div>
                                     )}
-                                    <span className="text-xs font-bold text-text-main dark:text-white">{testimonial.name}</span>
+                                    <span className="text-xs font-bold  text-[#fff]">{testimonial.name}</span>
                                 </div>
                             </div>
                         ))}
