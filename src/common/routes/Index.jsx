@@ -7,6 +7,9 @@ import LoginLogoutIcon from '../../components/LoginLogoutIcon'
 import Questionnaire from '../../pages/Questionnaire/Questionnaire'
 import SubscriptionPlane from '../modal/SubscribtionPlane'
 import DisclaimerModal from '../modal/DisclaimerModal'
+import ContactModal from '../modal/ContactModal'
+import { useContext } from 'react'
+import { Context } from '../helper/Context'
 
 const DisclaimerWrapper = () => {
     const navigate = useNavigate();
@@ -14,15 +17,19 @@ const DisclaimerWrapper = () => {
 };
 
 function Index() {
+    const { contactModal } = useContext(Context);
     return (
-        <Routes>
-            <Route path="/" element={<IntroPage />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/wave" element={<LoginLogoutIcon />} />
-            <Route path="/questionnaire" element={<Questionnaire />} />
-            <Route path="/sub" element={<SubscriptionPlane />} />
-            <Route path="/disclaimer" element={<DisclaimerWrapper />} />
-        </Routes>
+        <>
+            <Routes>
+                <Route path="/" element={<IntroPage />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/wave" element={<LoginLogoutIcon />} />
+                <Route path="/questionnaire" element={<Questionnaire />} />
+                <Route path="/sub" element={<SubscriptionPlane />} />
+                <Route path="/disclaimer" element={<DisclaimerWrapper />} />
+            </Routes>
+            {contactModal && <ContactModal />}
+        </>
     )
 }
 
