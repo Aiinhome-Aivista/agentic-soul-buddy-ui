@@ -128,12 +128,11 @@ export default function WellBeingProfile({ onClose, onContinue }) {
   return (
     <div className="fixed inset-0 flex  flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-50">
       <div
-        className={`glass-card flex flex-col items-center ${
-          loading ? "max-w-md h-[30%] justify-center" : "max-w-md justify-start"
-        } relative overflow-y-auto rounded-3xl p-6 max-h-[90vh] transition-all duration-500 custom-scrollbar`}
+        className={`glass-card flex flex-col items-center ${loading ? "max-w-md h-[30%] justify-center" : "max-w-md justify-start"
+          } relative overflow-y-auto rounded-3xl p-6 max-h-[90vh] transition-all duration-500 custom-scrollbar`}
       >
         <div className="h-full overflow-y-auto custom-scrollbar">
-          <style jsx>{`
+          <style>{`
             .custom-scrollbar::-webkit-scrollbar {
               display: none;
             }
