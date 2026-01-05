@@ -136,14 +136,48 @@ const AiChat = () => {
         <p className='text-white text-xl font-light  cursor-default'>"Grow With Ancient Indian Guidance..."</p>
       </div>
       <div className="flex flex-col items-center h-[45%] pt-[2%]">
+        <style>{`
+          .mic-button-3d {
+            background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+            box-shadow: 
+              8px 8px 16px rgba(0,0,0,0.2),
+              -8px -8px 16px rgba(255,255,255,0.05);
+            transition: all 0.2s ease;
+          }
+          .mic-button-3d:active, .mic-button-3d.pressed {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.15));
+            box-shadow: 
+              inset 4px 4px 8px rgba(0,0,0,0.3),
+              inset -4px -4px 8px rgba(255,255,255,0.05);
+            transform: scale(0.95);
+          }
+          .animate-pulse-shadow {
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            animation: pulse-red 1.5s infinite;
+          }
+          @keyframes pulse-red {
+            0% {
+              transform: scale(0.95);
+              box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+            70% {
+              transform: scale(1);
+              box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
+            }
+            100% {
+              transform: scale(0.95);
+              box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+          }
+        `}</style>
         {isRecording ? (
-          <div className='relative pb-[1%] rounded-full'>
-            <div className='absolute inset-0 bg-[#FFFFFF]/9 animate-pulse-circle rounded-full' />
-            <MicIcon
-              sx={{ fontSize: '2.5rem', color: '#D9D9D9', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: '50%' }}
+          <div className='relative pb-[1%]'>
+            <div
+              className='mic-button-3d pressed animate-pulse-shadow rounded-full p-4 cursor-pointer flex items-center justify-center'
               onClick={handleMicClick}
-              className='relative cursor-pointer'
-            />
+            >
+              <MicIcon sx={{ fontSize: '2.5rem', color: '#ef4444' }} />
+            </div>
           </div>
         ) : isLoading ? (
           <TypingDots />
@@ -161,15 +195,12 @@ const AiChat = () => {
           </div>
         ) : (
           <div className='relative pb-[1%]'>
-            <MicIcon sx={{
-              fontSize: '2.5rem',
-              color: '#D9D9D9',
-              transition: 'color 0.2s, font-size 0.2s',
-              '&:hover': {
-                color: '#fdfdfdff',
-                fontSize: '2.6rem'
-              }
-            }} onClick={handleMicClick} className='cursor-pointer' />
+            <div
+              className='mic-button-3d rounded-full p-4 cursor-pointer flex items-center justify-center hover:bg-white/10'
+              onClick={handleMicClick}
+            >
+              <MicIcon sx={{ fontSize: '2.5rem', color: '#D9D9D9' }} />
+            </div>
           </div>
         )}
         {isPlaying ? (
