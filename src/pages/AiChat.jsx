@@ -111,14 +111,14 @@ const AiChat = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-[100%] h-[100%]">
+    <div className="flex flex-col items-center w-[100%] h-[100%] bg-transparent dark:bg-transparent transition-colors duration-300">
 
 
       <div className={`flex items-start justify-end gap-[1%] w-[100%]`}>
         {!isLoggedIn && (
           <button
             onClick={() => setDisclaimerModal(true)}
-            className="h-[1.7rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] hover:bg-[#474747]/40 transition-colors"
+            className="h-[1.7rem] px-3 rounded-[1rem] border-2 border-border-light dark:border-[#333333] bg-white/50 dark:bg-[#474747]/22 text-[0.75rem] font-medium text-text-muted dark:text-[#7D7E7F] hover:bg-gray-100 dark:hover:bg-[#474747]/40 transition-colors"
           >
             Sign Up
           </button>
@@ -132,8 +132,8 @@ const AiChat = () => {
         <LoginLogoutIcon />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-4xl font-bold text-white pt-[12%]  cursor-default' >Cosmic Wisdom</p>
-        <p className='text-white text-xl font-light  cursor-default'>"Grow With Ancient Indian Guidance..."</p>
+        <p className='text-4xl font-bold text-primary-dark dark:text-white pt-[12%] cursor-default transition-colors'>Cosmic Wisdom</p>
+        <p className='text-text-muted dark:text-white text-xl font-light cursor-default transition-colors'>"Grow With Ancient Indian Guidance..."</p>
       </div>
       <div className="flex flex-col items-center h-[45%] pt-[2%]">
         {isRecording ? (
@@ -173,20 +173,20 @@ const AiChat = () => {
           </div>
         )}
         {isPlaying ? (
-          <div className='pb-[40%] font-light text-xs text-white'>
+          <div className='pb-[40%] font-light text-xs text-text-main dark:text-white'>
             <div></div>
-            <div className='flex items-center rounded-3xl bg-[#474747]/22 border-2 border-gray-500 p-1 cursor-pointer'>
-              <div className='rounded-full h-[1rem] w-[1rem] bg-[#D9D9D9]/54'
+            <div className='flex items-center rounded-3xl bg-white/50 dark:bg-[#474747]/22 border-2 border-border-light dark:border-gray-500 p-1 cursor-pointer transition-colors'>
+              <div className='rounded-full h-[1rem] w-[1rem] bg-primary-dark/50 dark:bg-[#D9D9D9]/54'
                 onClick={handleStop}></div>
-              <p className='flex items-center justify-center text-sm text-[#7D7E7F] px-1'>Stop</p>
+              <p className='flex items-center justify-center text-sm text-text-muted dark:text-[#7D7E7F] px-1'>Stop</p>
             </div>
           </div>
         ) : (
-          <div className='pb-[40%] font-light text-xs text-white'>
+          <div className='pb-[40%] font-light text-xs text-text-main dark:text-white'>
           </div>
         )}
       </div>
-      <p className='text-large text-[#D9D9D9] text-center font-light pb-[5%] cursor-default'>Share your details to begin your personalized<br />journey of transformation</p>
+      <p className='text-large text-text-muted dark:text-[#D9D9D9] text-center font-light pb-[5%] cursor-default transition-colors'>Share your details to begin your personalized<br />journey of transformation</p>
       <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
       <audio
         crossOrigin="anonymous"

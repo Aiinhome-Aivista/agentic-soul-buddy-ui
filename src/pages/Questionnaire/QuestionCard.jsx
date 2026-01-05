@@ -21,11 +21,11 @@ const QuestionCard = ({
   return (
     <div className="flex flex-col justify-between items-center w-full max-w-lg p-4 pt-0 flex-1 min-h-full">
       <div>
-        <h2 className="font-['Nunito'] font-bold text-[20px] leading-none tracking-normal text-center text-white mb-2 drop-shadow-md">
+        <h2 className="font-['Nunito'] font-bold text-[20px] leading-none tracking-normal text-center text-text-main dark:text-white mb-2 drop-shadow-md transition-colors">
           {question.text}
         </h2>
         {question.description && (
-          <p className="text-center text-white/60 text-sm max-w-md drop-shadow-sm font-medium">
+          <p className="text-center text-text-muted dark:text-white/60 text-sm max-w-md drop-shadow-sm font-medium transition-colors">
             {question.description}
           </p>
         )}
@@ -33,7 +33,7 @@ const QuestionCard = ({
       {isAgreement ? (
         <div className="w-full  flex flex-col gap-2">
           {/* Icon Container */}
-          <div className="w-full h-16 bg-white/10 rounded-2xl flex items-center justify-between p-2 relative border border-white/10">
+          <div className="w-full h-16 bg-primary/10 dark:bg-white/10 rounded-2xl flex items-center justify-between p-2 relative border border-border-light dark:border-white/10">
             {question.options.map((option, index) => {
               const isSelected = selectedOptions.includes(option);
 
@@ -102,7 +102,7 @@ const QuestionCard = ({
                 >
                   {/* Selection Background shape (only visible if selected) */}
                   {isSelected && (
-                    <div className="absolute inset-0 bg-white/20 rounded-xl" />
+                    <div className="absolute inset-0 bg-primary/20 dark:bg-white/20 rounded-xl" />
                   )}
                   {getIcon(index)}
                 </button>
@@ -111,10 +111,10 @@ const QuestionCard = ({
           </div>
           {/* Labels */}
           <div className="flex justify-between w-full px-2">
-            <span className="text-[10px] sm:text-xs text-white/50 font-medium tracking-wide">
+            <span className="text-[10px] sm:text-xs text-text-muted dark:text-white/50 font-medium tracking-wide transition-colors">
               Strongly disagree
             </span>
-            <span className="text-[10px] sm:text-xs text-white/50 font-medium tracking-wide">
+            <span className="text-[10px] sm:text-xs text-text-muted dark:text-white/50 font-medium tracking-wide transition-colors">
               Strongly Agree
             </span>
           </div>
@@ -130,8 +130,8 @@ const QuestionCard = ({
                 className={`w-full max-w-[374px] h-[35px] text-left px-4 rounded-[10px] border transition-all duration-300 ease-out group relative overflow-hidden backdrop-blur-sm flex items-center
                   ${
                     isSelected
-                      ? "border-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                      : "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/40"
+                      ? "border-primary-dark dark:border-white bg-primary/10 dark:bg-white/10 shadow-[0_0_15px_rgba(138,163,153,0.1)] dark:shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                      : "border-border-light dark:border-white/20 bg-primary/5 dark:bg-white/5 hover:bg-primary/10 dark:hover:bg-white/10 hover:border-primary/40 dark:hover:border-white/40"
                   }
                 `}
               >
@@ -139,8 +139,8 @@ const QuestionCard = ({
                   <span
                     className={`font-['Nunito'] font-bold text-[12px] leading-none tracking-normal transition-colors duration-300 ${
                       isSelected
-                        ? "text-white"
-                        : "text-white/80 group-hover:text-white"
+                        ? "text-text-main dark:text-white"
+                        : "text-text-muted dark:text-white/80 group-hover:text-text-main dark:group-hover:text-white"
                     }`}
                   >
                     {option}
@@ -150,15 +150,15 @@ const QuestionCard = ({
                     className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-300
                                      ${
                                        isSelected
-                                         ? "border-white bg-white scale-100 opacity-100"
-                                         : "border-white/30 scale-90 opacity-0 group-hover:opacity-50"
+                                         ? "border-primary-dark dark:border-white bg-primary-dark dark:bg-white scale-100 opacity-100"
+                                         : "border-text-muted/30 dark:border-white/30 scale-90 opacity-0 group-hover:opacity-50"
                                      }
                                 `}
                   >
                     {isSelected && (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-3 w-3 text-black"
+                        className="h-3 w-3 text-white dark:text-black"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                       >
@@ -186,8 +186,8 @@ const QuestionCard = ({
               className={`w-full max-w-[374px] h-[35px] rounded-[10px] border font-['Nunito'] font-bold transition-all shadow-lg transform active:scale-95 flex items-center justify-center
                             ${
                               selectedOptions.length > 0
-                                ? "bg-white text-[#434141D8] border-white hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-                                : "bg-white/10 text-white/30 border-white/5 cursor-not-allowed"
+                                ? "bg-primary-dark dark:bg-white text-white dark:text-[#434141D8] border-primary-dark dark:border-white hover:bg-primary-deep dark:hover:bg-white/90 shadow-[0_0_20px_rgba(138,163,153,0.2)] dark:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                                : "bg-primary/10 dark:bg-white/10 text-text-muted/30 dark:text-white/30 border-primary/5 dark:border-white/5 cursor-not-allowed"
                             }
                         `}
             >

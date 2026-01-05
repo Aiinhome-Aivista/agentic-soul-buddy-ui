@@ -199,7 +199,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-5">
+    <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 dark:bg-black/10 backdrop-blur-sm animate-fadeIn z-5">
       <div className="glass-card flex flex-col items-center justify-center w-[25%] relative overflow-auto animate-slideUp rounded-2xl p-2 max-h-[90vh]">
         {/* <div className="flex items-start justify-end w-full pt-2 mr-2">
                     <CloseRoundedIcon
@@ -213,7 +213,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
           onSubmit={formik.handleSubmit}
           className="w-full flex flex-col items-center pb-4"
         >
-          <h2 className="text-xl font-bold text-[#D9D9D9] mb-4 cursor-default">
+          <h2 className="text-xl font-bold text-text-main dark:text-[#D9D9D9] mb-4 cursor-default transition-colors">
             Complete Your Profile
           </h2>
 
@@ -228,7 +228,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               value={formik.values.full_name}
               placeholder="Full Name"
               readOnly={!!sessionStorage.getItem("signupName")}
-              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupName") ? "opacity-50 cursor-not-allowed" : ""
+              className={`bg-inherit text-text-main dark:text-[#D9D9D9] placeholder:text-text-muted dark:placeholder:text-[#D9D9D9]/50 focus:text-text-main dark:focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-border-light dark:border-[#D9D9D9]/25 focus:ring-2 focus:ring-primary/25 dark:focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupName") ? "opacity-50 cursor-not-allowed" : ""
                 }`}
             />
 
@@ -242,7 +242,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               value={formik.values.email}
               placeholder="Email Address"
               readOnly={!!sessionStorage.getItem("signupEmail")}
-              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupEmail") ? "opacity-50 cursor-not-allowed" : ""
+              className={`bg-inherit text-text-main dark:text-[#D9D9D9] placeholder:text-text-muted dark:placeholder:text-[#D9D9D9]/50 focus:text-text-main dark:focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-border-light dark:border-[#D9D9D9]/25 focus:ring-2 focus:ring-primary/25 dark:focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupEmail") ? "opacity-50 cursor-not-allowed" : ""
                 }`}
             />
 
@@ -272,7 +272,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               }}
               value={formik.values.age}
               placeholder="Age"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all no-spinner"
+              className="bg-inherit text-text-main dark:text-[#D9D9D9] placeholder:text-text-muted dark:placeholder:text-[#D9D9D9]/50 focus:text-text-main dark:focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-border-light dark:border-[#D9D9D9]/25 focus:ring-2 focus:ring-primary/25 dark:focus:ring-[#D9D9D9]/25 transition-all no-spinner"
               min={0}
             />
 
@@ -299,7 +299,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               onChange={formik.handleChange}
               value={formik.values.work}
               placeholder="Profession"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+              className="bg-inherit text-text-main dark:text-[#D9D9D9] placeholder:text-text-muted dark:placeholder:text-[#D9D9D9]/50 focus:text-text-main dark:focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-border-light dark:border-[#D9D9D9]/25 focus:ring-2 focus:ring-primary/25 dark:focus:ring-[#D9D9D9]/25 transition-all"
             />
 
             {/* Health Dropdown */}
@@ -339,7 +339,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               onChange={formik.handleChange}
               placeholder="How are you feeling? (Optional)"
               value={formik.values.emotional_state}
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+              className="bg-inherit text-text-main dark:text-[#D9D9D9] placeholder:text-text-muted dark:placeholder:text-[#D9D9D9]/50 focus:text-text-main dark:focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-border-light dark:border-[#D9D9D9]/25 focus:ring-2 focus:ring-primary/25 dark:focus:ring-[#D9D9D9]/25 transition-all"
             />
 
             <div className="pt-4 w-full">
@@ -347,7 +347,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
                 type="submit"
                 disabled={formik.isSubmitting}
                 onClick={handleFormSubmit}
-                className="w-full py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/80 border-2 border-[#D9D9D9]/25 font-bold tracking-wide cursor-pointer shadow-lg transition hover:bg-[#D9D9D9]/30 hover:text-white"
+                className="w-full py-2 rounded-xl bg-primary/25 dark:bg-[#D9D9D9]/25 text-text-main/80 dark:text-[#D9D9D9]/80 border-2 border-primary/25 dark:border-[#D9D9D9]/25 font-bold tracking-wide cursor-pointer shadow-lg transition hover:bg-primary/40 dark:hover:bg-[#D9D9D9]/30 hover:text-text-main dark:hover:text-white"
               >
                 {formik.isSubmitting ? "Submitting..." : "Sign Up"}
               </button>
@@ -368,19 +368,18 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
         >
           <div className="flex gap-2 h-full items-center">
             <WarningRoundedIcon
-              sx={{ color: "rgba(255, 255, 255, 0.4)", fontSize: "1.2rem" }}
+              sx={{ fontSize: "1.2rem" }}
+              className="text-text-muted dark:text-white/40"
             />
-            <p className="text-white/80 text-xs font-medium">
+            <p className="text-text-main/80 dark:text-white/80 text-xs font-medium">
               {firstError || ""}
             </p>
           </div>
           <CloseRoundedIcon
             className="cursor-pointer modalCloseIcon"
             sx={{
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
               borderRadius: "50%",
               fontSize: "1rem",
-              color: "white",
             }}
             onClick={() => setBannerVisible(false)}
           />

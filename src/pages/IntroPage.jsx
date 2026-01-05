@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "../common/helper/ThemeContext";
 
 const IntroPage = () => {
     const navigate = useNavigate();
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const { isDarkMode, toggleDarkMode } = useTheme();
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
 
@@ -19,33 +20,6 @@ const IntroPage = () => {
         setTimeout(() => {
             navigate('/home');
         }, 800);
-    };
-
-    useEffect(() => {
-        // Check for saved dark mode preference or system preference
-        const savedMode = localStorage.getItem('theme');
-        if (savedMode) {
-            setIsDarkMode(savedMode === 'dark');
-            if (savedMode === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setIsDarkMode(true);
-            document.documentElement.classList.add('dark');
-        }
-    }, []);
-
-    const toggleDarkMode = () => {
-        const newMode = !isDarkMode;
-        setIsDarkMode(newMode);
-        localStorage.setItem('theme', newMode ? 'dark' : 'light');
-        if (newMode) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
     };
 
     return (
@@ -93,9 +67,9 @@ const IntroPage = () => {
                             <span className="material-symbols-outlined">menu</span>
                         </button>
                         {/* Dark Mode Toggle */}
-                        <button onClick={toggleDarkMode} className="flex items-center justify-center p-2 rounded-full bg-white dark:bg-white/10 text-text-main dark:text-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-white/5 disabled:opacity-50">
+                        {/* <button onClick={toggleDarkMode} className="flex items-center justify-center p-2 rounded-full bg-white dark:bg-white/10 text-text-main dark:text-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-white/5 disabled:opacity-50">
                             <span className="material-symbols-outlined text-[20px]">{isDarkMode ? 'light_mode' : 'dark_mode'}</span>
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </header>

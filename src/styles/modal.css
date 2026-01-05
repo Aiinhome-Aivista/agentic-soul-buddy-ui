@@ -99,6 +99,23 @@
   overflow: hidden;
 }
 
+/* Light mode glass-card */
+:root:not(.dark) .glass-card {
+  --modal-bg-color: rgba(255, 255, 255, 0.85);
+  --modal-icon-color: rgba(77, 77, 77, 0.9);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode glass-card */
+.dark .glass-card {
+  --modal-bg-color: rgba(111, 111, 111, 0.34);
+  --modal-icon-color: rgb(77, 77, 77, 0.9);
+  background: rgba(111, 111, 111, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .glass-card::before {
   content: '';
   position: absolute;
@@ -120,7 +137,18 @@
   color: var(--modal-icon-color);
 }
 
-/* PrimeReact Dropdown Styling */
+/* Light mode close icon */
+:root:not(.dark) .modalCloseIcon {
+  color: rgba(77, 77, 77, 0.9);
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.dark .modalCloseIcon {
+  color: rgba(255, 255, 255, 0.54);
+  background-color: rgba(255, 255, 255, 0.54) !important;
+}
+
+/* PrimeReact Dropdown Styling - Dark Mode (Default) */
 .p-dropdown {
   background: transparent !important;
   border: 2px solid rgba(217, 217, 217, 0.25) !important;
@@ -193,4 +221,54 @@
 .p-dropdown-panel .p-dropdown-empty-message {
   color: rgba(217, 217, 217, 0.6) !important;
   padding: 0.5rem 1rem !important;
+}
+
+/* PrimeReact Dropdown Styling - Light Mode */
+:root:not(.dark) .p-dropdown {
+  border: 2px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+:root:not(.dark) .p-dropdown:not(.p-disabled):hover {
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+:root:not(.dark) .p-dropdown:not(.p-disabled).p-focus {
+  box-shadow: 0 0 0 2px rgba(138, 163, 153, 0.25) !important;
+  border-color: rgba(138, 163, 153, 0.5) !important;
+}
+
+:root:not(.dark) .p-dropdown .p-dropdown-label {
+  color: #2c3330 !important;
+}
+
+:root:not(.dark) .p-dropdown .p-dropdown-label.p-placeholder {
+  color: rgba(107, 124, 118, 0.7) !important;
+}
+
+:root:not(.dark) .p-dropdown .p-dropdown-trigger {
+  color: rgba(107, 124, 118, 0.8) !important;
+}
+
+:root:not(.dark) .p-dropdown-panel {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+:root:not(.dark) .p-dropdown-panel .p-dropdown-item {
+  color: #2c3330 !important;
+}
+
+:root:not(.dark) .p-dropdown-panel .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+  background: rgba(138, 163, 153, 0.15) !important;
+  color: #2c3330 !important;
+}
+
+:root:not(.dark) .p-dropdown-panel .p-dropdown-item.p-highlight {
+  background: rgba(138, 163, 153, 0.25) !important;
+  color: #2c3330 !important;
+}
+
+:root:not(.dark) .p-dropdown-panel .p-dropdown-empty-message {
+  color: rgba(107, 124, 118, 0.8) !important;
 }

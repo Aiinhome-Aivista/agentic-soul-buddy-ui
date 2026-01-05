@@ -85,20 +85,20 @@ export default function LoginModal({ OnClose }) {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm z-15 animate-fadeIn">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/10 dark:bg-black/10 backdrop-blur-sm z-15 animate-fadeIn">
             {/* Main Modal Container */}
             <div
                 className="glass-card flex flex-col items-center justify-center h-[36%] w-[25%] relative animate-slideUp overflow-hidden rounded-2xl p-2">
                 <div className="flex items-start justify-end w-[100%] h-[10%]">
-                    <CloseRoundedIcon onClick={OnClose} className="cursor-pointer modalCloseIcon" sx={{ backgroundColor: "rgba(255, 255, 255, 0.54)", borderRadius: '50%', fontSize: '1.1rem' }} />
+                    <CloseRoundedIcon onClick={OnClose} className="cursor-pointer modalCloseIcon" sx={{ borderRadius: '50%', fontSize: '1.1rem' }} />
                 </div>
                 <div className="flex flex-col items-center justify-center gap-7 w-[100%] h-[90%] pb-[10%]">
-                    <div className="text-2xl font-bold text-white  cursor-default">Login</div>
+                    <div className="text-2xl font-bold text-text-main dark:text-white cursor-default transition-colors">Login</div>
                     <div className="flex gap-3">
-                        <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-[#D9D9D9]/12 hover:bg-[#D9D9D9]/20 text-[#FFFFFF]/54 hover:text-[#FFFFFF]/64 p-1 cursor-pointer" onClick={handleGoogleSignIn}>G</div>
-                        <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-[#D9D9D9]/12 hover:bg-[#D9D9D9]/20 text-[#FFFFFF]/54 hover:text-[#FFFFFF]/64 p-1 cursor-pointer" onClick={handleFacebookSignIn}>f</div>
+                        <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-primary/20 dark:bg-[#D9D9D9]/12 hover:bg-primary/30 dark:hover:bg-[#D9D9D9]/20 text-text-main/70 dark:text-[#FFFFFF]/54 hover:text-text-main dark:hover:text-[#FFFFFF]/64 p-1 cursor-pointer transition-colors" onClick={handleGoogleSignIn}>G</div>
+                        <div className="flex justify-center items-center text-center text-lg font-semibold rounded-full w-[2.5rem] h-[2.5rem] bg-primary/20 dark:bg-[#D9D9D9]/12 hover:bg-primary/30 dark:hover:bg-[#D9D9D9]/20 text-text-main/70 dark:text-[#FFFFFF]/54 hover:text-text-main dark:hover:text-[#FFFFFF]/64 p-1 cursor-pointer transition-colors" onClick={handleFacebookSignIn}>f</div>
                     </div>
-                    <div className="text-base text-[#FFFFFF]/54 text-center  cursor-default">Authenticate with google or facebook</div>
+                    <div className="text-base text-text-muted dark:text-[#FFFFFF]/54 text-center cursor-default transition-colors">Authenticate with google or facebook</div>
                 </div>
             </div>
         </div>

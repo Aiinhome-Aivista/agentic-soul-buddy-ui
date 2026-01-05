@@ -92,31 +92,31 @@ function LoginLogoutIcon({ handleStop }) {
             <div className="relative" ref={dropdownRef}>
                 {/* Header - Name Section (always visible) */}
                 <div
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-2xl border-2 border-[#333333] bg-[#474747]/22 backdrop-blur-md cursor-pointer hover:bg-[#474747]/40 transition-all duration-300 ${showDropdown ? 'opacity-0' : 'opacity-100'
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-2xl border-2 border-border-light dark:border-[#333333] bg-white/50 dark:bg-[#474747]/22 backdrop-blur-md cursor-pointer hover:bg-gray-100 dark:hover:bg-[#474747]/40 transition-all duration-300 ${showDropdown ? 'opacity-0' : 'opacity-100'
                         }`}
                     onClick={() => setShowDropdown(!showDropdown)}
                 >
                     {/* Initials Icon */}
-                    <div className="w-6 h-6 rounded-full bg-[#d9d9d9]/30 flex items-center justify-center flex-shrink-0">
-                        <span className="text-[0.65rem] font-semibold text-[#d9d9d9]">
+                    <div className="w-6 h-6 rounded-full bg-primary/30 dark:bg-[#d9d9d9]/30 flex items-center justify-center flex-shrink-0">
+                        <span className="text-[0.65rem] font-semibold text-primary-dark dark:text-[#d9d9d9] transition-colors">
                             {initials}
                         </span>
                     </div>
                     {/* User Name */}
-                    <span className="text-[0.75rem] font-medium text-[#d9d9d9]/80 truncate">
+                    <span className="text-[0.75rem] font-medium text-text-muted dark:text-[#d9d9d9]/80 truncate transition-colors">
                         {userName}
                     </span>
                 </div>
 
                 {/* Expandable Menu - Absolute positioned overlay */}
                 <div
-                    className="absolute top-0 right-0 flex flex-col rounded-2xl border-2 border-[#333333] bg-[#2a2a2a]/95 backdrop-blur-xl z-50"
+                    className="absolute top-0 right-0 flex flex-col rounded-2xl border-2 border-border-light dark:border-[#333333] bg-white/95 dark:bg-[#2a2a2a]/95 backdrop-blur-xl z-50"
                     style={{
                         width: '200px',
                         opacity: showDropdown ? 1 : 0,
                         transform: showDropdown ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-10px)',
                         transformOrigin: 'top right',
-                        boxShadow: showDropdown ? '0 8px 32px rgba(0, 0, 0, 0.4)' : 'none',
+                        boxShadow: showDropdown ? '0 8px 32px rgba(0, 0, 0, 0.2)' : 'none',
                         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                         pointerEvents: showDropdown ? 'auto' : 'none',
                         visibility: showDropdown ? 'visible' : 'hidden'
@@ -124,60 +124,60 @@ function LoginLogoutIcon({ handleStop }) {
                 >
                     {/* Header inside dropdown */}
                     <div
-                        className="flex items-center gap-2 px-3 py-2 hover:bg-[#474747]/40 transition-colors cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-2 hover:bg-primary/10 dark:hover:bg-[#474747]/40 transition-colors cursor-pointer"
                         onClick={() => setShowDropdown(false)}
                     >
-                        <div className="w-6 h-6 rounded-full bg-[#d9d9d9]/30 flex items-center justify-center flex-shrink-0">
-                            <span className="text-[0.65rem] font-semibold text-[#d9d9d9]">
+                        <div className="w-6 h-6 rounded-full bg-primary/30 dark:bg-[#d9d9d9]/30 flex items-center justify-center flex-shrink-0">
+                            <span className="text-[0.65rem] font-semibold text-primary-dark dark:text-[#d9d9d9] transition-colors">
                                 {initials}
                             </span>
                         </div>
-                        <span className="text-[0.75rem] font-medium text-[#d9d9d9] truncate flex-1">
+                        <span className="text-[0.75rem] font-medium text-text-main dark:text-[#d9d9d9] truncate flex-1 transition-colors">
                             {userName}
                         </span>
                     </div>
 
                     {/* Menu Items */}
-                    <div className="border-t border-[#333333]">
+                    <div className="border-t border-border-light dark:border-[#333333]">
                         <button
                             onClick={() => handleMenuClick('profile')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-text-muted dark:text-[#d9d9d9]/70 hover:bg-primary/10 dark:hover:bg-white/10 hover:text-text-main dark:hover:text-white transition-colors text-left"
                         >
                             <PersonOutlineRoundedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Profile</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('account')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-text-muted dark:text-[#d9d9d9]/70 hover:bg-primary/10 dark:hover:bg-white/10 hover:text-text-main dark:hover:text-white transition-colors text-left"
                         >
                             <ManageAccountsOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Account</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('Terms & Conditions')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-text-muted dark:text-[#d9d9d9]/70 hover:bg-primary/10 dark:hover:bg-white/10 hover:text-text-main dark:hover:text-white transition-colors text-left"
                         >
                             <InfoOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Terms & Conditions</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('disclaimer')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-text-muted dark:text-[#d9d9d9]/70 hover:bg-primary/10 dark:hover:bg-white/10 hover:text-text-main dark:hover:text-white transition-colors text-left"
                         >
                             <InfoOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Disclaimer</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('contact')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-text-muted dark:text-[#d9d9d9]/70 hover:bg-primary/10 dark:hover:bg-white/10 hover:text-text-main dark:hover:text-white transition-colors text-left"
                         >
                             <EmailOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Contact Us</span>
                         </button>
-                        <div className="border-t border-[#333333] mx-2 my-1"></div>
+                        <div className="border-t border-border-light dark:border-[#333333] mx-2 my-1"></div>
                         <button
                             onClick={() => handleMenuClick('logout')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-text-muted dark:text-[#d9d9d9]/70 hover:bg-primary/10 dark:hover:bg-white/10 hover:text-text-main dark:hover:text-white transition-colors text-left"
                         >
                             <LogoutRoundedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Logout</span>
@@ -191,15 +191,15 @@ function LoginLogoutIcon({ handleStop }) {
     // When logged out, show sign in toggle
     return (
         <div
-            className="relative flex items-center gap-2 w-[4.8rem] h-[1.7rem] overflow-hidden rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 px-1.5 cursor-pointer"
+            className="relative flex items-center gap-2 w-[4.8rem] h-[1.7rem] overflow-hidden rounded-[1rem] border-2 border-border-light dark:border-[#333333] bg-white/50 dark:bg-[#474747]/22 px-1.5 cursor-pointer"
             onClick={handleSignIn}>
             <span className="invisible text-[0.75rem] font-medium">.</span>
-            <span className="ml-auto text-[0.75rem] font-medium text-[#7D7E7F] pointer-events-none">
+            <span className="ml-auto text-[0.75rem] font-medium text-text-muted dark:text-[#7D7E7F] pointer-events-none transition-colors">
                 Sign In
             </span>
             {/* Knob */}
             <div
-                className="absolute top-[0.25rem] left-[0.25rem] h-[1rem] w-[1rem] rounded-full bg-[#d9d9d9]/54 transition-transform duration-300 ease-in-out pointer-events-none"
+                className="absolute top-[0.25rem] left-[0.25rem] h-[1rem] w-[1rem] rounded-full bg-primary-dark/50 dark:bg-[#d9d9d9]/54 transition-transform duration-300 ease-in-out pointer-events-none"
             />
         </div>
     );

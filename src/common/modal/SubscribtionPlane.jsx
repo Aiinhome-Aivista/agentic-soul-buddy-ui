@@ -84,10 +84,10 @@ const SubscriptionPlane = ({ OnClose }) => {
   };
 
   return (
-    <div className="fixed p-4 inset-0 z-50 flex items-center h-full justify-center bg-black/30 backdrop-blur-md animate-fadeIn">
+    <div className="fixed p-4 inset-0 z-50 flex items-center h-full justify-center bg-white/30 dark:bg-black/30 backdrop-blur-md animate-fadeIn">
       <div className="w-full flex flex-col justify-between h-full max-w-md animate-slideUp">
         {/* Header (optional; keep if you want) */}
-        <h2 className="text-center text-[15px] mt-3 font-medium text-white/80 mb-4">
+        <h2 className="text-center text-[15px] mt-3 font-medium text-text-muted dark:text-white/80 mb-4 transition-colors">
           Your personalised plan is ready!
         </h2>
 
@@ -104,10 +104,10 @@ const SubscriptionPlane = ({ OnClose }) => {
                 className={[
                   "relative w-full text-left rounded-2xl",
                   "border transition-all duration-300 ease-out",
-                  isSelected ? "border-white/90 shadow-lg shadow-white/10" : "border-white/10",
-                  "bg-white/[0.05]",
-                  "hover:scale-[1.02] hover:bg-white/[0.08]",
-                  !isSelected && "hover:border-white/20",
+                  isSelected ? "border-primary-dark dark:border-white/90 shadow-lg shadow-primary/10 dark:shadow-white/10" : "border-border-light dark:border-white/10",
+                  "bg-primary/[0.05] dark:bg-white/[0.05]",
+                  "hover:scale-[1.02] hover:bg-primary/[0.08] dark:hover:bg-white/[0.08]",
+                  !isSelected && "hover:border-primary/30 dark:hover:border-white/20",
                   "active:scale-[0.98]",
                 ].join(" ")}
               >
@@ -119,15 +119,15 @@ const SubscriptionPlane = ({ OnClose }) => {
                       <div
                         className={[
                           "grid place-items-center w-[18px] h-[18px] rounded-full border",
-                          isSelected ? "border-white/90" : "border-white/30",
+                          isSelected ? "border-primary-dark dark:border-white/90" : "border-text-muted/30 dark:border-white/30",
                         ].join(" ")}
                       >
                         <span
                           className={[
                             "w-[9px] h-[9px] rounded-full transition-opacity",
                             isSelected
-                              ? "bg-white opacity-100"
-                              : "bg-white opacity-0",
+                              ? "bg-primary-dark dark:bg-white opacity-100"
+                              : "bg-primary-dark dark:bg-white opacity-0",
                           ].join(" ")}
                         />
                       </div>
@@ -144,7 +144,7 @@ const SubscriptionPlane = ({ OnClose }) => {
                       <div
                         className={[
                           "text-[12px] tracking-[0.22em] font-semibold",
-                          isSelected ? "text-white/90" : "text-white/35",
+                          isSelected ? "text-text-main dark:text-white/90" : "text-text-muted/50 dark:text-white/35",
                         ].join(" ")}
                       >
                         {plan.title}
@@ -152,7 +152,7 @@ const SubscriptionPlane = ({ OnClose }) => {
 
                       {/* small crossed + final price line like reference */}
                       {(plan.originalPrice || plan.finalPrice) && (
-                        <div className="mt-1 text-[11px] text-white/30">
+                        <div className="mt-1 text-[11px] text-text-muted/50 dark:text-white/30">
                           {plan.originalPrice && (
                             <span className="line-through mr-2">
                               {plan.originalPrice}
@@ -168,13 +168,13 @@ const SubscriptionPlane = ({ OnClose }) => {
                   <div
                     className={[
                       "shrink-0 flex gap-2 h-full rounded-xl px-2.5 py-4 text-center",
-                      isSelected ? "bg-white/90" : "bg-white/10",
+                      isSelected ? "bg-primary-dark dark:bg-white/90" : "bg-primary/10 dark:bg-white/10",
                     ].join(" ")}
                   >
                     <div
                       className={[
                         "leading-none font-bold",
-                        isSelected ? "text-[#656265]" : "text-[#D9D9D9B2]",
+                        isSelected ? "text-white dark:text-[#656265]" : "text-text-muted dark:text-[#D9D9D9B2]",
                       ].join(" ")}
                     >
                       <span className="text-[22px]">
@@ -190,7 +190,7 @@ const SubscriptionPlane = ({ OnClose }) => {
                     <div
                       className={[
                         "mt-1 text-[10px]",
-                        isSelected ? "text-black/60" : "text-[#D9D9D9B2]",
+                        isSelected ? "text-white/80 dark:text-black/60" : "text-text-muted/70 dark:text-[#D9D9D9B2]",
                       ].join(" ")}
                     >
                       {plan.period}
@@ -208,8 +208,8 @@ const SubscriptionPlane = ({ OnClose }) => {
         <button
           onClick={handleContinue}
           className="mt-5 w-full mb-[20vh] rounded-xl py-2.5 text-[16px] font-semibold
-                     bg-[#D9D9D9] text-black/95 border border-white/10
-                     hover:bg-white hover:shadow-lg hover:shadow-white/20
+                     bg-primary-dark dark:bg-[#D9D9D9] text-white dark:text-black/95 border border-primary/10 dark:border-white/10
+                     hover:bg-primary-deep dark:hover:bg-white hover:shadow-lg hover:shadow-primary/20 dark:hover:shadow-white/20
                      active:scale-[0.97] transition-all duration-300 ease-out
                      transform hover:scale-[1.01]"
         >

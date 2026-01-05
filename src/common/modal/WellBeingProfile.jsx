@@ -126,7 +126,7 @@ export default function WellBeingProfile({ onClose, onContinue }) {
   const styles = getLevelStyles(profileData?.negative_effects_level);
 
   return (
-    <div className="fixed inset-0 flex  flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-50">
+    <div className="fixed inset-0 flex  flex-col items-center justify-center gap-[2%] bg-white/10 dark:bg-black/10 backdrop-blur-sm animate-fadeIn z-50">
       <div
         className={`glass-card flex flex-col items-center ${
           loading ? "max-w-md h-[30%] justify-center" : "max-w-md justify-start"
@@ -145,7 +145,7 @@ export default function WellBeingProfile({ onClose, onContinue }) {
 
           {loading ? (
             <div className="flex flex-col items-center justify-center max-w-md h-full gap-6">
-              <h2 className="text-xl font-bold text-white text-center animate-pulse">
+              <h2 className="text-xl font-bold text-text-main dark:text-white text-center animate-pulse transition-colors">
                 Generating your profile...
               </h2>
               <div className="max-w-md">
@@ -184,10 +184,10 @@ export default function WellBeingProfile({ onClose, onContinue }) {
             </div>
           ) : !profileData ? (
             <div className="flex flex-col items-center justify-center h-40">
-              <div className="text-white mb-4">No profile data available.</div>
+              <div className="text-text-main dark:text-white mb-4 transition-colors">No profile data available.</div>
               <button
                 onClick={onClose}
-                className="px-4 py-2 bg-white/10 rounded-full text-white hover:bg-white/20"
+                className="px-4 py-2 bg-primary/20 dark:bg-white/10 rounded-full text-text-main dark:text-white hover:bg-primary/30 dark:hover:bg-white/20 transition-colors"
               >
                 Close
               </button>
@@ -196,7 +196,7 @@ export default function WellBeingProfile({ onClose, onContinue }) {
             <>
               {/* Header */}
               <div className="max-w-md flex justify-between items-start mb-4">
-                <h2 className="text-xl font-bold text-white text-center max-w-md">
+                <h2 className="text-xl font-bold text-text-main dark:text-white text-center max-w-md transition-colors">
                   Summary of your Well-being Profile
                 </h2>
                 {/* <button onClick={onClose} className="absolute right-4 top-4 hover:bg-white/10 rounded-full p-1 transition">
@@ -205,9 +205,9 @@ export default function WellBeingProfile({ onClose, onContinue }) {
               </div>
 
               {/* Main Gauge Card */}
-              <div className="rounded-2xl p-4 max-w-md mb-4 shadow-sm relative bg-white/5 border border-white/10">
+              <div className="rounded-2xl p-4 max-w-md mb-4 shadow-sm relative bg-primary/5 dark:bg-white/5 border border-border-light dark:border-white/10">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-bold text-white">
+                  <span className="font-bold text-text-main dark:text-white transition-colors">
                     Negative effects level
                   </span>
                   <span
@@ -253,7 +253,7 @@ export default function WellBeingProfile({ onClose, onContinue }) {
                       style={{ left: styles.gaugePos }}
                     ></div>
                   </div>
-                  <div className="flex justify-between text-xs text-white/50 mt-1 font-medium">
+                  <div className="flex justify-between text-xs text-text-muted dark:text-white/50 mt-1 font-medium transition-colors">
                     <span>Low</span>
                     <span>Normal</span>
                     <span>Medium</span>
@@ -288,26 +288,26 @@ export default function WellBeingProfile({ onClose, onContinue }) {
               {/* Stats Grid */}
               <div className="grid grid-cols-2 gap-3 w-full mb-6">
                 {/* Card 1 */}
-                <div className="bg-white/5 border col-span-2 border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                  <div className="bg-white/10 p-2 rounded-lg text-white">
+                <div className="bg-primary/5 dark:bg-white/5 border col-span-2 border-border-light dark:border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
+                  <div className="bg-primary/10 dark:bg-white/10 p-2 rounded-lg text-primary-dark dark:text-white">
                     <CrisisAlertIcon />
                   </div>
                   <div>
-                    <div className="text-xs text-white/60">Main difficulty</div>
-                    <div className="font-bold text-white text-sm">
+                    <div className="text-xs text-text-muted dark:text-white/60 transition-colors">Main difficulty</div>
+                    <div className="font-bold text-text-main dark:text-white text-sm transition-colors">
                       {profileData.main_difficulty}
                     </div>
                   </div>
                 </div>
                 {/* Card 3 */}
-                <div className="bg-white/5 border col-span-2 border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                  <div className="bg-white/10 p-2 rounded-lg text-white">
+                <div className="bg-primary/5 dark:bg-white/5 border col-span-2 border-border-light dark:border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
+                  <div className="bg-primary/10 dark:bg-white/10 p-2 rounded-lg text-primary-dark dark:text-white">
                     <BoltIcon />
                   </div>
                   <div>
-                    <div className="text-xs text-white/60">Trigger</div>
+                    <div className="text-xs text-text-muted dark:text-white/60 transition-colors">Trigger</div>
                     <div
-                      className="font-bold text-white text-sm "
+                      className="font-bold text-text-main dark:text-white text-sm transition-colors"
                       title={profileData.trigger}
                     >
                       {profileData.trigger}
@@ -316,28 +316,28 @@ export default function WellBeingProfile({ onClose, onContinue }) {
                 </div>
 
                 {/* Card 2 */}
-                <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                  <div className="bg-white/10 p-2 rounded-lg text-white   ">
+                <div className="bg-primary/5 dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
+                  <div className="bg-primary/10 dark:bg-white/10 p-2 rounded-lg text-primary-dark dark:text-white">
                     <CalendarMonthIcon />
                   </div>
                   <div>
-                    <div className="text-xs text-white/60">
+                    <div className="text-xs text-text-muted dark:text-white/60 transition-colors">
                       Challenging period
                     </div>
-                    <div className="font-bold text-white text-sm">
+                    <div className="font-bold text-text-main dark:text-white text-sm transition-colors">
                       {profileData.challenging_period}
                     </div>
                   </div>
                 </div>
 
                 {/* Card 4 */}
-                <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
-                  <div className="bg-white/10 p-2 rounded-lg text-white">
+                <div className="bg-primary/5 dark:bg-white/5 border border-border-light dark:border-white/10 rounded-xl p-3 flex gap-3 items-center shadow-sm">
+                  <div className="bg-primary/10 dark:bg-white/10 p-2 rounded-lg text-primary-dark dark:text-white">
                     <BatteryAlertIcon />
                   </div>
                   <div>
-                    <div className="text-xs text-white/60">Energy level</div>
-                    <div className="font-bold text-white text-sm">
+                    <div className="text-xs text-text-muted dark:text-white/60 transition-colors">Energy level</div>
+                    <div className="font-bold text-text-main dark:text-white text-sm transition-colors">
                       {profileData.energy_level}
                     </div>
                   </div>
@@ -347,7 +347,7 @@ export default function WellBeingProfile({ onClose, onContinue }) {
               {/* Footer Button */}
               <button
                 onClick={onContinue || onClose}
-                className="w-full cursor-pointer py-3 rounded-full bg-[#D9D9D9] text-black/95 font-bold text-lg hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.2) transition-colors"
+                className="w-full cursor-pointer py-3 rounded-full bg-primary-dark dark:bg-[#D9D9D9] text-white dark:text-black/95 font-bold text-lg hover:bg-primary-deep dark:hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-colors"
               >
                 Continue
               </button>

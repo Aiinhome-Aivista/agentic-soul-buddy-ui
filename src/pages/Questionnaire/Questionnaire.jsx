@@ -110,19 +110,19 @@ const Questionnaire = () => {
 
     if (loading) {
         return (
-            <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm">
-                <div className="text-white text-xl font-semibold">Loading questions...</div>
+            <div className="fixed inset-0 flex items-center justify-center bg-white/10 dark:bg-black/10 backdrop-blur-sm">
+                <div className="text-text-main dark:text-white text-xl font-semibold transition-colors">Loading questions...</div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-black/10 backdrop-blur-sm">
-                <div className="text-red-400 text-xl font-semibold">{error}</div>
+            <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-white/10 dark:bg-black/10 backdrop-blur-sm">
+                <div className="text-red-500 dark:text-red-400 text-xl font-semibold transition-colors">{error}</div>
                 <button
                     onClick={() => navigate('/')}
-                    className="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white transition-colors"
+                    className="px-6 py-2 bg-primary/20 dark:bg-white/20 hover:bg-primary/30 dark:hover:bg-white/30 rounded-lg text-text-main dark:text-white transition-colors"
                 >
                     Go Back
                 </button>
@@ -132,8 +132,8 @@ const Questionnaire = () => {
 
     if (!questions.length) {
         return (
-            <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm">
-                <div className="text-white text-xl font-semibold">No questions available</div>
+            <div className="fixed inset-0 flex items-center justify-center bg-white/10 dark:bg-black/10 backdrop-blur-sm">
+                <div className="text-text-main dark:text-white text-xl font-semibold transition-colors">No questions available</div>
             </div>
         );
     }
@@ -144,29 +144,29 @@ const Questionnaire = () => {
         <>
             {!signupModal2 && !subscriptionModal && !showProfile ? (
                 <div
-                    className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-white/5 backdrop-blur-sm animate-fadeIn z-5">
+                    className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-white/5 dark:bg-white/5 backdrop-blur-sm animate-fadeIn z-5">
                     {/* Header / Progress Bar */}
                     <div className="w-full px-8 py-6 flex items-center justify-between sticky top-0 z-10">
                         <button
                             onClick={handleBack}
-                            className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors backdrop-blur-md"
+                            className="p-2 bg-primary/10 dark:bg-white/10 hover:bg-primary/20 dark:hover:bg-white/20 rounded-full transition-colors backdrop-blur-md"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-text-main dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
                         </button>
 
                         {/* Progress Bar Label */}
-                        <div className="flex-1 mx-8 h-1 bg-white/20 rounded-full overflow-hidden">
+                        <div className="flex-1 mx-8 h-1 bg-primary/20 dark:bg-white/20 rounded-full overflow-hidden">
                             <div
-                                className="h-full bg-white/60 transition-all duration-300 ease-out rounded-full"
+                                className="h-full bg-primary-dark/60 dark:bg-white/60 transition-all duration-300 ease-out rounded-full"
                                 style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
                             />
                         </div>
 
                         <div className="text-sm font-bold font-mono">
-                            <span className="text-white">{currentIndex + 1}</span>
-                            <span className="text-white/60">/{questions.length}</span>
+                            <span className="text-text-main dark:text-white transition-colors">{currentIndex + 1}</span>
+                            <span className="text-text-muted dark:text-white/60 transition-colors">/{questions.length}</span>
                         </div>
                     </div>
 

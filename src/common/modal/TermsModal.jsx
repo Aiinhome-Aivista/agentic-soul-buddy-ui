@@ -40,22 +40,22 @@ export default function TermsModal({ onClose }) {
     }, []);
 
     return (
-        <div className="fixed inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md animate-fadeIn z-50">
+        <div className="fixed inset-0 flex flex-col items-center justify-center bg-white/40 dark:bg-black/40 backdrop-blur-md animate-fadeIn z-50">
             <div className="glass-card flex flex-col items-center relative overflow-hidden animate-slideUp rounded-3xl"
                 style={{ width: 'min(900px, calc(100% - 48px))', maxHeight: 'calc(100vh - 48px)' }}
             >
                 {/* Header */}
-                <div className="w-full flex items-center justify-between px-8 py-5 border-b border-white/10">
+                <div className="w-full flex items-center justify-between px-8 py-5 border-b border-border-light dark:border-white/10">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                            <DescriptionOutlinedIcon sx={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '1.5rem' }} />
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 dark:bg-white/10 flex items-center justify-center">
+                            <DescriptionOutlinedIcon sx={{ fontSize: '1.5rem' }} className="text-primary-dark dark:text-white/80" />
                         </div>
-                        <h2 className="text-2xl font-bold text-white cursor-default">Terms and Conditions</h2>
+                        <h2 className="text-2xl font-bold text-text-main dark:text-white cursor-default transition-colors">Terms and Conditions</h2>
                     </div>
                     <CloseRoundedIcon
                         onClick={handleClose}
-                        className="cursor-pointer hover:bg-white/20 rounded-full p-1 transition-all"
-                        sx={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '1.75rem' }}
+                        className="cursor-pointer hover:bg-primary/10 dark:hover:bg-white/20 rounded-full p-1 transition-all text-text-muted dark:text-white/70"
+                        sx={{ fontSize: '1.75rem' }}
                     />
                 </div>
 
@@ -66,36 +66,45 @@ export default function TermsModal({ onClose }) {
                           width: 6px;
                         }
                         .custom-scrollbar::-webkit-scrollbar-track {
-                          background: rgba(255, 255, 255, 0.05);
+                          background: rgba(0, 0, 0, 0.05);
                           border-radius: 10px;
+                        }
+                        .dark .custom-scrollbar::-webkit-scrollbar-track {
+                          background: rgba(255, 255, 255, 0.05);
                         }
                         .custom-scrollbar::-webkit-scrollbar-thumb {
-                          background: rgba(255, 255, 255, 0.2);
+                          background: rgba(0, 0, 0, 0.2);
                           border-radius: 10px;
                         }
+                        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+                          background: rgba(255, 255, 255, 0.2);
+                        }
                         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                          background: rgba(0, 0, 0, 0.3);
+                        }
+                        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                           background: rgba(255, 255, 255, 0.3);
                         }
                       `}</style>
 
                     {loading ? (
                         <div className="flex justify-center items-center h-40">
-                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-dark dark:border-white"></div>
                         </div>
                     ) : (
                         termsData.map((term, index) => (
-                            <div key={term.id} className="bg-white/5 rounded-2xl p-5 border border-white/10 hover:border-white/20 transition-all">
-                                <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-3">
-                                    <span className="w-6 h-6 rounded bg-white/10 flex items-center justify-center text-xs text-white/70">{index + 1}</span>
+                            <div key={term.id} className="bg-primary/5 dark:bg-white/5 rounded-2xl p-5 border border-border-light dark:border-white/10 hover:border-primary/30 dark:hover:border-white/20 transition-all">
+                                <h3 className="text-lg font-semibold text-text-main dark:text-white mb-3 flex items-center gap-3 transition-colors">
+                                    <span className="w-6 h-6 rounded bg-primary/10 dark:bg-white/10 flex items-center justify-center text-xs text-text-muted dark:text-white/70">{index + 1}</span>
                                     {term.title}
                                 </h3>
-                                <p className="text-white/70 leading-relaxed whitespace-pre-wrap">
+                                <p className="text-text-muted dark:text-white/70 leading-relaxed whitespace-pre-wrap transition-colors">
                                     {term.content}
                                 </p>
                             </div>
                         )))}
 
-                    <div className="mt-4 text-center text-white/30 text-xs pb-4">
+                    <div className="mt-4 text-center text-text-muted/50 dark:text-white/30 text-xs pb-4 transition-colors">
                         Last updated: 03 Jan 2026
                     </div>
                 </div>

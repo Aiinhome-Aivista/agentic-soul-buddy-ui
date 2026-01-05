@@ -30,15 +30,23 @@ body,
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: transparent;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --modal-bg-color: rgba(255, 255, 255, 0.85);
+  --modal-icon-color: rgba(77, 77, 77, 0.9);
+  color: #2c3330;
+  background-color: #fbfbf9;
+}
+
+/* Dark mode root styles */
+.dark {
   --modal-bg-color: rgba(111, 111, 111, 0.34);
   --modal-icon-color: rgb(77, 77, 77, 0.9);
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #1a1f1d;
 }
 
 .animate-pulse-circle {
