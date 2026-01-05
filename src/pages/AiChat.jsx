@@ -373,7 +373,7 @@ const AiChat = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full h-full bg-gradient-to-b from-slate-900 via-purple-950/30 to-slate-900 overflow-hidden relative">
+    <div className="flex flex-col items-center w-full h-full bg-gradient-to-b from-slate-900 via-purple-950/10 to-slate-900/10 overflow-hidden relative">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }}></div>
@@ -420,7 +420,8 @@ const AiChat = () => {
                 {isPlaying && (
                   <div className="absolute inset-0 rounded-full bg-violet-400/20 animate-ping"></div>
                 )}
-                <span className="text-3xl">🌙</span>
+                {/* <span className="text-3xl">🌙</span> */}
+                 <span className="text-white text-6xl">✧</span>
               </div>
               <span className="mt-2 text-violet-300 text-sm font-medium">Cosmic AI</span>
               {isPlaying && <span className="text-violet-400 text-xs animate-pulse">Speaking...</span>}
@@ -473,7 +474,8 @@ const AiChat = () => {
             <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 border border-white/10 shadow-2xl">
               <div className="flex flex-col items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center animate-pulse">
-                  <span className="text-xl">🌙</span>
+                  {/* <span className="text-xl">🌙</span> */}
+                   <span className="text-white text-4xl">✧</span>
                 </div>
                 <span className="text-white/80 text-sm">Cosmic AI is thinking...</span>
                 {/* Animated thinking dots */}
