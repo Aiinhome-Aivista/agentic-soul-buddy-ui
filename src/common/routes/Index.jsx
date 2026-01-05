@@ -9,12 +9,18 @@ import SubscriptionPlane from '../modal/SubscribtionPlane'
 import DisclaimerModal from '../modal/DisclaimerModal'
 import ContactModal from '../modal/ContactModal'
 import WellBeingProfile from '../modal/WellBeingProfile'
+import TermsModal from '../modal/TermsModal'
 import { useContext } from 'react'
 import { Context } from '../helper/Context'
 
 const DisclaimerWrapper = () => {
     const navigate = useNavigate();
     return <DisclaimerModal OnClose={() => navigate(-1)} onConfirm={() => navigate(-1)} hideFooter={true} />;
+};
+
+const TermsWrapper = () => {
+    const navigate = useNavigate();
+    return <TermsModal onClose={() => navigate(-1)} />;
 };
 
 function Index() {
@@ -28,6 +34,7 @@ function Index() {
                 <Route path="/questionnaire" element={<Questionnaire />} />
                 <Route path="/sub" element={<SubscriptionPlane />} />
                 <Route path="/disclaimer" element={<DisclaimerWrapper />} />
+                <Route path="/terms" element={<TermsWrapper />} />
             </Routes>
             {contactModal && <ContactModal />}
             {profileModal && <WellBeingProfile onClose={() => setProfileModal(false)} />}

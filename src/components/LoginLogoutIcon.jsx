@@ -66,8 +66,7 @@ function LoginLogoutIcon({ handleStop }) {
                 console.log('Account clicked');
                 break;
             case 'Terms & Conditions':
-                // Handle settings action
-                console.log('Terms & Conditions clicked');
+                navigate('/terms');
                 break;
             case 'disclaimer':
                 navigate('/disclaimer');
