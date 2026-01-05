@@ -17,5 +17,7 @@ export const POST_url1 = {
 };
 
 export const get_url1 = {
-      questions: devUrl1 + "fetch_questions"
+      questions: devUrl1 + "fetch_questions",
+      terms: devUrl1 + "terms-and-conditions",
+      disclaimer: devUrl1 + "disclaimer"
 };

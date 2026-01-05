@@ -1,4 +1,6 @@
-import React, { useContext } from 'react';
+import { apiService } from '../../service/apiService';
+import { get_url1 } from '../../connection/connection';
+import React, { useContext, useEffect, useState } from 'react';
 import "../../styles/modal.css";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
@@ -15,62 +17,27 @@ export default function TermsModal({ onClose }) {
         }
     };
 
-    const termsData = [
-        {
-            "content": "By creating an account, accessing, or using Soul Buddy, you agree to be bound by these Terms. If you disagree with any part of the terms, you may not access the Service.",
-            "effective_date": "Sat, 03 Jan 2026 00:00:00 GMT",
-            "id": 1,
-            "title": "Acceptance of Terms"
-        },
-        {
-            "content": "Soul Buddy is an AI-powered personalized assistant that uses data analysis and natural language processing to provide conversational support and insights based on user-uploaded data and profiles.",
-            "effective_date": "Sat, 03 Jan 2026 00:00:00 GMT",
-            "id": 2,
-            "title": "Description of Service"
-        },
-        {
-            "content": "Account Creation: You must provide accurate and complete information (including age, gender, and work details) to allow the AI to function correctly.\n\nCredentials: You are responsible for maintaining the confidentiality of your login credentials.\n\nAge Restriction: This Service is intended for users who are at least 18 years old (or the age of majority in your jurisdiction).",
-            "effective_date": "Sat, 03 Jan 2026 00:00:00 GMT",
-            "id": 3,
-            "title": "User Accounts and Security"
-        },
-        {
-            "content": "Data Collection: We collect data such as your name, age, emotional state, survey responses, and conversation history to personalize your experience.\n\nData Usage: Your data is processed by our AI models (e.g., Mistral) and stored in our databases (MySQL, ChromaDB) to maintain conversation context.\n\nAudio Data: Voice interactions are processed to generate text and audio responses.\n\nConsent: By using the Service, you consent to this data processing. Please refer to our Privacy Policy for full details.",
-            "effective_date": "Sat, 03 Jan 2026 00:00:00 GMT",
-            "id": 4,
-            "title": "User Data and Privacy"
-        },
-        {
-            "content": "You agree not to upload illegal, harmful, threatening, or abusive content; attempt to reverse-engineer the AI or inject malicious code (including prompt injection attacks); or harass or harm others.",
-            "effective_date": "Sat, 03 Jan 2026 00:00:00 GMT",
-            "id": 5,
-            "title": "Acceptable Use"
-        },
-        {
-            "content": "The Service and its original content (excluding user-uploaded data), features, and functionality are and will remain the exclusive property of the creators of Soul Buddy.",
-            "effective_date": "Sat, 03 Jan 2026 00:00:00 GMT",
-            "id": 6,
-            "title": "Intellectual Property"
-        },
-        {
-            "content": "In no event shall the creators of Soul Buddy, nor its directors, employees, or partners, be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your use of the Service.",
-            "effective_date": "Sat, 03 Jan 2026 00:00:00 GMT",
-            "id": 7,
-            "title": "Limitation of Liability"
-        },
-        {
-            "content": "We reserve the right to modify or replace these Terms at any time. Continued use of the Service after any such changes constitutes your acceptance of the new Terms.",
-            "effective_date": "Sat, 03 Jan 2026 00:00:00 GMT",
-            "id": 8,
-            "title": "Changes to Terms"
-        },
-        {
-            "content": "If you have any questions about these Terms, please contact us at: support@soulbuddy.app",
-            "effective_date": "Sat, 03 Jan 2026 00:00:00 GMT",
-            "id": 9,
-            "title": "Contact Us"
-        }
-    ];
+    const [termsData, setTermsData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTerms = async () => {
+            try {
+                const response = await apiService({
+                    url: get_url1.terms,
+                    method: 'GET'
+                });
+                if (response && response.success && response.data) {
+                    setTermsData(response.data);
+                }
+            } catch (error) {
+                console.error("Error fetching terms:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTerms();
+    }, []);
 
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md animate-fadeIn z-50">
@@ -111,17 +78,22 @@ export default function TermsModal({ onClose }) {
                         }
                       `}</style>
 
-                    {termsData.map((term, index) => (
-                        <div key={term.id} className="bg-white/5 rounded-2xl p-5 border border-white/10 hover:border-white/20 transition-all">
-                            <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-3">
-                                <span className="w-6 h-6 rounded bg-white/10 flex items-center justify-center text-xs text-white/70">{index + 1}</span>
-                                {term.title}
-                            </h3>
-                            <p className="text-white/70 leading-relaxed whitespace-pre-wrap">
-                                {term.content}
-                            </p>
+                    {loading ? (
+                        <div className="flex justify-center items-center h-40">
+                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
                         </div>
-                    ))}
+                    ) : (
+                        termsData.map((term, index) => (
+                            <div key={term.id} className="bg-white/5 rounded-2xl p-5 border border-white/10 hover:border-white/20 transition-all">
+                                <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-3">
+                                    <span className="w-6 h-6 rounded bg-white/10 flex items-center justify-center text-xs text-white/70">{index + 1}</span>
+                                    {term.title}
+                                </h3>
+                                <p className="text-white/70 leading-relaxed whitespace-pre-wrap">
+                                    {term.content}
+                                </p>
+                            </div>
+                        )))}
 
                     <div className="mt-4 text-center text-white/30 text-xs pb-4">
                         Last updated: 03 Jan 2026

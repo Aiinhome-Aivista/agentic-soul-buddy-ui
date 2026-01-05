@@ -1,10 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { apiService } from '../../service/apiService';
+import { get_url1 } from '../../connection/connection';
 import "../../styles/modal.css";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 export default function DisclaimerModal({ OnClose, onConfirm, hideFooter }) {
     const [acceptedTerms, setAcceptedTerms] = useState(false);
+    const [disclaimerData, setDisclaimerData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchDisclaimer = async () => {
+            try {
+                const response = await apiService({
+                    url: get_url1.disclaimer,
+                    method: 'GET'
+                });
+                if (response && response.success && response.data) {
+                    setDisclaimerData(response.data);
+                }
+            } catch (error) {
+                console.error("Error fetching disclaimer:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchDisclaimer();
+    }, []);
 
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md animate-fadeIn z-50">
@@ -29,35 +52,20 @@ export default function DisclaimerModal({ OnClose, onConfirm, hideFooter }) {
                 {/* Content */}
                 <div className="flex flex-col gap-5 w-full px-8 py-6 overflow-y-auto custom-scrollbar" style={{ maxHeight: 'calc(100vh - 280px)' }}>
 
-                    {/* Section 1 */}
-                    <div className="bg-white/5 rounded-2xl p-5 border border-white/10 hover:border-white/20 transition-all">
-                        <h3 className="text-lg font-semibold text-white mb-3">1. Not Medical or Mental Health Advice</h3>
-                        <p className="text-white/70 leading-relaxed mb-3">
-                            The content, insights, and conversations provided by "Cosmic Wisdom" are for <span className="text-white/90 font-medium">informational, educational, and entertainment purposes only</span>. The AI is designed to provide supportive and empathetic conversation based on user input.
-                        </p>
-                        <p className="text-white/90 font-medium bg-white/10 rounded-lg px-4 py-2 mb-3">
-                            ⚠️ It is NOT a substitute for professional medical advice, diagnosis, or treatment.
-                        </p>
-                        <p className="text-white/60 text-sm leading-relaxed bg-white/5 rounded-lg px-4 py-3 border border-white/10">
-                            If you are experiencing a medical emergency, mental health crisis, or thoughts of self-harm, please discontinue use immediately and contact a certified healthcare professional, emergency services, or a suicide prevention hotline.
-                        </p>
-                    </div>
-
-                    {/* Section 2 */}
-                    <div className="bg-white/5 rounded-2xl p-5 border border-white/10 hover:border-white/20 transition-all">
-                        <h3 className="text-lg font-semibold text-white mb-3">2. AI Limitations & Accuracy</h3>
-                        <p className="text-white/70 leading-relaxed">
-                            This Application utilizes <span className="text-white/90 font-medium">Large Language Models (LLMs)</span> and <span className="text-white/90 font-medium">RAG (Retrieval-Augmented Generation)</span> technologies. While we strive for accuracy, AI systems can occasionally generate incorrect, misleading, or "hallucinated" information. You should not rely solely on the Application's responses for critical life decisions (financial, legal, or health-related).
-                        </p>
-                    </div>
-
-                    {/* Section 3 */}
-                    <div className="bg-white/5 rounded-2xl p-5 border border-white/10 hover:border-white/20 transition-all">
-                        <h3 className="text-lg font-semibold text-white mb-3">3. User Responsibility</h3>
-                        <p className="text-white/70 leading-relaxed">
-                            By using this Application, you acknowledge that you are interacting with an AI system. You agree that the creators of Cosmic Wisdom are <span className="text-white/90 font-medium">not responsible for any actions</span> you take based on the information provided by the AI.
-                        </p>
-                    </div>
+                    {loading ? (
+                        <div className="flex justify-center items-center h-40">
+                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+                        </div>
+                    ) : (
+                        disclaimerData.map((item, index) => (
+                            <div key={item.id} className="bg-white/5 rounded-2xl p-5 border border-white/10 hover:border-white/20 transition-all">
+                                <h3 className="text-lg font-semibold text-white mb-3">{index + 1}. {item.title}</h3>
+                                <p className="text-white/70 leading-relaxed whitespace-pre-wrap">
+                                    {item.content}
+                                </p>
+                            </div>
+                        ))
+                    )}
                 </div>
 
                 {/* Footer */}
