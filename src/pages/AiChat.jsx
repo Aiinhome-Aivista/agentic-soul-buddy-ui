@@ -50,7 +50,7 @@ const AiChat = () => {
 
   useEffect(() => {
     console.log("AiChat Mounted. Current stored userName:", name);
-   
+
   }, []);
 
   // Initialize Audio Context and connections
@@ -97,6 +97,28 @@ const AiChat = () => {
       sessionStorage.setItem('hasGreeted', 'true');
     }
   }, [isLoggedIn]);
+
+  /* New useEffect to ensure audio plays when audioUrl changes */
+  useEffect(() => {
+    if (audioUrl && audioRef.current) {
+      // Resume AudioContext if suspended (common in browsers)
+      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        audioContextRef.current.resume().catch(e => console.error("Error resuming AudioContext:", e));
+      }
+
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch(error => {
+            console.error("Audio playback prevented:", error);
+            setIsPlaying(false);
+          });
+      }
+    }
+  }, [audioUrl]);
 
   const handleStop = () => {
     if (audioRef.current) {

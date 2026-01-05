@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import AiChat from './AiChat';
 import BackgroundAudioProvider from '../common/helper/BackgroundAudioProvider';
 import { Context } from '../common/helper/Context';
