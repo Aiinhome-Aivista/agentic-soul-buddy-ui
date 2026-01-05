@@ -2,9 +2,11 @@ import React, { useMemo, useState } from "react";
 import crown from "../../assets/icons/crown.svg";
 import { apiService } from "../../service/apiService";
 import { devUrl1 } from "../../env/env";
+import { useNavigate } from "react-router-dom";
 
 const SubscriptionPlane = ({ OnClose }) => {
   const [selectedPlan, setSelectedPlan] = useState("1-month");
+  const navigate = useNavigate();
 
   const plans = useMemo(
     () => [
@@ -66,7 +68,8 @@ const SubscriptionPlane = ({ OnClose }) => {
 
       if (response && !response.error) {
         console.log('Subscription successful:', response);
-        OnClose?.();
+        navigate('/home');
+        // OnClose?.();
       } else {
         console.error('Subscription failed:', response?.message);
       }

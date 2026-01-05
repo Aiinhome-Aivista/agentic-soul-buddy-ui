@@ -4,12 +4,12 @@ import { get_url1 } from '../../connection/connection';
 import "../../styles/modal.css";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-
+import { useNavigate } from 'react-router-dom';
 export default function DisclaimerModal({ OnClose, onConfirm, hideFooter }) {
     const [acceptedTerms, setAcceptedTerms] = useState(false);
     const [disclaimerData, setDisclaimerData] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchDisclaimer = async () => {
             try {
@@ -29,6 +29,9 @@ export default function DisclaimerModal({ OnClose, onConfirm, hideFooter }) {
         fetchDisclaimer();
     }, []);
 
+    const navigateTerms = () => {
+        window.open('/terms', '_blank');
+    };
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md animate-fadeIn z-50">
             <div className="glass-card flex flex-col items-center relative overflow-hidden animate-slideUp rounded-3xl"
@@ -91,7 +94,7 @@ export default function DisclaimerModal({ OnClose, onConfirm, hideFooter }) {
                                     className="sr-only"
                                 />
                                 <span className="text-white/80 group-hover:text-white transition-colors select-none">
-                                    I have read and accept the Terms and Conditions
+                                    I have read and accept the <span className="text-blue-500  underline cursor-pointer" onClick={navigateTerms}>Terms and Conditions</span>
                                 </span>
                             </label>
 
