@@ -8,7 +8,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 function LoginLogoutIcon({ handleStop }) {
-    const { isLoggedIn, setIsLoggedIn, setAudioUrl, setLoginModal, setDisclaimerModal, setContactModal, setProfileModal, setFaqModal } = useContext(Context);
+    const { isLoggedIn, setIsLoggedIn, setAudioUrl, setLoginModal, setDisclaimerModal, setContactModal, setProfileModal, setFaqModal, setAccountModal } = useContext(Context);
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
@@ -62,8 +62,7 @@ function LoginLogoutIcon({ handleStop }) {
                 setProfileModal(true);
                 break;
             case 'account':
-                // Handle account action
-                console.log('Account clicked');
+                setAccountModal(true);
                 break;
             case 'Terms & Conditions':
                 navigate('/terms');

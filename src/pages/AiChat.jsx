@@ -13,10 +13,11 @@ import LoginModal from '../common/modal/LoginModal';
 import SignupModal2 from '../common/modal/signupafterquestions';
 import WellBeingProfile from '../common/modal/WellBeingProfile';
 import DisclaimerModal from '../common/modal/DisclaimerModal';
+import AccountModal from '../common/modal/AccountModal';
 
 const AiChat = () => {
   const navigate = useNavigate();
-  const { recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal, signupModal2, setSignupModal2, audioUrl, setAudioUrl, isLoading, setIsLoading } = useContext(Context);
+  const { recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal, signupModal2, setSignupModal2, audioUrl, setAudioUrl, isLoading, setIsLoading, accountModal, setAccountModal } = useContext(Context);
   const audioRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -144,7 +145,7 @@ const AiChat = () => {
             {/* Outer pulsing ring */}
             <div className='absolute w-20 h-20 rounded-full bg-[#e57373]/40 animate-recording-pulse' />
             {/* Main red circular button */}
-            <div 
+            <div
               className='relative w-16 h-16 rounded-full flex items-center justify-center cursor-pointer'
               style={{
                 backgroundColor: '#e54b4b',
@@ -153,8 +154,8 @@ const AiChat = () => {
               onClick={handleMicClick}
             >
               <MicIcon
-                sx={{ 
-                  fontSize: '2rem', 
+                sx={{
+                  fontSize: '2rem',
                   color: '#FFFFFF'
                 }}
               />
@@ -220,6 +221,7 @@ const AiChat = () => {
       {signupModal2 && <SignupModal2 OnClose={() => setSignupModal2(false)} />}
       {showProfile && <WellBeingProfile onClose={() => setShowProfile(false)} />}
       {disclaimerModal && <DisclaimerModal OnClose={() => setDisclaimerModal(false)} onConfirm={handleDisclaimerConfirm} />}
+      {accountModal && <AccountModal OnClose={() => setAccountModal(false)} />}
     </div >
   );
 };

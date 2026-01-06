@@ -16,6 +16,7 @@ export function ContextProvider({ children }) {
     const [profileModal, setProfileModal] = useState(false);
     const [termsModal, setTermsModal] = useState(false);
     const [faqModal, setFaqModal] = useState(false);
+    const [accountModal, setAccountModal] = useState(false);
 
     return (
         <Context.Provider value={{
@@ -32,7 +33,8 @@ export function ContextProvider({ children }) {
             contactModal, setContactModal,
             profileModal, setProfileModal,
             termsModal, setTermsModal,
-            faqModal, setFaqModal
+            faqModal, setFaqModal,
+            accountModal, setAccountModal
         }}>
             {children}
         </Context.Provider>

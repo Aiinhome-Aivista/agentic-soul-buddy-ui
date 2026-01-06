@@ -13,7 +13,8 @@ export const POST_url1 = {
       subscription: devUrl1 + "subscribe",
       submit_response: devUrl1 + "submit_response",
       wellbeing: devUrl1 + "wellbeing-profile",
-      ask: devUrl1 + "voice-ask"
+      ask: devUrl1 + "voice-ask",
+      user_details: devUrl1 + "user_details"
 };
 
 export const get_url1 = {
