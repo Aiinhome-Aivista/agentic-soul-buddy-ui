@@ -86,6 +86,9 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
           // Store backend's user_id (not Firebase UID)
           localStorage.setItem("userId", response.user_id);
           localStorage.setItem("sessionId", response.session_id);
+          const nameToStore = response.full_name || values.full_name;
+          console.log("Setting name for fresh signup:", nameToStore);
+          localStorage.setItem("name", nameToStore);
           // Clean up temporary Firebase UID from sessionStorage
           sessionStorage.removeItem("firebaseUid");
           sessionStorage.removeItem("signupName");

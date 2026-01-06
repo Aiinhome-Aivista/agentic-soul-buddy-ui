@@ -27,11 +27,14 @@ const AiChat = () => {
     setDisclaimerModal(false);
     navigate('/questionnaire');
   };
-
+  const [name, setName] = useState(localStorage.getItem('name') || '');
   useEffect(() => {
     const handleStorageChange = () => {
       setUserId(localStorage.getItem('userId'));
       setSessionId(localStorage.getItem('sessionId'));
+      const storedName = localStorage.getItem('name');
+      console.log("Retrieved userName from storage:", storedName);
+      setName(storedName);
     };
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
