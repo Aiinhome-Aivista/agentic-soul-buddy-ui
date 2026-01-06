@@ -13,9 +13,55 @@ const QuestionCard = ({
 }) => {
   const isMultiple = question.type?.toLowerCase()?.includes("multiple");
   const isAgreement = question.type === "Agreement Scale";
+  const isSingleSelectWithText = question.type === "Single Select with Text";
+
+  const [textValue, setTextValue] = React.useState("");
+  const [localSelected, setLocalSelected] = React.useState(null);
+
+  React.useEffect(() => {
+    // Reset local state when question changes
+    if (isSingleSelectWithText) {
+      if (selectedOptions && selectedOptions.length > 0) {
+        // Check if the answer is an array ["Yes", "Description"]
+        if (Array.isArray(selectedOptions) && selectedOptions[0] === "Yes") {
+          setLocalSelected("Yes");
+          setTextValue(selectedOptions[1] || "");
+        }
+        // Or if it was stored as a string "Yes" (re-visiting)
+        else if (selectedOptions.includes("Yes")) {
+          setLocalSelected("Yes");
+        } else {
+          // For "No" or other single options
+          setLocalSelected(selectedOptions[0]);
+          setTextValue("");
+        }
+      } else {
+        setLocalSelected(null);
+        setTextValue("");
+      }
+    }
+  }, [question, selectedOptions, isSingleSelectWithText]);
 
   const handleOptionClick = (option) => {
-    onSelectOption(option);
+    if (isSingleSelectWithText) {
+      if (option === "Yes") {
+        setLocalSelected("Yes");
+        // Do not advance yet, wait for text input
+      } else {
+        setLocalSelected(option);
+        setTextValue("");
+        onSelectOption(option);
+      }
+    } else {
+      onSelectOption(option);
+    }
+  };
+
+  const handleTextSubmit = () => {
+    if (localSelected === "Yes") {
+      // Pass as array: ["Yes", "Description"]
+      onSelectOption(["Yes", textValue]);
+    }
   };
 
   return (
@@ -39,9 +85,8 @@ const QuestionCard = ({
 
               // Icons for 5-point scale: 0=Strongly Disagree, 4=Strongly Agree
               const getIcon = (idx) => {
-                const iconClass = `w-6 h-6 sm:w-8 sm:h-8 transition-opacity duration-300 ${
-                  isSelected ? "opacity-100" : "opacity-40"
-                }`;
+                const iconClass = `w-6 h-6 sm:w-8 sm:h-8 transition-opacity duration-300 ${isSelected ? "opacity-100" : "opacity-40"
+                  }`;
 
                 switch (idx) {
                   case 0:
@@ -94,11 +139,10 @@ const QuestionCard = ({
                   key={index}
                   onClick={() => handleOptionClick(option)}
                   className={`relative z-10 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl transition-all duration-300
-                                        ${
-                                          isSelected
-                                            ? "scale-110"
-                                            : "hover:scale-105"
-                                        }`}
+                                        ${isSelected
+                      ? "scale-110"
+                      : "hover:scale-105"
+                    }`}
                 >
                   {/* Selection Background shape (only visible if selected) */}
                   {isSelected && (
@@ -122,37 +166,41 @@ const QuestionCard = ({
       ) : (
         <div className="w-full  flex flex-col items-center gap-3">
           {question.options.map((option, index) => {
-            const isSelected = selectedOptions.includes(option);
+            // Determine visual selection state
+            let isSelected = false;
+            if (isSingleSelectWithText) {
+              if (localSelected === option) isSelected = true;
+            } else {
+              isSelected = selectedOptions.includes(option);
+            }
+
             return (
               <button
                 key={index}
                 onClick={() => handleOptionClick(option)}
                 className={`w-full max-w-[374px] h-[35px] text-left px-4 rounded-[10px] border transition-all duration-300 ease-out group relative overflow-hidden backdrop-blur-sm flex items-center
-                  ${
-                    isSelected
-                      ? "border-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                      : "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/40"
+                  ${isSelected
+                    ? "border-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                    : "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/40"
                   }
                 `}
               >
                 <div className="flex items-center justify-between w-full">
                   <span
-                    className={`font-['Nunito'] font-bold text-[12px] leading-none tracking-normal transition-colors duration-300 ${
-                      isSelected
-                        ? "text-white"
-                        : "text-white/80 group-hover:text-white"
-                    }`}
+                    className={`font-['Nunito'] font-bold text-[12px] leading-none tracking-normal transition-colors duration-300 ${isSelected
+                      ? "text-white"
+                      : "text-white/80 group-hover:text-white"
+                      }`}
                   >
                     {option}
                   </span>
 
                   <div
                     className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all duration-300
-                                     ${
-                                       isSelected
-                                         ? "border-white bg-white scale-100 opacity-100"
-                                         : "border-white/30 scale-90 opacity-0 group-hover:opacity-50"
-                                     }
+                                     ${isSelected
+                        ? "border-white bg-white scale-100 opacity-100"
+                        : "border-white/30 scale-90 opacity-0 group-hover:opacity-50"
+                      }
                                 `}
                   >
                     {isSelected && (
@@ -174,28 +222,42 @@ const QuestionCard = ({
               </button>
             );
           })}
+
+          {/* Conditional Input for Single Select with Text */}
+          {isSingleSelectWithText && localSelected === "Yes" && (
+            <div className="w-full max-w-[374px] flex flex-col gap-2 animate-fadeIn">
+              <input
+                type="text"
+                value={textValue}
+                onChange={(e) => setTextValue(e.target.value)}
+                placeholder="describe your god"
+                className="w-full p-2 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-white/50 transition-colors"
+                autoFocus
+              />
+            </div>
+          )}
+
         </div>
       )}
 
-      {isMultiple ? (
+      {(isMultiple || (isSingleSelectWithText && localSelected === "Yes")) ? (
         <div className="w-full flex justify-center pt-6">
           <div className="w-full flex justify-center">
             <button
-              onClick={onNext}
-              disabled={selectedOptions.length === 0}
+              onClick={isMultiple ? onNext : handleTextSubmit}
+              disabled={isMultiple ? selectedOptions.length === 0 : !textValue.trim()}
               className={`w-full max-w-[374px] h-[35px] rounded-[10px] border font-['Nunito'] font-bold transition-all shadow-lg transform active:scale-95 flex items-center justify-center
-                            ${
-                              selectedOptions.length > 0
-                                ? "bg-white text-[#434141D8] border-white hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-                                : "bg-white/10 text-white/30 border-white/5 cursor-not-allowed"
-                            }
+                            ${(isMultiple ? selectedOptions.length > 0 : textValue.trim())
+                  ? "bg-white text-[#434141D8] border-white hover:bg-white/90 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                  : "bg-white/10 text-white/30 border-white/5 cursor-not-allowed"
+                }
                         `}
             >
               Continue
             </button>
           </div>
         </div>
-      ): (
+      ) : (
         <div className="h-5"></div>
       )
       }
