@@ -144,42 +144,42 @@ function LoginLogoutIcon({ handleStop }) {
                     <div className="border-t border-[#333333]">
                         <button
                             onClick={() => handleMenuClick('profile')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <PersonOutlineRoundedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Profile</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('account')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <ManageAccountsOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Account</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('Terms & Conditions')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <InfoOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Terms & Conditions</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('disclaimer')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <InfoOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Disclaimer</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('faq')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer "
                         >
                             <InfoOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">FAQ</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('contact')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <EmailOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Contact Us</span>
@@ -187,7 +187,7 @@ function LoginLogoutIcon({ handleStop }) {
                         <div className="border-t border-[#333333] mx-2 my-1"></div>
                         <button
                             onClick={() => handleMenuClick('logout')}
-                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left"
+                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <LogoutRoundedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Logout</span>
