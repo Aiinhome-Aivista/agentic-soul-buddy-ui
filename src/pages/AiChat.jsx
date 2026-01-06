@@ -140,13 +140,25 @@ const AiChat = () => {
       </div>
       <div className="flex flex-col items-center h-[45%] pt-[2%]">
         {isRecording ? (
-          <div className='relative pb-[1%] rounded-full'>
-            <div className='absolute inset-0 bg-[#FFFFFF]/9 animate-pulse-circle rounded-full' />
-            <MicIcon
-              sx={{ fontSize: '2.5rem', color: '#D9D9D9', backgroundColor: 'rgba(255, 255, 255, 0.1)', borderRadius: '50%' }}
+          <div className='relative pb-[1%] flex items-center justify-center'>
+            {/* Outer pulsing ring */}
+            <div className='absolute w-20 h-20 rounded-full bg-[#e57373]/40 animate-recording-pulse' />
+            {/* Main red circular button */}
+            <div 
+              className='relative w-16 h-16 rounded-full flex items-center justify-center cursor-pointer'
+              style={{
+                backgroundColor: '#e54b4b',
+                boxShadow: '0 4px 15px rgba(229, 75, 75, 0.4)'
+              }}
               onClick={handleMicClick}
-              className='relative cursor-pointer'
-            />
+            >
+              <MicIcon
+                sx={{ 
+                  fontSize: '2rem', 
+                  color: '#FFFFFF'
+                }}
+              />
+            </div>
           </div>
         ) : isLoading ? (
           <TypingDots />
