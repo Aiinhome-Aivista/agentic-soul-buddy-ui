@@ -121,7 +121,7 @@ const AiChat = () => {
       <div className={`flex items-start justify-end gap-[1%] w-[100%] `}>
         {!isLoggedIn && (
           <button
-            onClick={() => setDisclaimerModal(true)}
+            onClick={() => navigate('/questionnaire')}
             className="h-[1.7rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] hover:bg-[#474747]/40 transition-colors cursor-pointer"
           >
             Sign Up

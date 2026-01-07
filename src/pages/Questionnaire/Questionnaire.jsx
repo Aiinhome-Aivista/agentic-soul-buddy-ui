@@ -9,6 +9,7 @@ import { apiService } from '../../service/apiService';
 import { get_url1 } from '../../connection/connection';
 
 import WellBeingProfile from '../../common/modal/WellBeingProfile';
+import DisclaimerModal from '../../common/modal/DisclaimerModal';
 
 const Questionnaire = () => {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Questionnaire = () => {
     const [error, setError] = useState(null);
     const [subscriptionModal, setSubscriptionModal] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
+    const [disclaimerModal, setDisclaimerModal] = useState(false);
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -83,8 +85,8 @@ const Questionnaire = () => {
         if (isLastQuestion) {
             // Finish flow - handle submission here
             console.log('Final Answers:', answers);
-
-            setSignupModal2(true);
+            setDisclaimerModal(true);
+            // setSignupModal2(true);
             // navigate('/');
             // setLoginModal(true);
 
@@ -101,6 +103,11 @@ const Questionnaire = () => {
     const handleProfileContinue = () => {
         setShowProfile(false);
         setSubscriptionModal(true);
+    };
+
+    const handleDisclaimerConfirm = () => {
+        setDisclaimerModal(false);
+        setSignupModal2(true);
     };
 
     const handleSubscriptionClose = () => {
@@ -142,7 +149,7 @@ const Questionnaire = () => {
 
     return (
         <>
-            {!signupModal2 && !subscriptionModal && !showProfile ? (
+            {!signupModal2 && !subscriptionModal && !showProfile && !disclaimerModal ? (
                 <div
                     className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-white/5 backdrop-blur-sm animate-fadeIn z-5">
                     {/* Header / Progress Bar */}
@@ -194,6 +201,8 @@ const Questionnaire = () => {
                 />
             ) : subscriptionModal ? (
                 <SubscriptionPlane OnClose={handleSubscriptionClose} />
+            ) : disclaimerModal ? (
+                <DisclaimerModal OnClose={() => setDisclaimerModal(false)} onConfirm={handleDisclaimerConfirm} />
             ) : null}
         </>
     );
