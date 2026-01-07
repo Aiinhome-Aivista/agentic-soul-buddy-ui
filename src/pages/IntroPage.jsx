@@ -404,9 +404,9 @@ const IntroPage = () => {
                             <span className="material-symbols-outlined text-lg">arrow_forward</span>
                         </button>
 
-                        <p className="text-sm text-white/60 mt-6">
+                        {/* <p className="text-sm text-white/60 mt-6">
                             Average response time: 24-48 hours
-                        </p>
+                        </p> */}
                     </div>
                 </div>
             </section>
