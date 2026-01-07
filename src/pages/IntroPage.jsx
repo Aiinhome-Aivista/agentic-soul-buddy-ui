@@ -539,21 +539,17 @@ const IntroPage = () => {
                         </div>
                         <div className="flex gap-16 flex-wrap">
                             <div className="flex flex-col gap-4">
-                                <h4 className="text-white font-bold text-sm uppercase tracking-wider">Sanctuary</h4>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Manifesto</a>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">The Assessment</a>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Membership</a>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wider">Support</h4>
+                                <a href="/contact" className="text-gray-400 text-sm hover:text-primary transition-colors">Get in Touch</a>
+                                <a href="/contact" className="text-gray-400 text-sm hover:text-primary transition-colors">Contact Us</a>
                             </div>
-                            <div className="flex flex-col gap-4">
-                                <h4 className="text-white font-bold text-sm uppercase tracking-wider">Company</h4>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Our Story</a>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Ethics</a>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Support</a>
-                            </div>
+                           
                             <div className="flex flex-col gap-4">
                                 <h4 className="text-white font-bold text-sm uppercase tracking-wider">Legal</h4>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Privacy Pledge</a>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Terms of Service</a>
+                                <a href="/privacy-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Privacy Policy</a>
+                                <a href="/terms" className="text-gray-400 text-sm hover:text-primary transition-colors">Terms of Use</a>
+                                <a href="/cookie-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Cookie Policy</a>
+                                <a href="/subscription-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Subscription Policy</a>
                             </div>
                         </div>
                     </div>

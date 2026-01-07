@@ -14,6 +14,14 @@ import FaqModal from '../modal/FaqModal'
 import { useContext } from 'react'
 import { Context } from '../helper/Context'
 
+// Legal Pages
+import PrivacyPolicy from '../../pages/legal/PrivacyPolicy'
+import CookiePolicy from '../../pages/legal/CookiePolicy'
+import SubscriptionPolicy from '../../pages/legal/SubscriptionPolicy'
+
+// Support Pages
+import ContactPage from '../../pages/support/ContactPage'
+
 const DisclaimerWrapper = () => {
     const navigate = useNavigate();
     return <DisclaimerModal OnClose={() => navigate(-1)} onConfirm={() => navigate(-1)} hideFooter={true} />;
@@ -36,6 +44,14 @@ function Index() {
                 <Route path="/sub" element={<SubscriptionPlane />} />
                 <Route path="/disclaimer" element={<DisclaimerWrapper />} />
                 <Route path="/terms" element={<TermsWrapper />} />
+                
+                {/* Legal Pages */}
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/cookie-policy" element={<CookiePolicy />} />
+                <Route path="/subscription-policy" element={<SubscriptionPolicy />} />
+                
+                {/* Support Pages */}
+                <Route path="/contact" element={<ContactPage />} />
             </Routes>
             {contactModal && <ContactModal />}
             {profileModal && <WellBeingProfile onClose={() => setProfileModal(false)} />}
