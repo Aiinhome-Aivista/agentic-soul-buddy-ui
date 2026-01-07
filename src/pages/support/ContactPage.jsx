@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { apiService } from "../../service/apiService";
+import { POST_url1 } from "../../connection/connection";
 
 const ContactPage = () => {
     const navigate = useNavigate();
@@ -13,13 +17,66 @@ const ContactPage = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
 
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validateEmail(formData.email)) {
+            toast.error('Please enter a valid email address.', {
+                position: "top-right",
+                autoClose: 3000,
+                theme: "colored"
+            });
+            return;
+        }
+
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setIsSubmitting(false);
-        setSubmitted(true);
+
+        try {
+            const response = await apiService({
+                url: POST_url1.contact_us,
+                method: 'POST',
+                data: {
+                    name: formData.name,
+                    email: formData.email,
+                    subject: formData.subject,
+                    message: formData.message
+                }
+            });
+
+            if (response && response.success) {
+                toast.success('Email sent successfully!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "dark"
+                });
+                setSubmitted(true);
+                setFormData({ name: '', email: '', subject: '', message: '' });
+            } else {
+                toast.error(response?.message || 'Failed to send email. Please try again.', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: "colored"
+                });
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            toast.error('An error occurred while sending your message. Please try again later.', {
+                position: "top-right",
+                autoClose: 3000,
+                theme: "colored"
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e) => {
@@ -65,30 +122,11 @@ const ContactPage = () => {
         }
     ];
 
-    if (submitted) {
-        return (
-            <div className="min-h-screen bg-background-dark text-gray-100 font-display flex items-center justify-center px-6">
-                <div className="max-w-md text-center">
-                    <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6">
-                        <span className="material-symbols-outlined text-4xl text-primary">check_circle</span>
-                    </div>
-                    <h1 className="text-3xl font-light text-white mb-4">Message Sent!</h1>
-                    <p className="text-gray-400 mb-8">
-                        Thank you for reaching out. We'll get back to you within 24-48 hours.
-                    </p>
-                    <button
-                        onClick={() => navigate('/')}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary-dark text-white font-medium hover:bg-primary-deep transition-colors"
-                    >
-                        <span>Return Home</span>
-                    </button>
-                </div>
-            </div>
-        );
-    }
+
 
     return (
         <div className="min-h-screen bg-background-dark text-gray-100 font-display">
+            <ToastContainer />
             {/* Header */}
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
