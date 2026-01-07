@@ -28,7 +28,7 @@ const ContactPage = () => {
             summary: 'Success',
             detail: message,
             life: 3000,
-            style: { background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: '#fff', borderRadius: '12px', border: 'none' },
+            style: { background: 'linear-gradient(135deg, #8aa399 0%, #61897c 100%)', color: '#fff', borderRadius: '12px', border: 'none' },
             contentStyle: { background: 'transparent' }
         });
     };
@@ -135,7 +135,7 @@ const ContactPage = () => {
                     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
                 }
                 .custom-toast .p-toast-message-success {
-                    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+                    background: linear-gradient(135deg, #8aa399 0%, #61897c 100%) !important;
                     border: none !important;
                     border-radius: 12px !important;
                 }
