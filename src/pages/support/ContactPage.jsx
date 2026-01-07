@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../components/Footer";
 
 const ContactPage = () => {
     const navigate = useNavigate();
@@ -75,7 +76,7 @@ const ContactPage = () => {
                     <p className="text-gray-400 mb-8">
                         Thank you for reaching out. We'll get back to you within 24-48 hours.
                     </p>
-                    <button 
+                    <button
                         onClick={() => navigate('/')}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary-dark text-white font-medium hover:bg-primary-deep transition-colors"
                     >
@@ -106,7 +107,7 @@ const ContactPage = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-secondary/5 to-transparent"></div>
                 <div className="absolute top-10 left-1/3 w-80 h-80 bg-secondary/10 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
-                
+
                 <div className="max-w-[900px] mx-auto text-center relative z-10">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary mb-6">
                         <span className="material-symbols-outlined">waving_hand</span>
@@ -126,7 +127,7 @@ const ContactPage = () => {
                 <div className="max-w-[1000px] mx-auto">
                     <div className="grid md:grid-cols-3 gap-6">
                         {contactMethods.map((method, index) => (
-                            <div 
+                            <div
                                 key={index}
                                 className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-secondary/30 transition-all duration-300 text-center"
                             >
@@ -233,7 +234,7 @@ const ContactPage = () => {
                         <h2 className="text-2xl font-light text-white mb-6">Frequently Asked</h2>
                         <div className="space-y-4">
                             {faqs.map((faq, index) => (
-                                <div 
+                                <div
                                     key={index}
                                     className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10"
                                 >
@@ -267,15 +268,7 @@ const ContactPage = () => {
             </section>
 
             {/* Footer */}
-            <footer className="py-8 px-6 md:px-12 border-t border-white/5 mt-8">
-                <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-gray-500 text-sm">© 2026 Cosmic Wisdom Inc. All rights reserved.</p>
-                    <div className="flex gap-6">
-                        <a href="/privacy-policy" className="text-gray-500 text-sm hover:text-primary transition-colors">Privacy Policy</a>
-                        <a href="/terms" className="text-gray-500 text-sm hover:text-primary transition-colors">Terms of Use</a>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 };

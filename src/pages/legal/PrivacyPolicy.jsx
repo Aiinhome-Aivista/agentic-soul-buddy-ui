@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../components/Footer";
 
 const PrivacyPolicy = () => {
     const navigate = useNavigate();
@@ -67,7 +68,7 @@ const PrivacyPolicy = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"></div>
                 <div className="absolute top-20 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
-                
+
                 <div className="max-w-[900px] mx-auto text-center relative z-10">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6">
                         <span className="material-symbols-outlined">shield</span>
@@ -88,7 +89,7 @@ const PrivacyPolicy = () => {
                 <div className="max-w-[900px] mx-auto">
                     <div className="grid gap-6">
                         {sections.map((section, index) => (
-                            <div 
+                            <div
                                 key={index}
                                 className="group bg-white/5 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/10 hover:border-primary/30 transition-all duration-300 hover:bg-white/[0.07]"
                             >
@@ -115,7 +116,7 @@ const PrivacyPolicy = () => {
                     <p className="text-gray-400 mb-6">
                         If you have any questions or concerns about our privacy practices, we're here to help.
                     </p>
-                    <button 
+                    <button
                         onClick={() => navigate('/contact')}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary-dark text-white font-medium hover:bg-primary-deep transition-colors"
                     >
@@ -126,15 +127,7 @@ const PrivacyPolicy = () => {
             </section>
 
             {/* Footer */}
-            <footer className="py-8 px-6 md:px-12 border-t border-white/5">
-                <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-gray-500 text-sm">© 2026 Cosmic Wisdom Inc. All rights reserved.</p>
-                    <div className="flex gap-6">
-                        <a href="/terms" className="text-gray-500 text-sm hover:text-primary transition-colors">Terms of Use</a>
-                        <a href="/cookie-policy" className="text-gray-500 text-sm hover:text-primary transition-colors">Cookie Policy</a>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 };

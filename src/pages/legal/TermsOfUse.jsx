@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Footer from "../../components/Footer";
 
 const TermsOfUse = () => {
     const navigate = useNavigate();
@@ -146,15 +147,7 @@ const TermsOfUse = () => {
             </section>
 
             {/* Footer */}
-            <footer className="py-8 px-6 md:px-12 border-t border-white/5">
-                <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-gray-500 text-sm">© 2026 Cosmic Wisdom Inc. All rights reserved.</p>
-                    <div className="flex gap-6">
-                        <a href="/privacy-policy" className="text-gray-500 text-sm hover:text-primary transition-colors">Privacy Policy</a>
-                        <a href="/cookie-policy" className="text-gray-500 text-sm hover:text-primary transition-colors">Cookie Policy</a>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 };
