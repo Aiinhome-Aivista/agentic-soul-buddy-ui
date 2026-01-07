@@ -166,7 +166,7 @@ const SubscriptionPolicy = () => {
             </section>
 
             {/* Contact CTA */}
-            <section className="py-16 px-6 md:px-12">
+            {/* <section className="py-16 px-6 md:px-12">
                 <div className="max-w-[600px] mx-auto text-center">
                     <span className="material-symbols-outlined text-4xl text-secondary mb-4">support_agent</span>
                     <h2 className="text-2xl font-light text-white mb-4">Need Help With Your Subscription?</h2>
@@ -181,7 +181,7 @@ const SubscriptionPolicy = () => {
                         <span className="material-symbols-outlined text-sm">arrow_forward</span>
                     </button>
                 </div>
-            </section>
+            </section> */}
 
             {/* Footer */}
             <Footer />

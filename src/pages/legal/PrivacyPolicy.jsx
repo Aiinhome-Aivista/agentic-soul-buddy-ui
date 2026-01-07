@@ -109,7 +109,7 @@ const PrivacyPolicy = () => {
             </section>
 
             {/* Contact Section */}
-            <section className="py-16 px-6 md:px-12 bg-white/5 border-t border-white/5">
+            {/* <section className="py-16 px-6 md:px-12 bg-white/5 border-t border-white/5">
                 <div className="max-w-[600px] mx-auto text-center">
                     <span className="material-symbols-outlined text-4xl text-secondary mb-4">mail</span>
                     <h2 className="text-2xl font-light text-white mb-4">Questions About Your Privacy?</h2>
@@ -124,7 +124,7 @@ const PrivacyPolicy = () => {
                         <span className="material-symbols-outlined text-sm">arrow_forward</span>
                     </button>
                 </div>
-            </section>
+            </section> */}
 
             {/* Footer */}
             <Footer />
