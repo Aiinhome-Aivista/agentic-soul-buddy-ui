@@ -539,8 +539,8 @@ const IntroPage = () => {
                         </div>
                         <div className="flex gap-16 flex-wrap">
                             <div className="flex flex-col gap-4">
-                                <h4 className="text-white font-bold text-sm uppercase tracking-wider">Support</h4>
-                                <a href="/contact" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm hover:text-primary transition-colors">Get in Touch</a>
+                                <h4 className="text-white font-bold text-sm uppercase tracking-wider">Get In Touch</h4>
+                                {/* <a href="/contact" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm hover:text-primary transition-colors">Get in Touch</a> */}
                                 <a href="/contact" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm hover:text-primary transition-colors">Contact Us</a>
                             </div>
                            
