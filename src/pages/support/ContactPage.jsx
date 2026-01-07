@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toast } from 'primereact/toast';
 import { apiService } from "../../service/apiService";
 import { POST_url1 } from "../../connection/connection";
 
 const ContactPage = () => {
     const navigate = useNavigate();
+    const toast = useRef(null);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -22,15 +22,29 @@ const ContactPage = () => {
         return re.test(String(email).toLowerCase());
     };
 
+    const showSuccess = (message) => {
+        toast.current.show({
+            severity: 'success',
+            summary: 'Success',
+            detail: message,
+            life: 3000
+        });
+    };
+
+    const showError = (message) => {
+        toast.current.show({
+            severity: 'error',
+            summary: 'Error',
+            detail: message,
+            life: 3000
+        });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateEmail(formData.email)) {
-            toast.error('Please enter a valid email address.', {
-                position: "top-right",
-                autoClose: 3000,
-                theme: "colored"
-            });
+            showError('Please enter a valid email address.');
             return;
         }
 
@@ -49,31 +63,15 @@ const ContactPage = () => {
             });
 
             if (response && response.success) {
-                toast.success('Email sent successfully!', {
-                    position: "top-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: "dark"
-                });
+                showSuccess('Email sent successfully! We will get back to you soon.');
                 setSubmitted(true);
                 setFormData({ name: '', email: '', subject: '', message: '' });
             } else {
-                toast.error(response?.message || 'Failed to send email. Please try again.', {
-                    position: "top-right",
-                    autoClose: 3000,
-                    theme: "colored"
-                });
+                showError(response?.message || 'Failed to send email. Please try again.');
             }
         } catch (error) {
             console.error('Error sending email:', error);
-            toast.error('An error occurred while sending your message. Please try again later.', {
-                position: "top-right",
-                autoClose: 3000,
-                theme: "colored"
-            });
+            showError('An error occurred while sending your message. Please try again later.');
         } finally {
             setIsSubmitting(false);
         }
@@ -126,7 +124,7 @@ const ContactPage = () => {
 
     return (
         <div className="min-h-screen bg-background-dark text-gray-100 font-display">
-            <ToastContainer />
+            <Toast ref={toast} position="top-right" />
             {/* Header */}
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
