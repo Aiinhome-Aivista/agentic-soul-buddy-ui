@@ -205,6 +205,9 @@ const IntroPage = () => {
                         <button onClick={handleEnterSpace} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
                             <span>Begin</span>
                         </button>
+                        <button onClick={() => navigate('/contact')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
+                            <span>Contact Us</span>
+                        </button>
                         <button className="md:hidden text-white">
                             <span className="material-symbols-outlined">menu</span>
                         </button>
@@ -397,7 +400,7 @@ const IntroPage = () => {
                             onClick={() => navigate('/contact')}
                             className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-background-dark font-semibold hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                         >
-                            <span>Get in Touch</span>
+                            <span>Contact Us</span>
                             <span className="material-symbols-outlined text-lg">arrow_forward</span>
                         </button>
 
