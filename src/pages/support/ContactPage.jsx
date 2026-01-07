@@ -27,7 +27,9 @@ const ContactPage = () => {
             severity: 'success',
             summary: 'Success',
             detail: message,
-            life: 3000
+            life: 3000,
+            style: { background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: '#fff', borderRadius: '12px', border: 'none' },
+            contentStyle: { background: 'transparent' }
         });
     };
 
@@ -36,7 +38,9 @@ const ContactPage = () => {
             severity: 'error',
             summary: 'Error',
             detail: message,
-            life: 3000
+            life: 3000,
+            style: { background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', color: '#fff', borderRadius: '12px', border: 'none' },
+            contentStyle: { background: 'transparent' }
         });
     };
 
@@ -124,7 +128,41 @@ const ContactPage = () => {
 
     return (
         <div className="min-h-screen bg-background-dark text-gray-100 font-display">
-            <Toast ref={toast} position="top-right" />
+            <Toast ref={toast} position="top-right" className="custom-toast" />
+            <style>{`
+                .custom-toast .p-toast-message {
+                    backdrop-filter: blur(10px);
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+                }
+                .custom-toast .p-toast-message-success {
+                    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+                    border: none !important;
+                    border-radius: 12px !important;
+                }
+                .custom-toast .p-toast-message-error {
+                    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+                    border: none !important;
+                    border-radius: 12px !important;
+                }
+                .custom-toast .p-toast-message-content {
+                    color: #fff !important;
+                    padding: 1rem !important;
+                }
+                .custom-toast .p-toast-summary {
+                    font-weight: 600 !important;
+                    color: #fff !important;
+                }
+                .custom-toast .p-toast-detail {
+                    color: rgba(255, 255, 255, 0.9) !important;
+                    margin-top: 0.25rem !important;
+                }
+                .custom-toast .p-toast-icon-close {
+                    color: #fff !important;
+                }
+                .custom-toast .p-toast-message-icon {
+                    display: none !important;
+                }
+            `}</style>
             {/* Header */}
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
