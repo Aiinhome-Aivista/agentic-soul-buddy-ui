@@ -113,7 +113,7 @@ const ContactPage = () => {
                         <span className="text-sm font-semibold uppercase tracking-wider">We're Here For You</span>
                     </div>
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white mb-6">
-                        Get in <span className="font-serif italic text-secondary">Touch</span>
+                        Contact <span className="font-serif italic text-secondary">Us</span>
                     </h1>
                     <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
                         Have questions, feedback, or just want to say hello? We'd love to hear from you.
