@@ -552,15 +552,15 @@ const IntroPage = () => {
                             </div> */}
                             <div className="flex flex-col gap-4">
                                 <h4 className="text-white font-bold text-sm uppercase tracking-wider">Get in touch</h4>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Contact Us</a>
-                               
+                                <a href="/contact-us" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm hover:text-primary transition-colors">Contact Us</a>
+
                             </div>
                             <div className="flex flex-col gap-4">
                                 <h4 className="text-white font-bold text-sm uppercase tracking-wider">Legal</h4>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Privacy Policy</a>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Terms of Use</a>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Cookie Policy</a>
-                                <a href="#" className="text-gray-400 text-sm hover:text-primary transition-colors">Subscription Policy</a>
+                                <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm hover:text-primary transition-colors">Privacy Policy</a>
+                                <a href="/terms-of-use" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm hover:text-primary transition-colors">Terms of Use</a>
+                                <a href="/cookie-policy" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm hover:text-primary transition-colors">Cookie Policy</a>
+                                <a href="/subscription-policy" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-sm hover:text-primary transition-colors">Subscription Policy</a>
                             </div>
                         </div>
                     </div>
