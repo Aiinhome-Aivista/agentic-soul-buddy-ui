@@ -14,7 +14,8 @@ export const POST_url1 = {
       submit_response: devUrl1 + "submit_response",
       wellbeing: devUrl1 + "wellbeing-profile",
       ask: devUrl1 + "voice-ask",
-      user_details: devUrl1 + "user_details"
+      user_details: devUrl1 + "user_details",
+      contact_us: devUrl1 + "contact"
 };
 
 export const get_url1 = {
