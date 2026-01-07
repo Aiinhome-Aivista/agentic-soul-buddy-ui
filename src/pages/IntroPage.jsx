@@ -372,6 +372,42 @@ const IntroPage = () => {
                 </div>
             </section>
 
+            {/* Contact Us Section */}
+            <section className="py-20 px-6 md:px-12 max-w-[1280px] mx-auto">
+                <div className="scroll-animate bg-gradient-to-br from-secondary/10 to-primary/10 rounded-3xl p-8 md:p-16 overflow-hidden relative border border-white/10">
+                    <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-secondary/20 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
+
+                    <div className="relative z-10 max-w-3xl mx-auto text-center">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white mb-6">
+                            <span className="material-symbols-outlined">support_agent</span>
+                            <span className="text-sm font-semibold uppercase tracking-wider">We're Here to Help</span>
+                        </div>
+
+                        <h2 className="text-3xl md:text-4xl font-light text-white mb-6">
+                            Have Questions? <span className="font-serif italic text-secondary">We're Listening.</span>
+                        </h2>
+
+                        <p className="text-lg md:text-xl font-light leading-relaxed text-white/90 mb-8">
+                            Whether you need support, have feedback, or just want to connect with our team, we're here for you.
+                            Your journey matters to us, and we're committed to ensuring you have the best experience possible.
+                        </p>
+
+                        <button
+                            onClick={() => navigate('/contact')}
+                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-background-dark font-semibold hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                        >
+                            <span>Get in Touch</span>
+                            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                        </button>
+
+                        <p className="text-sm text-white/60 mt-6">
+                            Average response time: 24-48 hours
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             {/* Journey Steps */}
             <section className="py-20 bg-white/5">
                 <div className="px-6 md:px-12 max-w-[1280px] mx-auto">
