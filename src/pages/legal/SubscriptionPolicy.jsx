@@ -6,24 +6,27 @@ const SubscriptionPolicy = () => {
 
     const plans = [
         {
-            name: "Seeker",
-            price: "Free",
+            name: "7-Day Plan",
+            price: "₹935.54",
             period: "",
-            features: ["Basic meditation guides", "Limited audio library", "Community access"],
+            perDay: "₹133.27/day",
+            features: ["Full access to all features", "7 days of guided meditation", "Personalized recommendations", "Community access"],
             highlighted: false
         },
         {
-            name: "Wanderer",
-            price: "$9.99",
-            period: "/month",
-            features: ["Full meditation library", "Personalized recommendations", "Unlimited audio sessions", "Journal features"],
+            name: "1-Month Plan",
+            price: "₹1,527.00",
+            period: "",
+            perDay: "₹50.94/day",
+            features: ["Everything in 7-Day Plan", "30 days of unlimited access", "Priority support", "Advanced analytics", "Journal features"],
             highlighted: true
         },
         {
-            name: "Sage",
-            price: "$79.99",
-            period: "/year",
-            features: ["Everything in Wanderer", "Exclusive workshops", "Priority support", "Early access to features"],
+            name: "3-Month Plan",
+            price: "₹2,664.00",
+            period: "",
+            perDay: "₹29.60/day",
+            features: ["Everything in 1-Month Plan", "90 days of unlimited access", "Exclusive workshops", "Early access to features", "Best value per day"],
             highlighted: false
         }
     ];
@@ -81,7 +84,7 @@ const SubscriptionPolicy = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"></div>
                 <div className="absolute top-20 right-1/3 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
-                
+
                 <div className="max-w-[900px] mx-auto text-center relative z-10">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-6">
                         <span className="material-symbols-outlined">loyalty</span>
@@ -102,13 +105,12 @@ const SubscriptionPolicy = () => {
                     <h2 className="text-2xl font-light text-white text-center mb-10">Our Membership Tiers</h2>
                     <div className="grid md:grid-cols-3 gap-6">
                         {plans.map((plan, index) => (
-                            <div 
+                            <div
                                 key={index}
-                                className={`rounded-2xl p-6 border transition-all duration-300 ${
-                                    plan.highlighted 
-                                        ? 'bg-gradient-to-b from-primary-dark/30 to-primary-deep/20 border-primary/30 scale-105' 
-                                        : 'bg-white/5 border-white/10 hover:border-white/20'
-                                }`}
+                                className={`rounded-2xl p-6 border transition-all duration-300 ${plan.highlighted
+                                    ? 'bg-gradient-to-b from-primary-dark/30 to-primary-deep/20 border-primary/30 scale-105'
+                                    : 'bg-white/5 border-white/10 hover:border-white/20'
+                                    }`}
                             >
                                 {plan.highlighted && (
                                     <div className="text-center mb-4">
@@ -116,9 +118,12 @@ const SubscriptionPolicy = () => {
                                     </div>
                                 )}
                                 <h3 className="text-xl font-semibold text-white text-center mb-2">{plan.name}</h3>
-                                <div className="text-center mb-6">
+                                <div className="text-center mb-2">
                                     <span className="text-3xl font-bold text-white">{plan.price}</span>
                                     <span className="text-gray-400">{plan.period}</span>
+                                </div>
+                                <div className="text-center mb-6">
+                                    <span className="text-sm text-primary font-medium">{plan.perDay}</span>
                                 </div>
                                 <ul className="space-y-3">
                                     {plan.features.map((feature, i) => (
@@ -140,7 +145,7 @@ const SubscriptionPolicy = () => {
                     <h2 className="text-2xl font-light text-white text-center mb-10">Policy Details</h2>
                     <div className="grid gap-6">
                         {policies.map((policy, index) => (
-                            <div 
+                            <div
                                 key={index}
                                 className="group bg-background-dark/50 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-primary/30 transition-all duration-300"
                             >
@@ -167,7 +172,7 @@ const SubscriptionPolicy = () => {
                     <p className="text-gray-400 mb-6">
                         Our support team is here to assist you with any billing questions or subscription changes.
                     </p>
-                    <button 
+                    <button
                         onClick={() => navigate('/contact')}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary-dark text-white font-medium hover:bg-primary-deep transition-colors"
                     >
