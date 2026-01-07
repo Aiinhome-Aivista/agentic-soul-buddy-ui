@@ -35,7 +35,7 @@ const SubscriptionPolicy = () => {
         {
             icon: "event_repeat",
             title: "Billing Cycle",
-            content: "Subscriptions are billed at the beginning of each billing period. Monthly plans renew every 30 days, while annual plans renew every 365 days from your start date."
+            content: "Subscriptions are billed at the beginning of each billing period. Monthly plans renew every 30 days, while 90-day plans renew every 90 days from your start date."
         },
         {
             icon: "cancel",
