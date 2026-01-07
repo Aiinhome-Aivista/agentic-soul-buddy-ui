@@ -18,6 +18,7 @@ import { Context } from '../helper/Context'
 import PrivacyPolicy from '../../pages/legal/PrivacyPolicy'
 import CookiePolicy from '../../pages/legal/CookiePolicy'
 import SubscriptionPolicy from '../../pages/legal/SubscriptionPolicy'
+import TermsOfUse from '../../pages/legal/TermsOfUse'
 
 // Support Pages
 import ContactPage from '../../pages/support/ContactPage'
@@ -44,12 +45,13 @@ function Index() {
                 <Route path="/sub" element={<SubscriptionPlane />} />
                 <Route path="/disclaimer" element={<DisclaimerWrapper />} />
                 <Route path="/terms" element={<TermsWrapper />} />
-                
+
                 {/* Legal Pages */}
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-use" element={<TermsOfUse />} />
                 <Route path="/cookie-policy" element={<CookiePolicy />} />
                 <Route path="/subscription-policy" element={<SubscriptionPolicy />} />
-                
+
                 {/* Support Pages */}
                 <Route path="/contact" element={<ContactPage />} />
             </Routes>
