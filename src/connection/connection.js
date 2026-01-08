@@ -15,7 +15,8 @@ export const POST_url1 = {
       wellbeing: devUrl1 + "wellbeing-profile",
       ask: devUrl1 + "voice-ask",
       user_details: devUrl1 + "user_details",
-      contact_us: devUrl1 + "contact"
+      contact_us: devUrl1 + "contact",
+      login_with_email: devUrl1 + "login_email"
 };
 
 export const get_url1 = {
