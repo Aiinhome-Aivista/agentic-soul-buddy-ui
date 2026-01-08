@@ -7,6 +7,7 @@ const IntroPage = () => {
     const navigate = useNavigate();
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
+    const [transitionColor, setTransitionColor] = useState('bg-primary-dark');
     // Testimonials Logic
     const testimonials = [
         {
@@ -84,12 +85,26 @@ const IntroPage = () => {
         }, 800);
     };
 
+    const handleNavigateWithTransition = (e, path, color = 'bg-primary-dark') => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setTransitionOrigin({
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2
+        });
+        setTransitionColor(color);
+        setIsTransitioning(true);
+
+        setTimeout(() => {
+            navigate(path);
+        }, 800);
+    };
+
     return (
         <div className="min-h-screen bg-background-dark text-gray-100 font-display overflow-x-hidden selection:bg-secondary/30">
             {/* Page Transition Overlay */}
             {isTransitioning && (
                 <div
-                    className="fixed inset-0 z-[100] pointer-events-none bg-primary-dark"
+                    className={`fixed inset-0 z-[100] pointer-events-none ${transitionColor}`}
                     style={{
                         clipPath: `circle(150% at ${transitionOrigin.x}px ${transitionOrigin.y}px)`,
                         animation: 'expandFromButton 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards',
@@ -206,7 +221,7 @@ const IntroPage = () => {
                         <button onClick={handleEnterSpace} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
                             <span>Begin</span>
                         </button>
-                        <button onClick={() => navigate('/contact')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
+                        <button onClick={(e) => handleNavigateWithTransition(e, '/contact', 'bg-secondary')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-secondary text-black text-sm font-medium hover:bg-secondary/90 transition-colors shadow-sm">
                             <span>Contact Us</span>
                         </button>
                         <button className="md:hidden text-white">
@@ -398,8 +413,8 @@ const IntroPage = () => {
                         </p>
 
                         <button
-                            onClick={() => navigate('/contact')}
-                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-background-dark font-semibold hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                            onClick={(e) => handleNavigateWithTransition(e, '/contact', 'bg-secondary')}
+                            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-secondary text-background-dark font-semibold hover:bg-secondary/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                         >
                             <span>Contact Us</span>
                             <span className="material-symbols-outlined text-lg">arrow_forward</span>
