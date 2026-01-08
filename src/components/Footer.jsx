@@ -10,7 +10,7 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-between gap-10">
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-2 text-white cursor-pointer" onClick={() => navigate('/')}>
-                            <span className="text-lg font-semibold tracking-wide uppercase">Soul Junction</span>
+                            <span className="text-lg font-extrabold tracking-wide uppercase">Soul Junction</span>
                         </div>
                         <p className="text-gray-400 text-sm max-w-xs leading-relaxed">
                             A mindful technology company dedicated to human flourishing and spiritual oneness.
