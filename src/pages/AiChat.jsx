@@ -136,7 +136,7 @@ const AiChat = () => {
         <LoginLogoutIcon />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-4xl font-bold text-white pt-[12%]  cursor-default' >Cosmic Wisdom</p>
+        <p className='text-4xl font-bold text-white pt-[12%]  cursor-default' >Soul Junction</p>
         <p className='text-white text-xl font-light  cursor-default'>"Grow With Ancient Indian Guidance..."</p>
       </div>
       <div className="flex flex-col items-center h-[45%] pt-[2%]">

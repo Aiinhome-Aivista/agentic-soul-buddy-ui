@@ -90,8 +90,8 @@ const ContactPage = () => {
             icon: "mail",
             title: "Email Us",
             description: "For general inquiries and support",
-            value: "support@cosmicwisdom.app",
-            action: "mailto:support@cosmicwisdom.app"
+            value: "support@souljunction.app",
+            action: "mailto:support@souljunction.app"
         },
         {
             icon: "schedule",
@@ -167,7 +167,7 @@ const ContactPage = () => {
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
                     <div onClick={() => navigate('/')} className="flex items-center gap-3 text-white cursor-pointer group">
-                        <h2 className="text-lg font-semibold tracking-wide uppercase text-primary">Cosmic Wisdom</h2>
+                        <h2 className="text-lg font-semibold tracking-wide uppercase text-primary">Soul Junction</h2>
                     </div>
                     <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors">
                         <span className="material-symbols-outlined">arrow_back</span>
