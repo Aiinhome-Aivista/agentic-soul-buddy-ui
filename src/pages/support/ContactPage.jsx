@@ -16,11 +16,15 @@ const ContactPage = () => {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
+    const [transitionColor, setTransitionColor] = useState('bg-primary-dark');
 
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(String(email).toLowerCase());
     };
+
 
     const showSuccess = (message) => {
         toast.current.show({
@@ -124,10 +128,57 @@ const ContactPage = () => {
         }
     ];
 
+    const handleNavigateWithTransition = (e, path, color = 'bg-primary-dark') => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setTransitionOrigin({
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2
+        });
+        setTransitionColor(color);
+        setIsTransitioning(true);
+
+        setTimeout(() => {
+            navigate(path);
+        }, 800);
+    };
+
+    const handleGoBack = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setTransitionOrigin({
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2
+        });
+        setTransitionColor('bg-background-dark');
+        setIsTransitioning(true);
+
+        setTimeout(() => {
+            navigate(-1);
+        }, 800);
+    };
 
 
     return (
         <div className="min-h-screen bg-background-dark text-gray-100 font-display">
+            {/* Page Transition Overlay */}
+            {isTransitioning && (
+                <div
+                    className={`fixed inset-0 z-[100] pointer-events-none ${transitionColor}`}
+                    style={{
+                        clipPath: `circle(150% at ${transitionOrigin.x}px ${transitionOrigin.y}px)`,
+                        animation: 'expandFromButton 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+                    }}
+                />
+            )}
+            <style>{`
+                @keyframes expandFromButton {
+                    from {
+                        clip-path: circle(0% at ${transitionOrigin.x}px ${transitionOrigin.y}px);
+                    }
+                    to {
+                        clip-path: circle(150% at ${transitionOrigin.x}px ${transitionOrigin.y}px);
+                    }
+                }
+            `}</style>
             <Toast ref={toast} position="top-right" className="custom-toast" />
             <style>{`
                 .custom-toast .p-toast-message {
@@ -169,7 +220,7 @@ const ContactPage = () => {
                     <div onClick={() => navigate('/')} className="flex items-center gap-3 text-white cursor-pointer group">
                         <h2 className="text-lg font-semibold tracking-wide uppercase text-primary">Soul Junction</h2>
                     </div>
-                    <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors">
+                    <button onClick={handleGoBack} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors">
                         <span className="material-symbols-outlined">arrow_back</span>
                         <span className="text-sm font-medium">Back</span>
                     </button>

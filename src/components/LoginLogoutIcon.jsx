@@ -49,10 +49,8 @@ function LoginLogoutIcon({ handleStop }) {
         setAudioUrl(null);
         setShowDropdown(false);
 
-        // Force page reload to ensure complete logout
-        setTimeout(() => {
-            window.location.reload();
-        }, 100);
+        // Redirect to intro page
+        navigate('/');
     };
 
     const handleMenuClick = (action) => {
