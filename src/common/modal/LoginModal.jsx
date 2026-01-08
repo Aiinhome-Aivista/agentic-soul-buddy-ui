@@ -156,7 +156,7 @@ export default function LoginModal({ OnClose }) {
                     <CloseRoundedIcon onClick={OnClose} className="cursor-pointer modalCloseIcon" sx={{ backgroundColor: "rgba(255, 255, 255, 0.54)", borderRadius: '50%', fontSize: '1.1rem' }} />
                 </div>
                 <div className="flex flex-col items-center justify-center gap-5 w-[100%] h-[90%] pb-[10%] px-6">
-                    <div className="text-2xl font-bold text-white cursor-default">Login</div>
+                    <div className="text-2xl font-bold text-white cursor-default">Sign In</div>
                     
                     {!showEmailLogin ? (
                         <>
