@@ -194,3 +194,49 @@
   color: rgba(217, 217, 217, 0.6) !important;
   padding: 0.5rem 1rem !important;
 }
+
+/* Custom Toast Styling */
+.custom-toast-message .p-toast-message-content {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    padding: 1rem !important;
+    gap: 1rem !important;
+}
+
+.custom-toast-message .p-toast-message-icon {
+    flex-shrink: 0 !important;
+    margin-right: 0 !important; /* Managed by gap */
+    width: 2rem !important;
+    height: 2rem !important;
+    font-size: 2rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.custom-toast-message .p-toast-message-text {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-width: 0 !important; /* Prevent flex blowouts */
+}
+
+.custom-toast-message .p-toast-summary {
+    font-weight: 700 !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.custom-toast-message .p-toast-detail {
+    line-height: 1.5 !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+}
+
+.custom-toast-message .p-toast-icon-close {
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin-left: 0.5rem !important;
+    align-self: flex-start !important;
+}

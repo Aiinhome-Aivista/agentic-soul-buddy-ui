@@ -16,7 +16,9 @@ export const POST_url1 = {
       ask: devUrl1 + "voice-ask",
       user_details: devUrl1 + "user_details",
       contact_us: devUrl1 + "contact",
-      login_with_email: devUrl1 + "login_email"
+      login_with_email: devUrl1 + "login_email",
+      password_reset_request: devUrl1 + "forgot_password_request",
+      password_reset: devUrl1 + "forgot_password_reset"
 };
 
 export const get_url1 = {

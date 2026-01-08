@@ -7,15 +7,46 @@ import { signInWithPopup } from "firebase/auth";
 import { apiService } from "../../service/apiService";
 import { POST_url1 } from "../../connection/connection";
 import { useNavigate } from "react-router-dom";
+import { Toast } from 'primereact/toast';
 
 export default function LoginModal({ OnClose }) {
     const { setIsLoggedIn, setSignupModal, setTempUserName, setTempUserId, setAudioUrl, setIsLoading } = useContext(Context)
     const navigate = useNavigate();
-    const [showEmailLogin, setShowEmailLogin] = useState(false);
+    const [view, setView] = useState('login'); // 'login', 'email_login', 'forgot_request', 'forgot_reset'
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
+    // Forgot Password States
+    const [otp, setOtp] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [showNewPassword, setShowNewPassword] = useState(false);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const toast = useRef(null);
+
+    const showToast = (severity, summary, detail) => {
+        let style = {};
+        const commonStyle = { borderRadius: '12px', border: 'none', minWidth: '400px', whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: '#fff' };
+
+        switch (severity) {
+            case 'success':
+                style = { ...commonStyle, background: 'linear-gradient(135deg, #8aa399 0%, #61897c 100%)' };
+                break;
+            case 'error':
+                style = { ...commonStyle, background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)' };
+                break;
+            case 'warn':
+                style = { ...commonStyle, background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' };
+                break;
+            case 'info':
+                style = { ...commonStyle, background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' };
+                break;
+            default:
+                style = { borderRadius: '12px', minWidth: '400px' };
+        }
+        toast.current.show({ severity, summary, detail, life: 3000, style, className: 'custom-toast-message' });
+    };
 
     const handleGoogleSignIn = async () => {
         try {
@@ -45,6 +76,8 @@ export default function LoginModal({ OnClose }) {
                             localStorage.setItem('userId', response.user_id || result.user.uid);
                             localStorage.setItem('name', response.full_name);
                             localStorage.setItem('sessionId', response.session_id);
+                            localStorage.setItem('loginType', response.login_type);
+                            navigate('/home');
                             setIsLoading(true);
                             setTimeout(() => {
                                 setIsLoading(false);
@@ -58,32 +91,30 @@ export default function LoginModal({ OnClose }) {
                             // Store Firebase UID for signup process
                             sessionStorage.setItem("firebaseUid", result.user.uid);
                             localStorage.setItem('sessionId', response.session_id);
+                            OnClose();
                             navigate('/questionnaire')
-                            // setSignupModal(true)
-                            // setTempUserName(result.user.displayName)
-                            // setTempUserId(result.user.uid)
-                            // OnClose()
                         }
                     }
                 } else {
                     console.error('Submission failed:', response?.message);
-                    alert(`Submission failed: ${response?.message || 'An error occurred.'}`);
+                    showToast('error', 'Error', response?.message || 'Submission failed');
                 }
             } catch (error) {
                 console.error('An error occurred during submission:', error);
-                alert('An error occurred. Please try again later.');
+                showToast('error', 'Error', 'An error occurred. Please try again later.');
             } finally {
-                OnClose();
+                // OnClose(); 
             }
         } catch (error) {
             console.error("Google Sign-In Error:", error);
+            showToast('error', 'Error', 'Google Sign-In failed');
         }
     }
 
     const handleEmailLogin = async (e) => {
         e.preventDefault();
         if (!email || !password) {
-            alert('Please enter both email and password');
+            showToast('warn', 'Warning', 'Please enter both email and password');
             return;
         }
         setIsSubmitting(true);
@@ -112,18 +143,88 @@ export default function LoginModal({ OnClose }) {
                         setAudioUrl(response.audio_url);
                     }, 3000);
                 } else {
-                    alert(`Login failed: ${response?.message || 'Invalid credentials.'}`);
+                    showToast('error', 'Login Failed', response?.message || 'Invalid credentials.');
                 }
             } else {
-                alert(`Login failed: ${response?.message || 'Invalid credentials.'}`);
+                showToast('error', 'Login Failed', response?.message || 'Invalid credentials.');
             }
         } catch (error) {
             console.error('Email login error:', error);
-            alert('An error occurred. Please try again later.');
+            showToast('error', 'Error', 'An error occurred. Please try again later.');
         } finally {
             setIsSubmitting(false);
         }
     };
+
+    const handleForgotPasswordRequest = async (e) => {
+        e.preventDefault();
+        if (!email) {
+            showToast('warn', 'Warning', 'Please enter your email');
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            // 1st API endpoint: request OTP
+            const payload = { "email": email };
+            const response = await apiService({
+                url: POST_url1.password_reset_request,
+                method: 'POST',
+                data: payload
+            });
+
+            if (response && response.status === "success") {
+                showToast('success', 'OTP Sent', response.message);
+                setView('forgot_reset');
+            } else {
+                showToast('error', 'Error', response?.message || 'Failed to send OTP');
+            }
+        } catch (error) {
+            console.error("Forgot Password Request Error:", error);
+            showToast('error', 'Error', 'An error occurred.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
+    const handlePasswordReset = async (e) => {
+        e.preventDefault();
+        if (!otp || !newPassword) {
+            showToast('warn', 'Warning', 'Please enter OTP and new password');
+            return;
+        }
+        setIsSubmitting(true);
+        try {
+            // 2nd API endpoint: reset password
+            const payload = {
+                "email": email,
+                "otp": otp,
+                "new_password": newPassword
+            };
+            const response = await apiService({
+                url: POST_url1.password_reset,
+                method: 'POST',
+                data: payload
+            });
+
+            if (response && response.status === "success") {
+                showToast('success', 'Success', response.message);
+                setTimeout(() => {
+                    setView('email_login');
+                    setPassword('');
+                    setOtp('');
+                    setNewPassword('');
+                }, 2000);
+            } else {
+                showToast('error', 'Error', response?.message || 'Failed to reset password');
+            }
+        } catch (error) {
+            console.error("Password Reset Error:", error);
+            showToast('error', 'Error', 'An error occurred.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
 
     const handleFacebookSignIn = async () => {
         try {
@@ -137,14 +238,19 @@ export default function LoginModal({ OnClose }) {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-sm z-15 animate-fadeIn">
+            <Toast ref={toast} />
             {/* Main Modal Container */}
             <div
-                className={`glass-card flex flex-col items-center justify-center ${showEmailLogin ? 'h-auto min-h-[45%]' : 'h-[36%]'} w-[25%] min-w-[320px] relative animate-slideUp overflow-hidden rounded-2xl p-2`}>
+                className={`glass-card flex flex-col items-center justify-center ${view !== 'login' ? 'h-auto min-h-[45%]' : 'h-[36%]'} w-[25%] min-w-[320px] relative animate-slideUp overflow-hidden rounded-2xl p-2`}>
                 <div className="flex items-start justify-between w-[100%] h-[10%] p-2">
-                    {showEmailLogin ? (
+                    {view !== 'login' ? (
                         <button
                             type="button"
-                            onClick={() => setShowEmailLogin(false)}
+                            onClick={() => {
+                                if (view === 'forgot_reset') setView('forgot_request');
+                                else if (view === 'forgot_request') setView('email_login');
+                                else setView('login');
+                            }}
                             className="flex items-center justify-center w-5 h-5 rounded-full bg-[#FFFFFF]/10 hover:bg-[#FFFFFF]/20 text-[#FFFFFF]/70 hover:text-[#FFFFFF]/90 transition-all cursor-pointer"
                         >
                             <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>arrow_back</span>
@@ -155,9 +261,14 @@ export default function LoginModal({ OnClose }) {
                     <CloseRoundedIcon onClick={OnClose} className="cursor-pointer modalCloseIcon" sx={{ backgroundColor: "rgba(255, 255, 255, 0.54)", borderRadius: '50%', fontSize: '1.1rem' }} />
                 </div>
                 <div className="flex flex-col items-center justify-center gap-5 w-[100%] h-[90%] pb-[10%] px-6">
-                    <div className="text-2xl font-bold text-white cursor-default">Sign In</div>
+                    <div className="text-2xl font-bold text-white cursor-default">
+                        {view === 'login' && 'Sign In'}
+                        {view === 'email_login' && 'Sign In'}
+                        {view === 'forgot_request' && 'Forgot Password'}
+                        {view === 'forgot_reset' && 'Reset Password'}
+                    </div>
 
-                    {!showEmailLogin ? (
+                    {view === 'login' && (
                         <>
                             <div className="flex gap-3">
                                 <div
@@ -174,7 +285,7 @@ export default function LoginModal({ OnClose }) {
                                 </div>
                                 <div
                                     className="flex justify-center items-center text-center rounded-full w-[2.5rem] h-[2.5rem] bg-[#D9D9D9]/12 hover:bg-[#D9D9D9]/20 text-[#FFFFFF]/70 hover:text-[#FFFFFF]/90 p-1 cursor-pointer transition-all"
-                                    onClick={() => setShowEmailLogin(true)}
+                                    onClick={() => setView('email_login')}
                                     title="Sign in with Email"
                                 >
                                     <span className="material-symbols-outlined text-xl">mail</span>
@@ -182,7 +293,9 @@ export default function LoginModal({ OnClose }) {
                             </div>
                             <div className="text-base text-[#FFFFFF]/54 text-center cursor-default">Authenticate with Google or Email</div>
                         </>
-                    ) : (
+                    )}
+
+                    {view === 'email_login' && (
                         <form onSubmit={handleEmailLogin} className="flex flex-col gap-4 w-full">
                             <div className="flex flex-col gap-2">
                                 <label className="text-sm text-[#FFFFFF]/70">Email</label>
@@ -219,7 +332,7 @@ export default function LoginModal({ OnClose }) {
                                 <button
                                     type="button"
                                     className="text-xs text-primary hover:text-primary-dark transition-colors cursor-pointer text-right"
-                                    onClick={() => {/* TODO: Add forgot password handler */ }}
+                                    onClick={() => setView('forgot_request')}
                                 >
                                     Forgot Password?
                                 </button>
@@ -234,16 +347,92 @@ export default function LoginModal({ OnClose }) {
                         </form>
                     )}
 
-                    <div className="text-sm text-[#FFFFFF]/54 text-center">
-                        New to <span className="text-primary font-medium">Soul Junction</span>? {' '}
-                        <button
-                            type="button"
-                            onClick={() => { OnClose(); navigate('/questionnaire'); }}
-                            className="text-primary hover:text-primary-dark font-medium transition-colors cursor-pointer underline"
-                        >
-                            Sign up
-                        </button>
-                    </div>
+                    {view === 'forgot_request' && (
+                        <form onSubmit={handleForgotPasswordRequest} className="flex flex-col gap-4 w-full">
+                            <div className="text-sm text-[#FFFFFF]/54 text-center mb-2">
+                                Enter your email address to receive an OTP for password reset.
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm text-[#FFFFFF]/70">Email</label>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="Enter your email"
+                                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                                    required
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-full py-3 mt-2 bg-primary-dark hover:bg-primary-deep text-white font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isSubmitting ? 'Sending OTP...' : 'Send OTP'}
+                            </button>
+                        </form>
+                    )}
+
+                    {view === 'forgot_reset' && (
+                        <form onSubmit={handlePasswordReset} className="flex flex-col gap-4 w-full">
+                            <div className="text-sm text-[#FFFFFF]/54 text-center mb-2">
+                                Enter the OTP sent to {email} and your new password.
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm text-[#FFFFFF]/70">OTP code</label>
+                                <input
+                                    type="text"
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                    placeholder="Enter OTP"
+                                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                                    required
+                                />
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm text-[#FFFFFF]/70">New Password</label>
+                                <div className="relative">
+                                    <input
+                                        type={showNewPassword ? "text" : "password"}
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        placeholder="Enter new password"
+                                        className="w-full px-4 py-3 pr-12 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowNewPassword(!showNewPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#FFFFFF]/50 hover:text-[#FFFFFF]/80 transition-colors"
+                                    >
+                                        <span className="material-symbols-outlined text-xl mt-1">
+                                            {showNewPassword ? 'visibility_off' : 'visibility'}
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting}
+                                className="w-full py-3 mt-2 bg-primary-dark hover:bg-primary-deep text-white font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isSubmitting ? 'Resetting Password...' : 'Reset Password'}
+                            </button>
+                        </form>
+                    )}
+
+                    {view === 'login' && (
+                        <div className="text-sm text-[#FFFFFF]/54 text-center">
+                            New to <span className="text-primary font-medium">Soul Junction</span>? {' '}
+                            <button
+                                type="button"
+                                onClick={() => { OnClose(); navigate('/questionnaire'); }}
+                                className="text-primary hover:text-primary-dark font-medium transition-colors cursor-pointer underline"
+                            >
+                                Sign up
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
