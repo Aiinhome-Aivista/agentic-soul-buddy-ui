@@ -26,6 +26,7 @@ const AiChat = () => {
   const [disclaimerModal, setDisclaimerModal] = useState(false);
   const [subscriptionActive, setSubscriptionActive] = useState(true);
   const [dailyMinutesLeft, setDailyMinutesLeft] = useState(null);
+  const [currentPlan, setCurrentPlan] = useState(localStorage.getItem('currentPlan') || '');
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showLimitReachedModal, setShowLimitReachedModal] = useState(false);
 
@@ -64,6 +65,11 @@ const AiChat = () => {
         if (response && !response.error) {
           setSubscriptionActive(response.active);
           setDailyMinutesLeft(response.daily_minutes_left);
+          // Store plan name in localStorage and state
+          if (response.plan) {
+            localStorage.setItem('currentPlan', response.plan);
+            setCurrentPlan(response.plan);
+          }
           const canUseVoice = response.active && response.daily_minutes_left > 0;
           return canUseVoice;
         } else {
@@ -176,6 +182,12 @@ const AiChat = () => {
 
 
       <div className={`flex items-start justify-end gap-[1%] w-[100%] `}>
+        {isLoggedIn && currentPlan && (
+          <div className="h-full px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] flex items-center gap-1">
+            <span className="text-[#D9D9D9]">✨</span>
+            <span>{currentPlan}</span>
+          </div>
+        )}
         {!isLoggedIn && (
           <button
             onClick={() => navigate('/questionnaire')}
