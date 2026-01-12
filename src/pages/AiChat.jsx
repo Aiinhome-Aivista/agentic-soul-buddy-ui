@@ -51,28 +51,35 @@ const AiChat = () => {
   }, [isLoggedIn]
   );
 
+  const checkSubscriptionStatus = async () => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      try {
+        const response = await apiService({
+          url: `${get_url1.subscription_status}?user_id=${userId}`,
+          method: 'GET'
+        });
+        if (response && !response.error) {
+          setSubscriptionActive(response.active);
+          return response.active;
+        } else {
+          setSubscriptionActive(false);
+          return false;
+        }
+      } catch (error) {
+        console.error('Error checking subscription status:', error);
+        setSubscriptionActive(false);
+        return false;
+      }
+    }
+    return false;
+  };
+
   /* Check subscription status when logged in */
   useEffect(() => {
-    const checkSubscriptionStatus = async () => {
-      const userId = localStorage.getItem('userId');
-      if (isLoggedIn && userId) {
-        try {
-          const response = await apiService({
-            url: `${get_url1.subscription_status}?user_id=${userId}`,
-            method: 'GET'
-          });
-          if (response && !response.error) {
-            setSubscriptionActive(response.active);
-          } else {
-            setSubscriptionActive(false);
-          }
-        } catch (error) {
-          console.error('Error checking subscription status:', error);
-          setSubscriptionActive(false);
-        }
-      }
-    };
-    checkSubscriptionStatus();
+    if (isLoggedIn) {
+      checkSubscriptionStatus();
+    }
   }, [isLoggedIn]);
 
   /* New useEffect for Auto Greeting */
@@ -112,6 +119,14 @@ const AiChat = () => {
         }
       });
       setIsLoading(false);
+      
+      // Check subscription status after each ask API call
+      const isActive = await checkSubscriptionStatus();
+      if (!isActive) {
+        setShowSubscriptionModal(true);
+        return;
+      }
+      
       if (response && !response.error) {
         console.log(response)
         setAudioUrl(response.audio_url);
