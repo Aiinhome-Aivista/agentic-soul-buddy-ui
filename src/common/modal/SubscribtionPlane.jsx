@@ -1,51 +1,51 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import crown from "../../assets/icons/crown.svg";
 import { apiService } from "../../service/apiService";
 import { devUrl2 } from "../../env/env";
+import { get_url1 } from "../../connection/connection";
 import { useNavigate } from "react-router-dom";
 
 const SubscriptionPlane = ({ OnClose }) => {
-  const [selectedPlan, setSelectedPlan] = useState("1-month");
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const plans = useMemo(
-    () => [
-      {
-        id: "7-day",
-        title: "7-DAY PLAN",
-        planName: "Personalized Plan",
-        originalPrice: "",
-        finalPrice: "₹935.54",
-        price: "₹133.27",
-        period: "Per day",
-        amount: 935.54,
-        highlighted: false,
-      },
-      {
-        id: "1-month",
-        title: "1-MONTH PLAN",
-        planName: "1-Month Plan",
-        originalPrice: "",
-        finalPrice: "₹1,527.00",
-        price: "₹50.94",
-        period: "Per day",
-        amount: 1527.00,
-        highlighted: true,
-      },
-      {
-        id: "3-month",
-        title: "3-MONTH PLAN",
-        planName: "3-Month Plan",
-        originalPrice: "",
-        finalPrice: "₹2,664.00",
-        price: "₹29.60",
-        period: "Per day",
-        amount: 2664.00,
-        highlighted: false,
-      },
-    ],
-    []
-  );
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await apiService({
+          url: get_url1.subscription_plan,
+          method: 'GET'
+        });
+        if (response && response.status === "success" && response.data) {
+          // Filter out trial plans and transform data
+          const transformedPlans = response.data
+            .filter(plan => !plan.isTrial)
+            .map(plan => ({
+              id: plan.id,
+              title: plan.title.toUpperCase() + " PLAN",
+              planName: plan.planName,
+              originalPrice: plan.originalPrice ? `₹${plan.originalPrice}` : "",
+              finalPrice: `₹${plan.finalPrice}`,
+              discount: plan.discount,
+              usage: plan.usage,
+              validityDays: plan.validityDays,
+              highlighted: plan.title.toLowerCase() === "gold",
+            }));
+          setPlans(transformedPlans);
+          // Select the first plan by default or gold plan if available
+          const goldPlan = transformedPlans.find(p => p.title.toLowerCase().includes("gold"));
+          setSelectedPlan(goldPlan?.id || transformedPlans[0]?.id);
+        }
+      } catch (error) {
+        console.error('Error fetching subscription plans:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPlans();
+  }, []);
 
   const handleContinue = async () => {
     try {
@@ -93,13 +93,18 @@ const SubscriptionPlane = ({ OnClose }) => {
       <div className="w-full flex flex-col justify-between h-full max-w-md animate-slideUp">
         {/* Header (optional; keep if you want) */}
         <h2 className="text-center text-[15px] mt-3 font-medium text-white/80 mb-4">
-          Your personalised plan is ready!
+          Choose your plan
         </h2>
 
+        {loading ? (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-white/60">Loading plans...</div>
+          </div>
+        ) : (
         <div className="space-y-3">
           {plans.map((plan) => {
             const isSelected = selectedPlan === plan.id;
-            const { currency, intPart, decPart } = splitPrice(plan.price);
+            const { currency, intPart, decPart } = splitPrice(plan.finalPrice);
 
             return (
               <button
@@ -194,29 +199,38 @@ const SubscriptionPlane = ({ OnClose }) => {
                     </div>
                     <div
                       className={[
-                        "mt-1 text-[10px]",
+                        "flex flex-col justify-center text-[10px]",
                         isSelected ? "text-black/60" : "text-[#D9D9D9B2]",
                       ].join(" ")}
                     >
-                      {plan.period}
+                      <div>{plan.usage}</div>
+                      <div>{plan.validityDays} days</div>
                     </div>
                   </div>
                 </div>
 
-                {/* Crown at bottom-left for highlighted + selected (like reference) */}
+                {/* Discount badge */}
+                {plan.discount && plan.discount !== "0%" && (
+                  <div className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    {plan.discount} OFF
+                  </div>
+                )}
               </button>
             );
           })}
         </div>
+        )}
 
         {/* Continue button (disabled look like screenshot can be done via opacity) */}
         <button
           onClick={handleContinue}
-          className="mt-5 w-full mb-[20vh] rounded-xl py-2.5 text-[16px] font-semibold
-                     bg-[#D9D9D9] text-black/95 border border-white/10
-                     hover:bg-white hover:shadow-lg hover:shadow-white/20
-                     active:scale-[0.97] transition-all duration-300 ease-out
-                     transform hover:scale-[1.01]"
+          disabled={loading || !selectedPlan}
+          className={`mt-5 w-full mb-[20vh] rounded-xl py-2.5 text-[16px] font-semibold
+                     border border-white/10 transition-all duration-300 ease-out
+                     ${loading || !selectedPlan 
+                       ? 'bg-[#D9D9D9]/50 text-black/50 cursor-not-allowed' 
+                       : 'bg-[#D9D9D9] text-black/95 hover:bg-white hover:shadow-lg hover:shadow-white/20 active:scale-[0.97] transform hover:scale-[1.01]'
+                     }`}
         >
           Continue
         </button>

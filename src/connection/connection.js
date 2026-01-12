@@ -26,5 +26,6 @@ export const get_url1 = {
       terms: devUrl1 + "terms-and-conditions",
       disclaimer: devUrl1 + "disclaimer",
       faq: devUrl1 + "faqs",
-      subscription_status: devUrl2 + "subscription_status"
+      subscription_status: devUrl2 + "subscription_status",
+      subscription_plan: devUrl2 + "subscription_plan"
 };

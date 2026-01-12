@@ -1,36 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
+import { apiService } from "../../service/apiService";
+import { get_url1 } from "../../connection/connection";
 
 const SubscriptionPolicy = () => {
     const navigate = useNavigate();
+    const [plans, setPlans] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const plans = [
-        {
-            name: "7-Day Plan",
-            price: "₹935.54",
-            period: "",
-            perDay: "₹133.27/day",
-            features: ["Full access to all features", "7 days of guided meditation", "Personalized recommendations", "Community access"],
-            highlighted: false
-        },
-        {
-            name: "1-Month Plan",
-            price: "₹1,527.00",
-            period: "",
-            perDay: "₹50.94/day",
-            features: ["Everything in 7-Day Plan", "30 days of unlimited access", "Priority support", "Advanced analytics", "Journal features"],
-            highlighted: true
-        },
-        {
-            name: "3-Month Plan",
-            price: "₹2,664.00",
-            period: "",
-            perDay: "₹29.60/day",
-            features: ["Everything in 1-Month Plan", "90 days of unlimited access", "Exclusive workshops", "Early access to features", "Best value per day"],
-            highlighted: false
-        }
-    ];
+    useEffect(() => {
+        const fetchPlans = async () => {
+            try {
+                const response = await apiService({
+                    url: get_url1.subscription_plan,
+                    method: 'GET'
+                });
+                if (response && response.status === "success" && response.data) {
+                    const transformedPlans = response.data.map(plan => ({
+                        name: plan.planName,
+                        price: `₹${plan.finalPrice}`,
+                        originalPrice: plan.originalPrice ? `₹${plan.originalPrice}` : null,
+                        period: "",
+                        perDay: plan.usage,
+                        discount: plan.discount,
+                        validityDays: plan.validityDays,
+                        isTrial: plan.isTrial,
+                        features: plan.isTrial 
+                            ? ["14 days free trial", `${plan.usage}`, "Basic features access", "Personalized recommendations"]
+                            : plan.title.toLowerCase() === "silver"
+                                ? [`${plan.validityDays} days access`, `${plan.usage}`, "Priority support", "Advanced analytics", "Journal features"]
+                                : [`${plan.validityDays} days access`, `${plan.usage}`, "All Silver features", "Exclusive workshops", "Early access to features", "Best value"],
+                        highlighted: plan.title.toLowerCase() === "gold"
+                    }));
+                    setPlans(transformedPlans);
+                }
+            } catch (error) {
+                console.error('Error fetching subscription plans:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPlans();
+    }, []);
 
     const policies = [
         {
@@ -104,6 +116,9 @@ const SubscriptionPolicy = () => {
             <section className="py-12 px-6 md:px-12">
                 <div className="max-w-[1000px] mx-auto">
                     <h2 className="text-2xl font-light text-white text-center mb-10">Our Membership Tiers</h2>
+                    {loading ? (
+                        <div className="text-center text-white/60">Loading plans...</div>
+                    ) : (
                     <div className="grid md:grid-cols-3 gap-6">
                         {plans.map((plan, index) => (
                             <div
@@ -118,8 +133,21 @@ const SubscriptionPolicy = () => {
                                         <span className="px-3 py-1 bg-primary/20 text-primary text-xs font-semibold rounded-full">Most Popular</span>
                                     </div>
                                 )}
+                                {plan.isTrial && (
+                                    <div className="text-center mb-4">
+                                        <span className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded-full">Free Trial</span>
+                                    </div>
+                                )}
+                                {plan.discount && plan.discount !== "0%" && !plan.isTrial && (
+                                    <div className="text-center mb-4">
+                                        <span className="px-3 py-1 bg-orange-500/20 text-orange-400 text-xs font-semibold rounded-full">{plan.discount} OFF</span>
+                                    </div>
+                                )}
                                 <h3 className="text-xl font-semibold text-white text-center mb-2">{plan.name}</h3>
                                 <div className="text-center mb-2">
+                                    {plan.originalPrice && (
+                                        <span className="text-lg text-gray-500 line-through mr-2">{plan.originalPrice}</span>
+                                    )}
                                     <span className="text-3xl font-bold text-white">{plan.price}</span>
                                     <span className="text-gray-400">{plan.period}</span>
                                 </div>
@@ -137,6 +165,7 @@ const SubscriptionPolicy = () => {
                             </div>
                         ))}
                     </div>
+                    )}
                 </div>
             </section>
 
