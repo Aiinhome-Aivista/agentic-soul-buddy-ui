@@ -5,7 +5,7 @@ import { devUrl2 } from "../../env/env";
 import { get_url1 } from "../../connection/connection";
 import { useNavigate } from "react-router-dom";
 
-const SubscriptionPlane = ({ OnClose }) => {
+const SubscriptionPlane = ({ OnClose, showAllPlans = true }) => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,24 +19,30 @@ const SubscriptionPlane = ({ OnClose }) => {
           method: 'GET'
         });
         if (response && response.status === "success" && response.data) {
-          // Filter out trial plans and transform data
+          // Transform data - filter out trial plans only if showAllPlans is false
           const transformedPlans = response.data
-            .filter(plan => !plan.isTrial)
+            .filter(plan => showAllPlans || !plan.isTrial)
             .map(plan => ({
               id: plan.id,
-              title: plan.title.toUpperCase() + " PLAN",
+              title: plan.isTrial ? "FREE TRIAL" : plan.title.toUpperCase() + " PLAN",
               planName: plan.planName,
               originalPrice: plan.originalPrice ? `₹${plan.originalPrice}` : "",
-              finalPrice: `₹${plan.finalPrice}`,
+              finalPrice: plan.isTrial ? "FREE" : `₹${plan.finalPrice}`,
               discount: plan.discount,
               usage: plan.usage,
               validityDays: plan.validityDays,
+              isTrial: plan.isTrial,
               highlighted: plan.title.toLowerCase() === "gold",
             }));
           setPlans(transformedPlans);
-          // Select the first plan by default or gold plan if available
-          const goldPlan = transformedPlans.find(p => p.title.toLowerCase().includes("gold"));
-          setSelectedPlan(goldPlan?.id || transformedPlans[0]?.id);
+          // Select the free trial plan by default if showing all plans, otherwise gold plan
+          if (showAllPlans) {
+            const trialPlan = transformedPlans.find(p => p.isTrial);
+            setSelectedPlan(trialPlan?.id || transformedPlans[0]?.id);
+          } else {
+            const goldPlan = transformedPlans.find(p => p.title.toLowerCase().includes("gold"));
+            setSelectedPlan(goldPlan?.id || transformedPlans[0]?.id);
+          }
         }
       } catch (error) {
         console.error('Error fetching subscription plans:', error);
@@ -45,7 +51,7 @@ const SubscriptionPlane = ({ OnClose }) => {
       }
     };
     fetchPlans();
-  }, []);
+  }, [showAllPlans]);
 
   const handleContinue = async () => {
     try {

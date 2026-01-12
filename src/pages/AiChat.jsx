@@ -279,7 +279,7 @@ const AiChat = () => {
       {showProfile && <WellBeingProfile onClose={() => setShowProfile(false)} />}
       {disclaimerModal && <DisclaimerModal OnClose={() => setDisclaimerModal(false)} onConfirm={handleDisclaimerConfirm} />}
       {accountModal && <AccountModal OnClose={() => setAccountModal(false)} />}
-      {showSubscriptionModal && <SubscriptionPlane OnClose={() => setShowSubscriptionModal(false)} />}
+      {showSubscriptionModal && <SubscriptionPlane OnClose={() => setShowSubscriptionModal(false)} showAllPlans={false} />}
       
       {/* Limit Reached Modal */}
       {showLimitReachedModal && (
