@@ -25,7 +25,9 @@ const AiChat = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [disclaimerModal, setDisclaimerModal] = useState(false);
   const [subscriptionActive, setSubscriptionActive] = useState(true);
+  const [dailyMinutesLeft, setDailyMinutesLeft] = useState(null);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [showLimitReachedModal, setShowLimitReachedModal] = useState(false);
 
   const handleDisclaimerConfirm = () => {
     setDisclaimerModal(false);
@@ -61,14 +63,18 @@ const AiChat = () => {
         });
         if (response && !response.error) {
           setSubscriptionActive(response.active);
-          return response.active;
+          setDailyMinutesLeft(response.daily_minutes_left);
+          const canUseVoice = response.active && response.daily_minutes_left > 0;
+          return canUseVoice;
         } else {
           setSubscriptionActive(false);
+          setDailyMinutesLeft(0);
           return false;
         }
       } catch (error) {
         console.error('Error checking subscription status:', error);
         setSubscriptionActive(false);
+        setDailyMinutesLeft(0);
         return false;
       }
     }
@@ -123,7 +129,7 @@ const AiChat = () => {
       // Check subscription status after each ask API call
       const isActive = await checkSubscriptionStatus();
       if (!isActive) {
-        setShowSubscriptionModal(true);
+        setShowLimitReachedModal(true);
         return;
       }
       
@@ -143,8 +149,8 @@ const AiChat = () => {
 
   const handleMicClick = async () => {
     if (isLoggedIn) {
-      if (!subscriptionActive) {
-        setShowSubscriptionModal(true);
+      if (!subscriptionActive || dailyMinutesLeft === 0) {
+        setShowLimitReachedModal(true);
         return;
       }
       setIsRecording((prevState) => !prevState);
@@ -158,6 +164,11 @@ const AiChat = () => {
     else {
       setLoginModal(true)
     }
+  };
+
+  const handleUpgradePlan = () => {
+    setShowLimitReachedModal(false);
+    setShowSubscriptionModal(true);
   };
 
   return (
@@ -269,6 +280,35 @@ const AiChat = () => {
       {disclaimerModal && <DisclaimerModal OnClose={() => setDisclaimerModal(false)} onConfirm={handleDisclaimerConfirm} />}
       {accountModal && <AccountModal OnClose={() => setAccountModal(false)} />}
       {showSubscriptionModal && <SubscriptionPlane OnClose={() => setShowSubscriptionModal(false)} />}
+      
+      {/* Limit Reached Modal */}
+      {showLimitReachedModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 max-w-sm w-[90%] text-center animate-slideUp">
+            <div className="text-4xl mb-4">⏰</div>
+            <h3 className="text-white text-xl font-semibold mb-2">Plan Limit Reached</h3>
+            <p className="text-white/60 text-sm mb-6">
+              You have reached your daily usage limit. Upgrade your plan to continue your journey.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={handleUpgradePlan}
+                className="w-full py-3 rounded-xl bg-[#D9D9D9] text-black font-semibold
+                           hover:bg-white transition-all duration-300"
+              >
+                Upgrade Plan
+              </button>
+              <button
+                onClick={() => setShowLimitReachedModal(false)}
+                className="w-full py-3 rounded-xl border border-white/20 text-white/70 font-medium
+                           hover:bg-white/10 transition-all duration-300"
+              >
+                Maybe Later
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div >
   );
 };
