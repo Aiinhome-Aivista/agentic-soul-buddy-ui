@@ -1,5 +1,5 @@
 // import { devUrl } from "../env/env";
-import { devUrl1 } from "../env/env";
+import { devUrl1, devUrl2 } from "../env/env";
 
 // export const POST_url = {
 //       login: devUrl + "social-login",
@@ -25,5 +25,6 @@ export const get_url1 = {
       questions: devUrl1 + "fetch_questions",
       terms: devUrl1 + "terms-and-conditions",
       disclaimer: devUrl1 + "disclaimer",
-      faq: devUrl1 + "faqs"
+      faq: devUrl1 + "faqs",
+      subscription_status: devUrl2 + "subscription_status"
 };

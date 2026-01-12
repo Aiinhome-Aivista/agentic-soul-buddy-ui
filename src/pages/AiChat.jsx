@@ -4,7 +4,7 @@ import MicIcon from '@mui/icons-material/Mic';
 import { VoiceRecognizer } from '../common/helper/VoiceRecognizer'
 import { Context } from '../common/helper/Context';
 import { apiService } from '../service/apiService';
-import { POST_url1 } from '../connection/connection';
+import { POST_url1, get_url1 } from '../connection/connection';
 import TypingDots from '../components/TypingDots';
 import CanvasVisualizerSim from '../components/CanvasVisualizerSim';
 import LoginLogoutIcon from '../components/LoginLogoutIcon';
@@ -14,6 +14,7 @@ import SignupModal2 from '../common/modal/signupafterquestions';
 import WellBeingProfile from '../common/modal/WellBeingProfile';
 import DisclaimerModal from '../common/modal/DisclaimerModal';
 import AccountModal from '../common/modal/AccountModal';
+import SubscriptionPlane from '../common/modal/SubscribtionPlane';
 
 const AiChat = () => {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ const AiChat = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [disclaimerModal, setDisclaimerModal] = useState(false);
+  const [subscriptionActive, setSubscriptionActive] = useState(true);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
 
   const handleDisclaimerConfirm = () => {
     setDisclaimerModal(false);
@@ -47,6 +50,30 @@ const AiChat = () => {
     }
   }, [isLoggedIn]
   );
+
+  /* Check subscription status when logged in */
+  useEffect(() => {
+    const checkSubscriptionStatus = async () => {
+      const userId = localStorage.getItem('userId');
+      if (isLoggedIn && userId) {
+        try {
+          const response = await apiService({
+            url: `${get_url1.subscription_status}?user_id=${userId}`,
+            method: 'GET'
+          });
+          if (response && !response.error) {
+            setSubscriptionActive(response.active);
+          } else {
+            setSubscriptionActive(false);
+          }
+        } catch (error) {
+          console.error('Error checking subscription status:', error);
+          setSubscriptionActive(false);
+        }
+      }
+    };
+    checkSubscriptionStatus();
+  }, [isLoggedIn]);
 
   /* New useEffect for Auto Greeting */
   useEffect(() => {
@@ -101,6 +128,10 @@ const AiChat = () => {
 
   const handleMicClick = async () => {
     if (isLoggedIn) {
+      if (!subscriptionActive) {
+        setShowSubscriptionModal(true);
+        return;
+      }
       setIsRecording((prevState) => !prevState);
       if (isRecording) {
         // Was recording, now stopping -> send query
@@ -222,6 +253,7 @@ const AiChat = () => {
       {showProfile && <WellBeingProfile onClose={() => setShowProfile(false)} />}
       {disclaimerModal && <DisclaimerModal OnClose={() => setDisclaimerModal(false)} onConfirm={handleDisclaimerConfirm} />}
       {accountModal && <AccountModal OnClose={() => setAccountModal(false)} />}
+      {showSubscriptionModal && <SubscriptionPlane OnClose={() => setShowSubscriptionModal(false)} />}
     </div >
   );
 };

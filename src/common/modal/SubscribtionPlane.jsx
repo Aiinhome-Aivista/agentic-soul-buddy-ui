@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import crown from "../../assets/icons/crown.svg";
 import { apiService } from "../../service/apiService";
-import { devUrl1 } from "../../env/env";
+import { devUrl2 } from "../../env/env";
 import { useNavigate } from "react-router-dom";
 
 const SubscriptionPlane = ({ OnClose }) => {
@@ -13,7 +13,8 @@ const SubscriptionPlane = ({ OnClose }) => {
       {
         id: "7-day",
         title: "7-DAY PLAN",
-        originalPrice: "₹3,555.24",
+        planName: "Personalized Plan",
+        originalPrice: "",
         finalPrice: "₹935.54",
         price: "₹133.27",
         period: "Per day",
@@ -23,8 +24,9 @@ const SubscriptionPlane = ({ OnClose }) => {
       {
         id: "1-month",
         title: "1-MONTH PLAN",
-        originalPrice: "₹3,555.24",
-        finalPrice: "₹935.54",
+        planName: "1-Month Plan",
+        originalPrice: "",
+        finalPrice: "₹1,527.00",
         price: "₹50.94",
         period: "Per day",
         amount: 1527.00,
@@ -33,8 +35,9 @@ const SubscriptionPlane = ({ OnClose }) => {
       {
         id: "3-month",
         title: "3-MONTH PLAN",
-        originalPrice: "₹3,555.24",
-        finalPrice: "₹935.54",
+        planName: "3-Month Plan",
+        originalPrice: "",
+        finalPrice: "₹2,664.00",
         price: "₹29.60",
         period: "Per day",
         amount: 2664.00,
@@ -56,12 +59,11 @@ const SubscriptionPlane = ({ OnClose }) => {
 
       const payload = {
         user_id: userId,
-        amount: selectedPlanData?.amount || 9.99,
-        transaction_id: "TID-123456789-20251215"
+        plan_name: selectedPlanData?.planName || "Personalized Plan"
       };
 
       const response = await apiService({
-        url: devUrl1 + "subscribe",
+        url: devUrl2 + "start_subscription",
         method: 'POST',
         data: payload
       });
