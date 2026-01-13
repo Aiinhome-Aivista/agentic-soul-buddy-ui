@@ -92,7 +92,7 @@ function LoginLogoutIcon({ handleStop }) {
             <div className="relative" ref={dropdownRef}>
                 {/* Header - Name Section (always visible) */}
                 <div
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-2xl border-2 border-[#333333] bg-[#474747]/22 backdrop-blur-md cursor-pointer hover:bg-[#474747]/40 transition-all duration-300 ${showDropdown ? 'opacity-0' : 'opacity-100'
+                    className={`flex items-center gap-2 p-1 rounded-2xl border-2 border-[#333333] bg-[#474747]/22 backdrop-blur-md cursor-pointer hover:bg-[#474747]/40 transition-all duration-300 ${showDropdown ? 'opacity-0' : 'opacity-100'
                         }`}
                     onClick={() => setShowDropdown(!showDropdown)}
                 >

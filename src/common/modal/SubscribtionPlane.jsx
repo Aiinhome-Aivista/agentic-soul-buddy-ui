@@ -76,8 +76,10 @@ const SubscriptionPlane = ({ OnClose, showAllPlans = true }) => {
 
       if (response && !response.error) {
         console.log('Subscription successful:', response);
+        // Store the new plan in localStorage
+        localStorage.setItem('currentPlan', selectedPlanData?.planName || "Personalized Plan");
+        OnClose?.();
         navigate('/home');
-        // OnClose?.();
       } else {
         console.error('Subscription failed:', response?.message);
       }
