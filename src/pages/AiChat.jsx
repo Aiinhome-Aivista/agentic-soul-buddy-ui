@@ -1,24 +1,39 @@
-import { useState, useRef, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import MicIcon from '@mui/icons-material/Mic';
-import { VoiceRecognizer } from '../common/helper/VoiceRecognizer'
-import { Context } from '../common/helper/Context';
-import { apiService } from '../service/apiService';
-import { POST_url1, get_url1 } from '../connection/connection';
-import TypingDots from '../components/TypingDots';
-import CanvasVisualizerSim from '../components/CanvasVisualizerSim';
-import LoginLogoutIcon from '../components/LoginLogoutIcon';
-import LoginModal from '../common/modal/LoginModal';
+import { useState, useRef, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import MicIcon from "@mui/icons-material/Mic";
+import { VoiceRecognizer } from "../common/helper/VoiceRecognizer";
+import { Context } from "../common/helper/Context";
+import { apiService } from "../service/apiService";
+import { POST_url1, get_url1 } from "../connection/connection";
+import TypingDots from "../components/TypingDots";
+import CanvasVisualizerSim from "../components/CanvasVisualizerSim";
+import LoginLogoutIcon from "../components/LoginLogoutIcon";
+import LoginModal from "../common/modal/LoginModal";
 // import SignupModal from '../common/modal/SignupMOdal';
-import SignupModal2 from '../common/modal/signupafterquestions';
-import WellBeingProfile from '../common/modal/WellBeingProfile';
-import DisclaimerModal from '../common/modal/DisclaimerModal';
-import AccountModal from '../common/modal/AccountModal';
-import SubscriptionPlane from '../common/modal/SubscribtionPlane';
+import SignupModal2 from "../common/modal/signupafterquestions";
+import WellBeingProfile from "../common/modal/WellBeingProfile";
+import DisclaimerModal from "../common/modal/DisclaimerModal";
+import AccountModal from "../common/modal/AccountModal";
+import SubscriptionPlane from "../common/modal/SubscribtionPlane";
 
 const AiChat = () => {
   const navigate = useNavigate();
-  const { recognizedText, isLoggedIn, loginModal, setLoginModal, signupModal, setSignupModal, signupModal2, setSignupModal2, audioUrl, setAudioUrl, isLoading, setIsLoading, accountModal, setAccountModal } = useContext(Context);
+  const {
+    recognizedText,
+    isLoggedIn,
+    loginModal,
+    setLoginModal,
+    signupModal,
+    setSignupModal,
+    signupModal2,
+    setSignupModal2,
+    audioUrl,
+    setAudioUrl,
+    isLoading,
+    setIsLoading,
+    accountModal,
+    setAccountModal,
+  } = useContext(Context);
   const audioRef = useRef(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -26,51 +41,57 @@ const AiChat = () => {
   const [disclaimerModal, setDisclaimerModal] = useState(false);
   const [subscriptionActive, setSubscriptionActive] = useState(true);
   const [dailyMinutesLeft, setDailyMinutesLeft] = useState(null);
-  const [currentPlan, setCurrentPlan] = useState(localStorage.getItem('currentPlan') || '');
+  const [currentPlan, setCurrentPlan] = useState(
+    localStorage.getItem("currentPlan") || ""
+  );
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showLimitReachedModal, setShowLimitReachedModal] = useState(false);
 
   const handleDisclaimerConfirm = () => {
     setDisclaimerModal(false);
-    navigate('/questionnaire');
+    navigate("/questionnaire");
   };
-  const [name, setName] = useState(localStorage.getItem('name') || '');
+  const [name, setName] = useState(localStorage.getItem("name") || "");
   useEffect(() => {
     const handleStorageChange = () => {
-      setUserId(localStorage.getItem('userId'));
-      setSessionId(localStorage.getItem('sessionId'));
-      const storedName = localStorage.getItem('name');
+      setUserId(localStorage.getItem("userId"));
+      setSessionId(localStorage.getItem("sessionId"));
+      const storedName = localStorage.getItem("name");
       console.log("Retrieved userName from storage:", storedName);
       setName(storedName);
     };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   useEffect(() => {
     if (!isLoggedIn) {
       setIsRecording(false);
     }
-  }, [isLoggedIn]
-  );
+  }, [isLoggedIn]);
 
   const checkSubscriptionStatus = async () => {
-    const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem("userId");
     if (userId) {
       try {
         const response = await apiService({
           url: `${get_url1.subscription_status}?user_id=${userId}`,
-          method: 'GET'
+          method: "GET",
         });
         if (response && !response.error) {
           setSubscriptionActive(response.active);
           setDailyMinutesLeft(response.daily_minutes_left);
-          // Store plan name in localStorage and state
+
           if (response.plan) {
-            localStorage.setItem('currentPlan', response.plan);
+            localStorage.setItem("currentPlan", response.plan);
             setCurrentPlan(response.plan);
           }
-          const canUseVoice = response.active && response.daily_minutes_left > 0;
+
+          const canUseVoice =
+            response.active &&
+            (response.daily_minutes_left === "unlimited" ||
+              response.daily_minutes_left > 0);
+
           return canUseVoice;
         } else {
           setSubscriptionActive(false);
@@ -78,7 +99,7 @@ const AiChat = () => {
           return false;
         }
       } catch (error) {
-        console.error('Error checking subscription status:', error);
+        console.error("Error checking subscription status:", error);
         setSubscriptionActive(false);
         setDailyMinutesLeft(0);
         return false;
@@ -96,10 +117,10 @@ const AiChat = () => {
 
   /* New useEffect for Auto Greeting */
   useEffect(() => {
-    const hasGreeted = sessionStorage.getItem('hasGreeted');
+    const hasGreeted = sessionStorage.getItem("hasGreeted");
     if (isLoggedIn && !hasGreeted) {
       handleVoiceQuery("");
-      sessionStorage.setItem('hasGreeted', 'true');
+      sessionStorage.setItem("hasGreeted", "true");
     }
   }, [isLoggedIn]);
 
@@ -116,40 +137,42 @@ const AiChat = () => {
   const handleVoiceQuery = async (textValue) => {
     setIsLoading(true);
     const payload = {
-      "user_id": localStorage.getItem('userId'),
+      user_id: localStorage.getItem("userId"),
       // "session_id": localStorage.getItem('sessionId'),
-      "text": textValue
-    }
+      text: textValue,
+    };
     try {
-      console.log(payload)
+      console.log(payload);
       const response = await apiService({
         url: POST_url1.ask,
-        method: 'POST',
+        method: "POST",
         data: payload,
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       });
       setIsLoading(false);
-      
+
       // Check subscription status after each ask API call
       const isActive = await checkSubscriptionStatus();
       if (!isActive) {
         setShowLimitReachedModal(true);
         return;
       }
-      
+
       if (response && !response.error) {
-        console.log(response)
+        console.log(response);
         setAudioUrl(response.audio_url);
       } else {
-        console.error('Submission failed:', response?.message);
-        console.log(`Submission failed: ${response?.message || 'An error occurred.'}`);
+        console.error("Submission failed:", response?.message);
+        console.log(
+          `Submission failed: ${response?.message || "An error occurred."}`
+        );
       }
     } catch (error) {
       setIsLoading(false);
-      console.error('An error occurred during submission:', error);
-      console.log('An error occurred. Please try again later.');
+      console.error("An error occurred during submission:", error);
+      console.log("An error occurred. Please try again later.");
     }
   };
 
@@ -166,9 +189,8 @@ const AiChat = () => {
           handleVoiceQuery(recognizedText);
         }
       }
-    }
-    else {
-      setLoginModal(true)
+    } else {
+      setLoginModal(true);
     }
   };
 
@@ -179,8 +201,6 @@ const AiChat = () => {
 
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%]">
-
-
       <div className={`flex items-start justify-end gap-[1%] w-[100%] `}>
         {isLoggedIn && currentPlan && (
           <div className="h-full px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] flex items-center gap-1">
@@ -190,7 +210,7 @@ const AiChat = () => {
         )}
         {!isLoggedIn && (
           <button
-            onClick={() => navigate('/questionnaire')}
+            onClick={() => navigate("/questionnaire")}
             className="h-[1.7rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] hover:bg-[#474747]/40 transition-colors cursor-pointer"
           >
             Sign Up
@@ -205,27 +225,31 @@ const AiChat = () => {
         <LoginLogoutIcon />
       </div>
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className='text-4xl font-bold text-white pt-[12%]  cursor-default' >Soul Junction</p>
-        <p className='text-white text-xl font-light  cursor-default'>"Grow With Ancient Indian Guidance..."</p>
+        <p className="text-4xl font-bold text-white pt-[12%]  cursor-default">
+          Soul Junction
+        </p>
+        <p className="text-white text-xl font-light  cursor-default">
+          "Grow With Ancient Indian Guidance..."
+        </p>
       </div>
       <div className="flex flex-col items-center h-[45%] pt-[2%]">
         {isRecording ? (
-          <div className='relative pb-[1%] flex items-center justify-center'>
+          <div className="relative pb-[1%] flex items-center justify-center">
             {/* Outer pulsing ring */}
-            <div className='absolute w-20 h-20 rounded-full bg-[#e57373]/40 animate-recording-pulse' />
+            <div className="absolute w-20 h-20 rounded-full bg-[#e57373]/40 animate-recording-pulse" />
             {/* Main red circular button */}
             <div
-              className='relative w-16 h-16 rounded-full flex items-center justify-center cursor-pointer'
+              className="relative w-16 h-16 rounded-full flex items-center justify-center cursor-pointer"
               style={{
-                backgroundColor: '#e54b4b',
-                boxShadow: '0 4px 15px rgba(229, 75, 75, 0.4)'
+                backgroundColor: "#e54b4b",
+                boxShadow: "0 4px 15px rgba(229, 75, 75, 0.4)",
               }}
               onClick={handleMicClick}
             >
               <MicIcon
                 sx={{
-                  fontSize: '2rem',
-                  color: '#FFFFFF'
+                  fontSize: "2rem",
+                  color: "#FFFFFF",
                 }}
               />
             </div>
@@ -233,7 +257,7 @@ const AiChat = () => {
         ) : isLoading ? (
           <TypingDots />
         ) : isPlaying ? (
-          <div className='pb-[1%]'>
+          <div className="pb-[1%]">
             <CanvasVisualizerSim
               width={350}
               height={130}
@@ -245,34 +269,48 @@ const AiChat = () => {
             />
           </div>
         ) : (
-          <div className='relative pb-[1%]'>
-            <MicIcon sx={{
-              fontSize: '2.5rem',
-              color: '#D9D9D9',
-              transition: 'color 0.2s, font-size 0.2s',
-              '&:hover': {
-                color: '#fdfdfdff',
-                fontSize: '2.6rem'
-              }
-            }} onClick={handleMicClick} className='cursor-pointer' />
+          <div className="relative pb-[1%]">
+            <MicIcon
+              sx={{
+                fontSize: "2.5rem",
+                color: "#D9D9D9",
+                transition: "color 0.2s, font-size 0.2s",
+                "&:hover": {
+                  color: "#fdfdfdff",
+                  fontSize: "2.6rem",
+                },
+              }}
+              onClick={handleMicClick}
+              className="cursor-pointer"
+            />
           </div>
         )}
         {isPlaying ? (
-          <div className='pb-[40%] font-light text-xs text-white'>
+          <div className="pb-[40%] font-light text-xs text-white">
             <div></div>
-            <div className='flex items-center rounded-3xl bg-[#474747]/22 border-2 border-gray-500 p-1 cursor-pointer'>
-              <div className='rounded-full h-[1rem] w-[1rem] bg-[#D9D9D9]/54'
-                onClick={handleStop}></div>
-              <p className='flex items-center justify-center text-sm text-[#7D7E7F] px-1'>Stop</p>
+            <div className="flex items-center rounded-3xl bg-[#474747]/22 border-2 border-gray-500 p-1 cursor-pointer">
+              <div
+                className="rounded-full h-[1rem] w-[1rem] bg-[#D9D9D9]/54"
+                onClick={handleStop}
+              ></div>
+              <p className="flex items-center justify-center text-sm text-[#7D7E7F] px-1">
+                Stop
+              </p>
             </div>
           </div>
         ) : (
-          <div className='pb-[40%] font-light text-xs text-white'>
-          </div>
+          <div className="pb-[40%] font-light text-xs text-white"></div>
         )}
       </div>
-      <p className='text-large text-[#D9D9D9] text-center font-light pb-[5%] cursor-default'>Share your details to begin your personalized<br />journey of transformation</p>
-      <VoiceRecognizer isRecording={isRecording} setIsRecording={setIsRecording} />
+      <p className="text-large text-[#D9D9D9] text-center font-light pb-[5%] cursor-default">
+        Share your details to begin your personalized
+        <br />
+        journey of transformation
+      </p>
+      <VoiceRecognizer
+        isRecording={isRecording}
+        setIsRecording={setIsRecording}
+      />
       <audio
         crossOrigin="anonymous"
         onPlay={() => setIsPlaying(true)}
@@ -288,19 +326,34 @@ const AiChat = () => {
       {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
       {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
       {signupModal2 && <SignupModal2 OnClose={() => setSignupModal2(false)} />}
-      {showProfile && <WellBeingProfile onClose={() => setShowProfile(false)} />}
-      {disclaimerModal && <DisclaimerModal OnClose={() => setDisclaimerModal(false)} onConfirm={handleDisclaimerConfirm} />}
+      {showProfile && (
+        <WellBeingProfile onClose={() => setShowProfile(false)} />
+      )}
+      {disclaimerModal && (
+        <DisclaimerModal
+          OnClose={() => setDisclaimerModal(false)}
+          onConfirm={handleDisclaimerConfirm}
+        />
+      )}
       {accountModal && <AccountModal OnClose={() => setAccountModal(false)} />}
-      {showSubscriptionModal && <SubscriptionPlane OnClose={() => setShowSubscriptionModal(false)} showAllPlans={false} />}
-      
+      {showSubscriptionModal && (
+        <SubscriptionPlane
+          OnClose={() => setShowSubscriptionModal(false)}
+          showAllPlans={false}
+        />
+      )}
+
       {/* Limit Reached Modal */}
       {showLimitReachedModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fadeIn">
           <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 max-w-sm w-[90%] text-center animate-slideUp">
             <div className="text-4xl mb-4">⏰</div>
-            <h3 className="text-white text-xl font-semibold mb-2">Plan Limit Reached</h3>
+            <h3 className="text-white text-xl font-semibold mb-2">
+              Plan Limit Reached
+            </h3>
             <p className="text-white/60 text-sm mb-6">
-              You have reached your daily usage limit. Upgrade your plan to continue your journey.
+              You have reached your daily usage limit. Upgrade your plan to
+              continue your journey.
             </p>
             <div className="flex flex-col gap-3">
               <button
@@ -321,7 +374,7 @@ const AiChat = () => {
           </div>
         </div>
       )}
-    </div >
+    </div>
   );
 };
 
