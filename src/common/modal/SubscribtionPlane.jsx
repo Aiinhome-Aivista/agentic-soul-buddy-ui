@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import crown from "../../assets/icons/crown.svg";
 import { apiService } from "../../service/apiService";
-import { devUrl2 } from "../../env/env";
+import { devUrl1 } from "../../env/env";
 import { get_url1 } from "../../connection/connection";
 import { useNavigate } from "react-router-dom";
 
@@ -69,7 +69,7 @@ const SubscriptionPlane = ({ OnClose, showAllPlans = true }) => {
       };
 
       const response = await apiService({
-        url: devUrl2 + "start_subscription",
+        url: devUrl1 + "start_subscription",
         method: 'POST',
         data: payload
       });
