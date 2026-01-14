@@ -10,7 +10,7 @@ const App = () => (
       <ContextProvider>
         <div
           className="w-full h-full"
-          style={{ position: 'absolute', top: 0, left: 0, zIndex: -1, opacity: 0.6 }}
+          style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }}
         >
           <VideoBackground />
           {/* <DarkVeil hueShift={186} speed={1} /> */}
