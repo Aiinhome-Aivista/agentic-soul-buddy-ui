@@ -16,6 +16,52 @@ import DisclaimerModal from "../common/modal/DisclaimerModal";
 import AccountModal from "../common/modal/AccountModal";
 import SubscriptionPlane from "../common/modal/SubscribtionPlane";
 
+const getPlanDetails = (planName) => {
+  if (!planName) return null;
+  const lowerPlan = planName.toLowerCase();
+
+  switch (true) {
+    case lowerPlan.includes("free"):
+      return {
+        discount: "0%",
+        finalPrice: "0.00",
+        id: 1,
+        isTrial: true,
+        originalPrice: null,
+        planName: "Free Plan",
+        title: "free",
+        usage: "10 minutes/day",
+        validityDays: 14
+      };
+    case lowerPlan.includes("silver"):
+      return {
+        discount: "50%",
+        finalPrice: "1000.00",
+        id: 2,
+        isTrial: false,
+        originalPrice: "2000.00",
+        planName: "Silver Plan",
+        title: "silver",
+        usage: "20 minutes/day",
+        validityDays: 30
+      };
+    case lowerPlan.includes("gold"):
+      return {
+        discount: "60%",
+        finalPrice: "1600.00",
+        id: 3,
+        isTrial: false,
+        originalPrice: "4000.00",
+        planName: "Gold Plan",
+        title: "gold",
+        usage: "Unlimited",
+        validityDays: 30
+      };
+    default:
+      return null;
+  }
+};
+
 const AiChat = () => {
   const navigate = useNavigate();
   const {
@@ -46,6 +92,7 @@ const AiChat = () => {
   );
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showLimitReachedModal, setShowLimitReachedModal] = useState(false);
+  const [isPlanHovered, setIsPlanHovered] = useState(false);
 
   const handleDisclaimerConfirm = () => {
     setDisclaimerModal(false);
@@ -203,9 +250,45 @@ const AiChat = () => {
     <div className="flex flex-col items-center w-[100%] h-[100%]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%] `}>
         {isLoggedIn && currentPlan && (
-          <div className="h-full px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] flex items-center gap-1">
+          <div
+            className="relative h-full px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] flex items-center gap-1 cursor-pointer"
+            onMouseEnter={() => setIsPlanHovered(true)}
+            onMouseLeave={() => setIsPlanHovered(false)}
+          >
             {/* <span className="text-[#D9D9D9]">✨</span> */}
             <span>{currentPlan}</span>
+
+            {isPlanHovered && (
+              <div className="absolute top-full right-0 mt-2 w-48 p-3 rounded-xl bg-[#1a1a1a] border border-white/10 shadow-xl backdrop-blur-md z-50 text-left">
+                {(() => {
+                  const details = getPlanDetails(currentPlan);
+                  if (!details) return null;
+                  return (
+                    <div className="flex flex-col gap-2">
+                      <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-1">
+                        <span className="text-white font-semibold text-sm">{details.planName}</span>
+                        {/* {details.discount !== "0%" && <span className="text-[0.65rem] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">{details.discount} OFF</span>} */}
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-gray-400">Price</span>
+                          <span className="text-white font-medium">₹{details.finalPrice}</span>
+                        </div>
+                        <div className="flex justify-between text-xs">
+                          <span className="text-gray-400">Usage</span>
+                          <span className="text-white font-medium">{details.usage}</span>
+                        </div>
+                        <div className="flex justify-between text-xs">
+                          <span className="text-gray-400">Validity</span>
+                          <span className="text-white font-medium">{details.validityDays} Days</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
           </div>
         )}
         {!isLoggedIn && (
