@@ -41,7 +41,7 @@ export default function AccountModal({ OnClose }) {
                 });
 
                 if (response && response.success) {
-                    setUserData(response.data);
+                    setUserData(response.data.user);
                 } else {
                     console.error("Failed to load user details:", response);
                     setError("Failed to load user details");
