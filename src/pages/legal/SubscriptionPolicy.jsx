@@ -26,7 +26,7 @@ const SubscriptionPolicy = () => {
                         discount: plan.discount,
                         validityDays: plan.validityDays,
                         isTrial: plan.isTrial,
-                        features: plan.isTrial 
+                        features: plan.isTrial
                             ? ["14 days free trial", `${plan.usage}`, "Basic features access", "Personalized recommendations"]
                             : plan.title.toLowerCase() === "silver"
                                 ? [`${plan.validityDays} days access`, `${plan.usage}`, "Priority support", "Advanced analytics", "Journal features"]
@@ -119,52 +119,52 @@ const SubscriptionPolicy = () => {
                     {loading ? (
                         <div className="text-center text-white/60">Loading plans...</div>
                     ) : (
-                    <div className="grid md:grid-cols-3 gap-6">
-                        {plans.map((plan, index) => (
-                            <div
-                                key={index}
-                                className={`rounded-2xl p-6 border transition-all duration-300 ${plan.highlighted
-                                    ? 'bg-gradient-to-b from-primary-dark/30 to-primary-deep/20 border-primary/30 scale-105'
-                                    : 'bg-white/5 border-white/10 hover:border-white/20'
-                                    }`}
-                            >
-                                {plan.highlighted && (
-                                    <div className="text-center mb-4">
-                                        <span className="px-3 py-1 bg-primary/20 text-primary text-xs font-semibold rounded-full">Most Popular</span>
-                                    </div>
-                                )}
-                                {plan.isTrial && (
-                                    <div className="text-center mb-4">
-                                        <span className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded-full">Free Trial</span>
-                                    </div>
-                                )}
-                                {plan.discount && plan.discount !== "0%" && !plan.isTrial && (
-                                    <div className="text-center mb-4">
-                                        <span className="px-3 py-1 bg-orange-500/20 text-orange-400 text-xs font-semibold rounded-full">{plan.discount} OFF</span>
-                                    </div>
-                                )}
-                                <h3 className="text-xl font-semibold text-white text-center mb-2">{plan.name}</h3>
-                                <div className="text-center mb-2">
-                                    {plan.originalPrice && (
-                                        <span className="text-lg text-gray-500 line-through mr-2">{plan.originalPrice}</span>
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {plans.map((plan, index) => (
+                                <div
+                                    key={index}
+                                    className={`relative rounded-2xl p-6 border transition-all duration-300 ${plan.highlighted
+                                        ? 'bg-gradient-to-b from-primary-dark/30 to-primary-deep/20 border-primary/30 scale-105'
+                                        : 'bg-white/5 border-white/10 hover:border-white/20'
+                                        }`}
+                                >
+                                    {plan.highlighted && (
+                                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                            <span className="px-3 py-1 bg-[#1a1a1a] border border-primary/30 text-primary text-xs font-semibold rounded-full shadow-lg">Most Popular</span>
+                                        </div>
                                     )}
-                                    <span className="text-3xl font-bold text-white">{plan.price}</span>
-                                    <span className="text-gray-400">{plan.period}</span>
+                                    {plan.isTrial && (
+                                        <div className="text-center mb-4">
+                                            <span className="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded-full">Free Trial</span>
+                                        </div>
+                                    )}
+                                    {plan.discount && plan.discount !== "0%" && !plan.isTrial && (
+                                        <div className="text-center mb-4">
+                                            <span className="px-3 py-1 bg-orange-500/20 text-orange-400 text-xs font-semibold rounded-full">{plan.discount} OFF</span>
+                                        </div>
+                                    )}
+                                    <h3 className="text-xl font-semibold text-white text-center mb-2">{plan.name}</h3>
+                                    <div className="text-center mb-2">
+                                        {plan.originalPrice && (
+                                            <span className="text-lg text-gray-500 line-through mr-2">{plan.originalPrice}</span>
+                                        )}
+                                        <span className="text-3xl font-bold text-white">{plan.price}</span>
+                                        <span className="text-gray-400">{plan.period}</span>
+                                    </div>
+                                    <div className="text-center mb-6">
+                                        <span className="text-sm text-primary font-medium">{plan.perDay}</span>
+                                    </div>
+                                    <ul className="space-y-3">
+                                        {plan.features.map((feature, i) => (
+                                            <li key={i} className="flex items-center gap-2 text-gray-300 text-sm">
+                                                <span className="material-symbols-outlined text-primary text-base">check</span>
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-                                <div className="text-center mb-6">
-                                    <span className="text-sm text-primary font-medium">{plan.perDay}</span>
-                                </div>
-                                <ul className="space-y-3">
-                                    {plan.features.map((feature, i) => (
-                                        <li key={i} className="flex items-center gap-2 text-gray-300 text-sm">
-                                            <span className="material-symbols-outlined text-primary text-base">check</span>
-                                            {feature}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
                     )}
                 </div>
             </section>
