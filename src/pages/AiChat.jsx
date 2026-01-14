@@ -204,7 +204,7 @@ const AiChat = () => {
       <div className={`flex items-start justify-end gap-[1%] w-[100%] `}>
         {isLoggedIn && currentPlan && (
           <div className="h-full px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] flex items-center gap-1">
-            <span className="text-[#D9D9D9]">✨</span>
+            {/* <span className="text-[#D9D9D9]">✨</span> */}
             <span>{currentPlan}</span>
           </div>
         )}
