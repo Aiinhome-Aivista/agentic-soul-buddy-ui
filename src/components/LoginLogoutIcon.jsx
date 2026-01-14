@@ -69,7 +69,7 @@ function LoginLogoutIcon({ handleStop }) {
                 navigate('/disclaimer');
                 break;
             case 'contact':
-                setContactModal(true);
+                navigate('/contact');
                 break;
             case 'faq':
                 setFaqModal(true);
