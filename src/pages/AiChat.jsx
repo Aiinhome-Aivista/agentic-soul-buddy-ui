@@ -15,6 +15,7 @@ import WellBeingProfile from "../common/modal/WellBeingProfile";
 import DisclaimerModal from "../common/modal/DisclaimerModal";
 import AccountModal from "../common/modal/AccountModal";
 import SubscriptionPlane from "../common/modal/SubscribtionPlane";
+import { useMicVolume } from "../common/hooks/useMicVolume";
 
 const getPlanDetails = (planName) => {
   if (!planName) return null;
@@ -93,6 +94,9 @@ const AiChat = () => {
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showLimitReachedModal, setShowLimitReachedModal] = useState(false);
   const [isPlanHovered, setIsPlanHovered] = useState(false);
+
+  // Use the new hook
+  const volume = useMicVolume(isRecording);
 
   const handleDisclaimerConfirm = () => {
     setDisclaimerModal(false);
@@ -318,8 +322,14 @@ const AiChat = () => {
       <div className="flex flex-col items-center h-[45%] pt-[2%]">
         {isRecording ? (
           <div className="relative pb-[1%] flex items-center justify-center">
-            {/* Outer pulsing ring */}
-            <div className="absolute w-20 h-20 rounded-full bg-[#e57373]/40 animate-recording-pulse" />
+            {/* Outer pulsing ring with dynamic volume scale */}
+            <div
+              className="absolute w-20 h-20 rounded-full bg-[#e57373]/40"
+              style={{
+                transform: `scale(${1 + volume * 0.8})`,
+                transition: 'transform 0.1s ease-out'
+              }}
+            />
             {/* Main red circular button */}
             <div
               className="relative w-16 h-16 rounded-full flex items-center justify-center cursor-pointer"
