@@ -171,7 +171,7 @@ const Questionnaire = () => {
                             />
                         </div>
 
-                        <div className="text-sm font-bold font-mono">
+                        <div className="text-sm font-bold font-mono text-[20px]">
                             <span className="text-white">{currentIndex + 1}</span>
                             <span className="text-white/60">/{questions.length}</span>
                         </div>
