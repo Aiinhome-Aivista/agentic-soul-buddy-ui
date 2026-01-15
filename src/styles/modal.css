@@ -202,6 +202,24 @@
     justify-content: flex-start !important;
     padding: 1rem !important;
     gap: 1rem !important;
+    color: #fff !important; /* Ensure text is white */
+}
+
+/* Background colors for success and error */
+.custom-toast-message .p-toast-message-success {
+    background: linear-gradient(135deg, #8aa399 0%, #61897c 100%) !important;
+    border: none !important;
+}
+
+.custom-toast-message .p-toast-message-error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    border: none !important;
+}
+
+.custom-toast-message .p-toast-message {
+    border-radius: 12px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(10px) !important;
 }
 
 .custom-toast-message .p-toast-message-icon {
@@ -227,12 +245,14 @@
 .custom-toast-message .p-toast-summary {
     font-weight: 700 !important;
     margin-bottom: 0.25rem !important;
+    color: #fff !important;
 }
 
 .custom-toast-message .p-toast-detail {
     line-height: 1.5 !important;
     overflow-wrap: break-word !important;
     word-break: break-word !important;
+    color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .custom-toast-message .p-toast-icon-close {

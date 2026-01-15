@@ -8,10 +8,16 @@ import * as Yup from "yup";
 import { apiService } from "../../service/apiService";
 import { POST_url1 } from "../../connection/connection";
 import { Dropdown } from "primereact/dropdown";
+import { Toast } from "primereact/toast";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const { tempUserName, tempUserId, setIsLoggedIn, setAudioUrl, setIsLoading } =
     useContext(Context);
+
+  const toast = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Single-error banner visibility + auto-hide timer
   const [bannerVisible, setBannerVisible] = useState(false);
@@ -48,10 +54,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       .max(120, "Invalid age!")
       .required("Age is required!"),
     gender: Yup.string().required("Gender is required."),
-    work: Yup.string()
-      .min(3, "Please enter a valid profession.")
-      .matches(/(.*[a-zA-Z]){2,}/, "Please enter a valid profession.")
-      .required("Profession is required."),
+    work: Yup.string().required("Profession is required."),
     health: Yup.string().required("Health status is required."),
     emotional_state: Yup.string().nullable(),
     relationship: Yup.string().required("Relationship status is required."),
@@ -137,9 +140,21 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
           }
         } else {
           console.error("Submission failed:", response?.message);
+          toast.current.show({
+            severity: 'error',
+            summary: 'Error',
+            detail: response?.message || 'Signup failed. Please try again.',
+            life: 3000
+          });
         }
       } catch (error) {
         console.error("An error occurred during submission:", error);
+        toast.current.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'An unexpected error occurred. Please try again.',
+          life: 3000
+        });
       } finally {
         setSubmitting(false);
       }
@@ -203,6 +218,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-5">
+      <Toast ref={toast} className="custom-toast-message" />
       <div className="glass-card flex flex-col items-center justify-center w-[25%] relative overflow-auto animate-slideUp rounded-2xl p-2 max-h-[90vh]">
         {/* <div className="flex items-start justify-end w-full pt-2 mr-2">
                     <CloseRoundedIcon
@@ -250,16 +266,26 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
             />
 
             {/* Password */}
-            <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            onBlur={formik.handleBlur}
-                            onChange={formik.handleChange}
-                            value={formik.values.password}
-                            placeholder="Password"
-                            className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
-                        />
+            {/* Password */}
+            <div className="relative w-full">
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                placeholder="Password"
+                className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all pr-12"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#D9D9D9]/70 hover:text-white transition-colors cursor-pointer flex items-center justify-center p-1"
+              >
+                {showPassword ? <VisibilityOff sx={{ fontSize: '1.2rem' }} /> : <Visibility sx={{ fontSize: '1.2rem' }} />}
+              </button>
+            </div>
 
             {/* Age */}
             <input
