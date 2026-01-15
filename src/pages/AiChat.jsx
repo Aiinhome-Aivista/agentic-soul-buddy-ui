@@ -398,7 +398,7 @@ const AiChat = () => {
             />
           </div>
         ) : (
-          <div className="relative pb-[1%]">
+          <div className="relative pb-[1%] flex flex-col items-center justify-center">
             <MicIcon
               sx={{
                 fontSize: "2.5rem",
@@ -412,6 +412,9 @@ const AiChat = () => {
               onClick={handleMicClick}
               className="cursor-pointer"
             />
+            <p className="text-sm text-white/50 mt-4 cursor-default font-light tracking-wide">
+              Click to speak
+            </p>
           </div>
         )}
         {isPlaying ? (
@@ -432,14 +435,13 @@ const AiChat = () => {
         )}
       </div>
       <p className="text-large text-[#D9D9D9] text-center font-light pb-[5%] cursor-default">
-        Share your details to begin your personalized
-        <br />
-        journey of transformation
+        Unlock your potential and embrace the path to a new you
       </p>
       <VoiceRecognizer
         isRecording={isRecording}
         setIsRecording={setIsRecording}
       />
+     
       <audio
         crossOrigin="anonymous"
         onPlay={() => setIsPlaying(true)}
