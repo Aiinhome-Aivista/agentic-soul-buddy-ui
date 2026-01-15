@@ -18,7 +18,8 @@ export const POST_url1 = {
       contact_us: devUrl1 + "contact",
       login_with_email: devUrl1 + "login_email",
       password_reset_request: devUrl1 + "forgot_password_request",
-      password_reset: devUrl1 + "forgot_password_reset"
+      password_reset: devUrl1 + "forgot_password_reset",
+      start_subscription: devUrl1 + "start_subscription"
 };
 
 export const get_url1 = {

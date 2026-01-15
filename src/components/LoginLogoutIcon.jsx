@@ -56,11 +56,15 @@ function LoginLogoutIcon({ handleStop }) {
     const handleMenuClick = (action) => {
         setShowDropdown(false);
         switch (action) {
-            case 'profile':
+            case 'Well-being profile summary':
                 setProfileModal(true);
                 break;
-            case 'account':
+            case 'Profile':
                 setAccountModal(true);
+
+                break;
+            case 'subscription':
+                navigate('/subscription');
                 break;
             case 'Terms & Conditions':
                 navigate('/terms');
@@ -140,27 +144,27 @@ function LoginLogoutIcon({ handleStop }) {
                     {/* Menu Items */}
                     <div className="border-t border-[#333333]">
                         <button
-                            onClick={() => handleMenuClick('profile')}
+                            onClick={() => handleMenuClick('Well-being profile summary')}
                             className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <PersonOutlineRoundedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Well-being profile summary</span>
                         </button>
                         <button
-                            onClick={() => handleMenuClick('account')}
+                            onClick={() => handleMenuClick('Profile')}
                             className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <ManageAccountsOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Profile</span>
                         </button>
-                        {/* <button
-                            onClick={() => handleMenuClick('Terms & Conditions')}
+                        <button
+                            onClick={() => handleMenuClick('subscription')}
                             className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <InfoOutlinedIcon sx={{ fontSize: '1rem' }} />
-                            <span className="text-[13px]">Terms & Conditions</span>
+                            <span className="text-[13px]">Subscription</span>
                         </button>
-                        <button
+                        {/* <button
                             onClick={() => handleMenuClick('disclaimer')}
                             className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
