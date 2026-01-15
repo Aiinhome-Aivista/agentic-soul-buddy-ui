@@ -250,6 +250,11 @@ const AiChat = () => {
     setShowSubscriptionModal(true);
   };
 
+  const handleSubscriptionSuccess = async () => {
+    await checkSubscriptionStatus();
+    setShowSubscriptionModal(false);
+  };
+
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%]">
       <div className={`flex items-start justify-end gap-[1%] w-[100%] `}>
@@ -433,6 +438,7 @@ const AiChat = () => {
         <SubscriptionPlane
           OnClose={() => setShowSubscriptionModal(false)}
           showAllPlans={false}
+          onSuccess={handleSubscriptionSuccess}
         />
       )}
 

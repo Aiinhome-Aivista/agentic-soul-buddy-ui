@@ -5,7 +5,7 @@ import { devUrl1 } from "../../env/env";
 import { get_url1 } from "../../connection/connection";
 import { useNavigate } from "react-router-dom";
 
-const SubscriptionPlane = ({ OnClose, showAllPlans = true }) => {
+const SubscriptionPlane = ({ OnClose, showAllPlans = true, onSuccess }) => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,8 +78,13 @@ const SubscriptionPlane = ({ OnClose, showAllPlans = true }) => {
         console.log('Subscription successful:', response);
         // Store the new plan in localStorage
         localStorage.setItem('currentPlan', selectedPlanData?.planName || "Personalized Plan");
-        OnClose?.();
-        navigate('/home');
+
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          OnClose?.();
+          navigate('/home');
+        }
       } else {
         console.error('Subscription failed:', response?.message);
       }
@@ -109,124 +114,124 @@ const SubscriptionPlane = ({ OnClose, showAllPlans = true }) => {
             <div className="text-white/60">Loading plans...</div>
           </div>
         ) : (
-        <div className="space-y-3">
-          {plans.map((plan) => {
-            const isSelected = selectedPlan === plan.id;
-            const { currency, intPart, decPart } = splitPrice(plan.finalPrice);
+          <div className="space-y-3">
+            {plans.map((plan) => {
+              const isSelected = selectedPlan === plan.id;
+              const { currency, intPart, decPart } = splitPrice(plan.finalPrice);
 
-            return (
-              <button
-                type="button"
-                key={plan.id}
-                onClick={() => setSelectedPlan(plan.id)}
-                className={[
-                  "relative w-full text-left rounded-2xl",
-                  "border transition-all duration-300 ease-out",
-                  isSelected ? "border-white/90 shadow-lg shadow-white/10" : "border-white/10",
-                  "bg-white/[0.05]",
-                  "hover:scale-[1.02] hover:bg-white/[0.08]",
-                  !isSelected && "hover:border-white/20",
-                  "active:scale-[0.98]",
-                ].join(" ")}
-              >
-                <div className="flex items-center justify-between h-18 gap-3 p-3">
-                  {/* Left: radio + text */}
-                  <div className="flex items-center gap-3 min-w-0 h-full">
-                    {/* radio */}
-                    <div className="flex flex-col justify-between h-full ">
-                      <div
-                        className={[
-                          "grid place-items-center w-[18px] h-[18px] rounded-full border",
-                          isSelected ? "border-white/90" : "border-white/30",
-                        ].join(" ")}
-                      >
-                        <span
+              return (
+                <button
+                  type="button"
+                  key={plan.id}
+                  onClick={() => setSelectedPlan(plan.id)}
+                  className={[
+                    "relative w-full text-left rounded-2xl",
+                    "border transition-all duration-300 ease-out",
+                    isSelected ? "border-white/90 shadow-lg shadow-white/10" : "border-white/10",
+                    "bg-white/[0.05]",
+                    "hover:scale-[1.02] hover:bg-white/[0.08]",
+                    !isSelected && "hover:border-white/20",
+                    "active:scale-[0.98]",
+                  ].join(" ")}
+                >
+                  <div className="flex items-center justify-between h-18 gap-3 p-3">
+                    {/* Left: radio + text */}
+                    <div className="flex items-center gap-3 min-w-0 h-full">
+                      {/* radio */}
+                      <div className="flex flex-col justify-between h-full ">
+                        <div
                           className={[
-                            "w-[9px] h-[9px] rounded-full transition-opacity",
-                            isSelected
-                              ? "bg-white opacity-100"
-                              : "bg-white opacity-0",
+                            "grid place-items-center w-[18px] h-[18px] rounded-full border",
+                            isSelected ? "border-white/90" : "border-white/30",
                           ].join(" ")}
-                        />
+                        >
+                          <span
+                            className={[
+                              "w-[9px] h-[9px] rounded-full transition-opacity",
+                              isSelected
+                                ? "bg-white opacity-100"
+                                : "bg-white opacity-0",
+                            ].join(" ")}
+                          />
+                        </div>
+                        {plan.highlighted && isSelected && (
+                          <img
+                            src={crown}
+                            alt="crown"
+                            className="w-5 h-5"
+                          />
+                        )}
                       </div>
-                      {plan.highlighted && isSelected && (
-                        <img
-                          src={crown}
-                          alt="crown"
-                          className="w-5 h-5"
-                        />
-                      )}
+
+                      <div className="min-w-0 h-full">
+                        <div
+                          className={[
+                            "text-[12px] tracking-[0.22em] font-semibold",
+                            isSelected ? "text-white/90" : "text-white/35",
+                          ].join(" ")}
+                        >
+                          {plan.title}
+                        </div>
+
+                        {/* small crossed + final price line like reference */}
+                        {(plan.originalPrice || plan.finalPrice) && (
+                          <div className="mt-1 text-[11px] text-white/30">
+                            {plan.originalPrice && (
+                              <span className="line-through mr-2">
+                                {plan.originalPrice}
+                              </span>
+                            )}
+                            {plan.finalPrice && <span>{plan.finalPrice}</span>}
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="min-w-0 h-full">
+                    {/* Right: price badge */}
+                    <div
+                      className={[
+                        "shrink-0 flex gap-2 h-full rounded-xl px-2.5 py-4 text-center",
+                        isSelected ? "bg-white/90" : "bg-white/10",
+                      ].join(" ")}
+                    >
                       <div
                         className={[
-                          "text-[12px] tracking-[0.22em] font-semibold",
-                          isSelected ? "text-white/90" : "text-white/35",
+                          "leading-none font-bold",
+                          isSelected ? "text-[#656265]" : "text-[#D9D9D9B2]",
                         ].join(" ")}
                       >
-                        {plan.title}
-                      </div>
-
-                      {/* small crossed + final price line like reference */}
-                      {(plan.originalPrice || plan.finalPrice) && (
-                        <div className="mt-1 text-[11px] text-white/30">
-                          {plan.originalPrice && (
-                            <span className="line-through mr-2">
-                              {plan.originalPrice}
-                            </span>
-                          )}
-                          {plan.finalPrice && <span>{plan.finalPrice}</span>}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Right: price badge */}
-                  <div
-                    className={[
-                      "shrink-0 flex gap-2 h-full rounded-xl px-2.5 py-4 text-center",
-                      isSelected ? "bg-white/90" : "bg-white/10",
-                    ].join(" ")}
-                  >
-                    <div
-                      className={[
-                        "leading-none font-bold",
-                        isSelected ? "text-[#656265]" : "text-[#D9D9D9B2]",
-                      ].join(" ")}
-                    >
-                      <span className="text-[22px]">
-                        {currency}
-                        {intPart}
-                      </span>
-                      {decPart && (
-                        <span className="align-top text-[10px] font-semibold ml-[1px]">
-                          {decPart}
+                        <span className="text-[22px]">
+                          {currency}
+                          {intPart}
                         </span>
-                      )}
-                    </div>
-                    <div
-                      className={[
-                        "flex flex-col justify-center text-[10px]",
-                        isSelected ? "text-black/60" : "text-[#D9D9D9B2]",
-                      ].join(" ")}
-                    >
-                      <div>{plan.usage}</div>
-                      <div>{plan.validityDays} days</div>
+                        {decPart && (
+                          <span className="align-top text-[10px] font-semibold ml-[1px]">
+                            {decPart}
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        className={[
+                          "flex flex-col justify-center text-[10px]",
+                          isSelected ? "text-black/60" : "text-[#D9D9D9B2]",
+                        ].join(" ")}
+                      >
+                        <div>{plan.usage}</div>
+                        <div>{plan.validityDays} days</div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Discount badge */}
-                {plan.discount && plan.discount !== "0%" && (
-                  <div className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                    {plan.discount} OFF
-                  </div>
-                )}
-              </button>
-            );
-          })}
-        </div>
+                  {/* Discount badge */}
+                  {plan.discount && plan.discount !== "0%" && (
+                    <div className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      {plan.discount} OFF
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         )}
 
         {/* Continue button (disabled look like screenshot can be done via opacity) */}
@@ -235,10 +240,10 @@ const SubscriptionPlane = ({ OnClose, showAllPlans = true }) => {
           disabled={loading || !selectedPlan}
           className={`mt-5 w-full mb-[20vh] rounded-xl py-2.5 text-[16px] font-semibold
                      border border-white/10 transition-all duration-300 ease-out
-                     ${loading || !selectedPlan 
-                       ? 'bg-[#D9D9D9]/50 text-black/50 cursor-not-allowed' 
-                       : 'bg-[#D9D9D9] text-black/95 hover:bg-white hover:shadow-lg hover:shadow-white/20 active:scale-[0.97] transform hover:scale-[1.01]'
-                     }`}
+                     ${loading || !selectedPlan
+              ? 'bg-[#D9D9D9]/50 text-black/50 cursor-not-allowed'
+              : 'bg-[#D9D9D9] text-black/95 hover:bg-white hover:shadow-lg hover:shadow-white/20 active:scale-[0.97] transform hover:scale-[1.01]'
+            }`}
         >
           Continue
         </button>
