@@ -144,16 +144,16 @@ function LoginLogoutIcon({ handleStop }) {
                             className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <PersonOutlineRoundedIcon sx={{ fontSize: '1rem' }} />
-                            <span className="text-[13px]">Profile</span>
+                            <span className="text-[13px]">Well-being profile summary</span>
                         </button>
                         <button
                             onClick={() => handleMenuClick('account')}
                             className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
                             <ManageAccountsOutlinedIcon sx={{ fontSize: '1rem' }} />
-                            <span className="text-[13px]">Account</span>
+                            <span className="text-[13px]">Profile</span>
                         </button>
-                        <button
+                        {/* <button
                             onClick={() => handleMenuClick('Terms & Conditions')}
                             className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
                         >
@@ -166,7 +166,7 @@ function LoginLogoutIcon({ handleStop }) {
                         >
                             <InfoOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Disclaimer</span>
-                        </button>
+                        </button> */}
                         <button
                             onClick={() => handleMenuClick('faq')}
                             className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer "
