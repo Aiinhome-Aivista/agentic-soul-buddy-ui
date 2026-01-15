@@ -31,7 +31,7 @@ export const apiService = async ({
     const responseData = isJson ? await response.json() : await response.text();
 
     if (!response.ok) {
-      throw new Error(responseData?.message || "API Error");
+      throw new Error(responseData?.message || responseData?.error || "API Error");
     }
 
     return responseData;
