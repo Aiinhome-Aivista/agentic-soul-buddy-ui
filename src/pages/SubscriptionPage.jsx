@@ -75,7 +75,7 @@ export default function SubscriptionPage() {
             if (response && response.status === 'success') {
                 toast.current.show({ severity: 'success', summary: 'Success', detail: `You have switched to the ${plan.planName}.`, life: 3000 });
                 setCurrentPlanId(plan.id);
-                localStorage.setItem('currentPlan', plan.id); // Update local storage
+                localStorage.setItem('currentPlan', plan.planName); // Update local storage
             } else {
                 console.error("Upgrade failed", response);
                 toast.current.show({ severity: 'error', summary: 'Error', detail: response?.message || "Failed to upgrade plan.", life: 3000 });

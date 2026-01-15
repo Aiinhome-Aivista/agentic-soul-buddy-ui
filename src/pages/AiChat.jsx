@@ -288,46 +288,59 @@ const AiChat = () => {
 
         <div className="flex items-center gap-2">
           {isLoggedIn && currentPlan && (
-            <div
-              className="relative h-[2.5rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] flex items-center gap-1 cursor-pointer"
-              onMouseEnter={() => setIsPlanHovered(true)}
-              onMouseLeave={() => setIsPlanHovered(false)}
-            >
-              {/* <span className="text-[#D9D9D9]">✨</span> */}
-              <span>{currentPlan}</span>
+            (() => {
+              const details = getPlanDetails(currentPlan);
+              const isGold = details?.title === 'gold';
+              const isSilver = details?.title === 'silver';
 
-              {isPlanHovered && (
-                <div className="absolute top-full right-0 mt-2 w-48 p-3 rounded-xl bg-[#1a1a1a] border border-white/10 shadow-xl backdrop-blur-md z-50 text-left">
-                  {(() => {
-                    const details = getPlanDetails(currentPlan);
-                    if (!details) return null;
-                    return (
-                      <div className="flex flex-col gap-2">
-                        <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-1">
-                          <span className="text-white font-semibold text-sm">{details.planName}</span>
-                          {/* {details.discount !== "0%" && <span className="text-[0.65rem] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">{details.discount} OFF</span>} */}
-                        </div>
+              const badgeStyle = isGold
+                ? "border-yellow-500/50 bg-yellow-500/10 text-yellow-200 shadow-[0_0_10px_rgba(234,179,8,0.2)]"
+                : isSilver
+                  ? "border-gray-300/50 bg-gray-300/10 text-gray-200 shadow-[0_0_10px_rgba(209,213,219,0.2)]"
+                  : "border-[#333333] bg-[#474747]/22 text-[#7D7E7F]";
 
-                        <div className="space-y-1.5">
-                          <div className="flex justify-between text-xs">
-                            <span className="text-gray-400">Price</span>
-                            <span className="text-white font-medium">₹{details.finalPrice}</span>
+              return (
+                <div
+                  className={`relative h-[2.5rem] px-3 rounded-[1rem] border-2 flex items-center gap-1 cursor-pointer transition-all duration-300 ${badgeStyle}`}
+                  onMouseEnter={() => setIsPlanHovered(true)}
+                  onMouseLeave={() => setIsPlanHovered(false)}
+                >
+                  {/* <span className="text-[#D9D9D9]">✨</span> */}
+                  <span className="font-medium text-[0.75rem]">{currentPlan}</span>
+
+                  {isPlanHovered && (
+                    <div className="absolute top-full right-0 mt-2 w-48 p-3 rounded-xl bg-[#1a1a1a] border border-white/10 shadow-xl backdrop-blur-md z-50 text-left">
+                      {(() => {
+                        if (!details) return null;
+                        return (
+                          <div className="flex flex-col gap-2">
+                            <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-1">
+                              <span className="text-white font-semibold text-sm">{details.planName}</span>
+                              {/* {details.discount !== "0%" && <span className="text-[0.65rem] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">{details.discount} OFF</span>} */}
+                            </div>
+
+                            <div className="space-y-1.5">
+                              <div className="flex justify-between text-xs">
+                                <span className="text-gray-400">Price</span>
+                                <span className="text-white font-medium">₹{details.finalPrice}</span>
+                              </div>
+                              <div className="flex justify-between text-xs">
+                                <span className="text-gray-400">Usage</span>
+                                <span className="text-white font-medium">{details.usage}</span>
+                              </div>
+                              <div className="flex justify-between text-xs">
+                                <span className="text-gray-400">Validity</span>
+                                <span className="text-white font-medium">{details.validityDays} Days</span>
+                              </div>
+                            </div>
                           </div>
-                          <div className="flex justify-between text-xs">
-                            <span className="text-gray-400">Usage</span>
-                            <span className="text-white font-medium">{details.usage}</span>
-                          </div>
-                          <div className="flex justify-between text-xs">
-                            <span className="text-gray-400">Validity</span>
-                            <span className="text-white font-medium">{details.validityDays} Days</span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })()}
+                        );
+                      })()}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              )
+            })()
           )}
           {!isLoggedIn && (
             <button
@@ -441,7 +454,7 @@ const AiChat = () => {
         isRecording={isRecording}
         setIsRecording={setIsRecording}
       />
-     
+
       <audio
         crossOrigin="anonymous"
         onPlay={() => setIsPlaying(true)}
