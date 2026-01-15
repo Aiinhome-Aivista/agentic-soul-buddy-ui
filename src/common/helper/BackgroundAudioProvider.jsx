@@ -7,7 +7,7 @@ export default function BackgroundAudioProvider({ children }) {
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
-  const [volume, setVol] = useState(0.6); // desired target volume after fade-in
+  const [volume, setVol] = useState(0.2); // desired target volume after fade-in
 
   // Create one <audio> element and keep it for the app lifetime
   useEffect(() => {

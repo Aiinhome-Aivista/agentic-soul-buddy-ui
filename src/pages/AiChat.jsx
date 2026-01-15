@@ -16,6 +16,7 @@ import DisclaimerModal from "../common/modal/DisclaimerModal";
 import AccountModal from "../common/modal/AccountModal";
 import SubscriptionPlane from "../common/modal/SubscribtionPlane";
 import { useMicVolume } from "../common/hooks/useMicVolume";
+import { BackgroundAudioContext } from "../common/helper/BackgroundAudioProvider";
 
 const getPlanDetails = (planName) => {
   if (!planName) return null;
@@ -255,67 +256,97 @@ const AiChat = () => {
     setShowSubscriptionModal(false);
   };
 
+  /* New context usage for background audio */
+  const { playing: bgPlaying, play: bgPlay, pause: bgPause } = useContext(BackgroundAudioContext);
+
+  const toggleBackgroundAudio = () => {
+    if (bgPlaying) {
+      bgPause();
+    } else {
+      bgPlay();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%]">
-      <div className={`flex items-start justify-end gap-[1%] w-[100%] `}>
-        {isLoggedIn && currentPlan && (
-          <div
-            className="relative h-full px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] flex items-center gap-1 cursor-pointer"
-            onMouseEnter={() => setIsPlanHovered(true)}
-            onMouseLeave={() => setIsPlanHovered(false)}
-          >
-            {/* <span className="text-[#D9D9D9]">✨</span> */}
-            <span>{currentPlan}</span>
+      <div className={`flex items-start justify-between gap-[1%] w-[100%] `}>
 
-            {isPlanHovered && (
-              <div className="absolute top-full right-0 mt-2 w-48 p-3 rounded-xl bg-[#1a1a1a] border border-white/10 shadow-xl backdrop-blur-md z-50 text-left">
-                {(() => {
-                  const details = getPlanDetails(currentPlan);
-                  if (!details) return null;
-                  return (
-                    <div className="flex flex-col gap-2">
-                      <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-1">
-                        <span className="text-white font-semibold text-sm">{details.planName}</span>
-                        {/* {details.discount !== "0%" && <span className="text-[0.65rem] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">{details.discount} OFF</span>} */}
-                      </div>
+        {/* Background Audio Toggle */}
+        {/* Background Audio Toggle Switch */}
+        <div
+          onClick={toggleBackgroundAudio}
+          className="h-[2.5rem] px-3 pr-2 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 cursor-pointer flex items-center gap-3 hover:bg-[#474747]/40 transition-colors"
+        >
+          <span className="text-[0.75rem] font-medium text-[#7D7E7F]">Background Sound</span>
 
-                      <div className="space-y-1.5">
-                        <div className="flex justify-between text-xs">
-                          <span className="text-gray-400">Price</span>
-                          <span className="text-white font-medium">₹{details.finalPrice}</span>
-                        </div>
-                        <div className="flex justify-between text-xs">
-                          <span className="text-gray-400">Usage</span>
-                          <span className="text-white font-medium">{details.usage}</span>
-                        </div>
-                        <div className="flex justify-between text-xs">
-                          <span className="text-gray-400">Validity</span>
-                          <span className="text-white font-medium">{details.validityDays} Days</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
-              </div>
-            )}
+          {/* Switch Track */}
+          <div className={`relative w-8 h-4 rounded-full transition-colors duration-300 ${bgPlaying ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
+            {/* Switch Dot */}
+            <div className={`absolute top-0.5 w-3 h-3 rounded-full shadow-sm transform transition-all duration-300 ${bgPlaying ? 'translate-x-4 bg-green-500' : 'translate-x-0.5 bg-red-500'}`} />
           </div>
-        )}
-        {!isLoggedIn && (
-          <button
-            onClick={() => navigate("/questionnaire")}
-            className="h-[1.7rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] hover:bg-[#474747]/40 transition-colors cursor-pointer"
-          >
-            Sign Up
-          </button>
-        )}
-        {/* <button
+        </div>
+
+        <div className="flex items-center gap-2">
+          {isLoggedIn && currentPlan && (
+            <div
+              className="relative h-[2.5rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] flex items-center gap-1 cursor-pointer"
+              onMouseEnter={() => setIsPlanHovered(true)}
+              onMouseLeave={() => setIsPlanHovered(false)}
+            >
+              {/* <span className="text-[#D9D9D9]">✨</span> */}
+              <span>{currentPlan}</span>
+
+              {isPlanHovered && (
+                <div className="absolute top-full right-0 mt-2 w-48 p-3 rounded-xl bg-[#1a1a1a] border border-white/10 shadow-xl backdrop-blur-md z-50 text-left">
+                  {(() => {
+                    const details = getPlanDetails(currentPlan);
+                    if (!details) return null;
+                    return (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-1">
+                          <span className="text-white font-semibold text-sm">{details.planName}</span>
+                          {/* {details.discount !== "0%" && <span className="text-[0.65rem] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">{details.discount} OFF</span>} */}
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <div className="flex justify-between text-xs">
+                            <span className="text-gray-400">Price</span>
+                            <span className="text-white font-medium">₹{details.finalPrice}</span>
+                          </div>
+                          <div className="flex justify-between text-xs">
+                            <span className="text-gray-400">Usage</span>
+                            <span className="text-white font-medium">{details.usage}</span>
+                          </div>
+                          <div className="flex justify-between text-xs">
+                            <span className="text-gray-400">Validity</span>
+                            <span className="text-white font-medium">{details.validityDays} Days</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+          )}
+          {!isLoggedIn && (
+            <button
+              onClick={() => navigate("/questionnaire")}
+              className="h-[2.5rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] hover:bg-[#474747]/40 transition-colors cursor-pointer"
+            >
+              Sign Up
+            </button>
+          )}
+          {/* <button
           onClick={() => setShowProfile(true)}
           className="h-[1.7rem] px-3 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 text-[0.75rem] font-medium text-[#7D7E7F] hover:bg-[#474747]/40 transition-colors"
         >
           Profile
         </button> */}
-        <LoginLogoutIcon />
+          <LoginLogoutIcon />
+        </div>
       </div>
+
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
         <p className="text-4xl font-bold text-white pt-[12%]  cursor-default">
           Soul Junction
@@ -424,56 +455,64 @@ const AiChat = () => {
       {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
       {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
       {signupModal2 && <SignupModal2 OnClose={() => setSignupModal2(false)} />}
-      {showProfile && (
-        <WellBeingProfile onClose={() => setShowProfile(false)} />
-      )}
-      {disclaimerModal && (
-        <DisclaimerModal
-          OnClose={() => setDisclaimerModal(false)}
-          onConfirm={handleDisclaimerConfirm}
-        />
-      )}
+      {
+        showProfile && (
+          <WellBeingProfile onClose={() => setShowProfile(false)} />
+        )
+      }
+      {
+        disclaimerModal && (
+          <DisclaimerModal
+            OnClose={() => setDisclaimerModal(false)}
+            onConfirm={handleDisclaimerConfirm}
+          />
+        )
+      }
       {accountModal && <AccountModal OnClose={() => setAccountModal(false)} />}
-      {showSubscriptionModal && (
-        <SubscriptionPlane
-          OnClose={() => setShowSubscriptionModal(false)}
-          showAllPlans={false}
-          onSuccess={handleSubscriptionSuccess}
-        />
-      )}
+      {
+        showSubscriptionModal && (
+          <SubscriptionPlane
+            OnClose={() => setShowSubscriptionModal(false)}
+            showAllPlans={false}
+            onSuccess={handleSubscriptionSuccess}
+          />
+        )
+      }
 
       {/* Limit Reached Modal */}
-      {showLimitReachedModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 max-w-sm w-[90%] text-center animate-slideUp">
-            <div className="text-4xl mb-4">⏰</div>
-            <h3 className="text-white text-xl font-semibold mb-2">
-              Plan Limit Reached
-            </h3>
-            <p className="text-white/60 text-sm mb-6">
-              You have reached your daily usage limit. Upgrade your plan to
-              continue your journey.
-            </p>
-            <div className="flex flex-col gap-3">
-              <button
-                onClick={handleUpgradePlan}
-                className="w-full py-3 rounded-xl bg-[#D9D9D9] text-black font-semibold
+      {
+        showLimitReachedModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fadeIn">
+            <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 max-w-sm w-[90%] text-center animate-slideUp">
+              <div className="text-4xl mb-4">⏰</div>
+              <h3 className="text-white text-xl font-semibold mb-2">
+                Plan Limit Reached
+              </h3>
+              <p className="text-white/60 text-sm mb-6">
+                You have reached your daily usage limit. Upgrade your plan to
+                continue your journey.
+              </p>
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={handleUpgradePlan}
+                  className="w-full py-3 rounded-xl bg-[#D9D9D9] text-black font-semibold
                            hover:bg-white transition-all duration-300"
-              >
-                Upgrade Plan
-              </button>
-              <button
-                onClick={() => setShowLimitReachedModal(false)}
-                className="w-full py-3 rounded-xl border border-white/20 text-white/70 font-medium
+                >
+                  Upgrade Plan
+                </button>
+                <button
+                  onClick={() => setShowLimitReachedModal(false)}
+                  className="w-full py-3 rounded-xl border border-white/20 text-white/70 font-medium
                            hover:bg-white/10 transition-all duration-300"
-              >
-                Maybe Later
-              </button>
+                >
+                  Maybe Later
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 };
 

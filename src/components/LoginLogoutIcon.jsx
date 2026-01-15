@@ -92,7 +92,7 @@ function LoginLogoutIcon({ handleStop }) {
             <div className="relative" ref={dropdownRef}>
                 {/* Header - Name Section (always visible) */}
                 <div
-                    className={`flex items-center gap-2 p-1 rounded-2xl border-2 border-[#333333] bg-[#474747]/22 backdrop-blur-md cursor-pointer hover:bg-[#474747]/40 transition-all duration-300 ${showDropdown ? 'opacity-0' : 'opacity-100'
+                    className={`flex items-center gap-2 p-1 h-[2.5rem] rounded-2xl border-2 border-[#333333] bg-[#474747]/22 backdrop-blur-md cursor-pointer hover:bg-[#474747]/40 transition-all duration-300 ${showDropdown ? 'opacity-0' : 'opacity-100'
                         }`}
                     onClick={() => setShowDropdown(!showDropdown)}
                 >
@@ -198,7 +198,7 @@ function LoginLogoutIcon({ handleStop }) {
     // When logged out, show sign in toggle
     return (
         <div
-            className="relative flex items-center gap-2 w-[4.8rem] h-[1.7rem] overflow-hidden rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 px-1.5 cursor-pointer"
+            className="relative flex items-center gap-2 w-[4.8rem] h-[2.5rem] overflow-hidden rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 px-1.5 cursor-pointer"
             onClick={handleSignIn}>
             <span className="invisible text-[0.75rem] font-medium">.</span>
             <span className="ml-auto text-[0.75rem] font-medium text-[#7D7E7F] pointer-events-none">
@@ -206,7 +206,7 @@ function LoginLogoutIcon({ handleStop }) {
             </span>
             {/* Knob */}
             <div
-                className="absolute top-[0.25rem] left-[0.25rem] h-[1rem] w-[1rem] rounded-full bg-[#d9d9d9]/54 transition-transform duration-300 ease-in-out pointer-events-none"
+                className="absolute left-[0.25rem] h-[1rem] w-[1rem] rounded-full bg-[#d9d9d9]/54 transition-transform duration-300 ease-in-out pointer-events-none"
             />
         </div>
     );
