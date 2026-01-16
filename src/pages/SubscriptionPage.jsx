@@ -14,7 +14,7 @@ export default function SubscriptionPage() {
     const [plans, setPlans] = useState([]);
     const [currentPlanId, setCurrentPlanId] = useState(null);
     const [selectedPlanId, setSelectedPlanId] = useState(null);
-    
+
     // Check if this is a new signup flow
     const isNewSignup = location.state?.isNewSignup || false;
 
@@ -29,10 +29,10 @@ export default function SubscriptionPage() {
                 if (response && response.status === 'success') {
                     // For new signup, show all plans including trial
                     // For existing users (upgrade), filter out trial plans
-                    const filteredPlans = isNewSignup 
-                        ? response.data 
+                    const filteredPlans = isNewSignup
+                        ? response.data
                         : response.data.filter(p => !p.isTrial);
-                    
+
                     setPlans(filteredPlans);
 
                     // Check local storage for current plan (only for existing users)
@@ -51,7 +51,7 @@ export default function SubscriptionPage() {
                             }
                         }
                     }
-                    
+
                     // For new signup, select trial plan by default if available
                     if (isNewSignup) {
                         const trialPlan = filteredPlans.find(p => p.isTrial);
@@ -71,12 +71,12 @@ export default function SubscriptionPage() {
     const handleUpgrade = (plan) => {
         navigate('/payment', { state: { plan, isNewSignup } });
     };
-    
+
     // Handle plan selection for new signup flow
     const handleSelectPlan = (plan) => {
         setSelectedPlanId(plan.id);
     };
-    
+
     // Handle continue button for new signup
     const handleContinue = () => {
         const selectedPlan = plans.find(p => p.id === selectedPlanId);
@@ -92,20 +92,20 @@ export default function SubscriptionPage() {
             }
         }
     };
-    
+
     // Start free trial without payment
     const startFreeTrial = async (plan) => {
         setLoading(true);
         try {
             const userId = localStorage.getItem('userId');
             const userName = localStorage.getItem('name');
-            
+
             if (!userId) {
                 toast.current.show({ severity: 'error', summary: 'Error', detail: 'User session not found.', life: 3000 });
                 setLoading(false);
                 return;
             }
-            
+
             const payload = {
                 user_id: userId,
                 plan_name: plan.planName,
@@ -125,13 +125,13 @@ export default function SubscriptionPage() {
                     currency: 'INR'
                 }
             };
-            
+
             const response = await apiService({
                 url: POST_url1.start_subscription,
                 method: 'POST',
                 data: payload
             });
-            
+
             if (response && (response.status === 'PAID' || response.status === 'ACTIVE')) {
                 localStorage.setItem('currentPlan', plan.planName);
                 toast.current.show({ severity: 'success', summary: 'Success', detail: 'Free trial activated successfully!', life: 2000 });
@@ -154,19 +154,62 @@ export default function SubscriptionPage() {
             <Toast ref={toast} className="custom-toast-message" position="top-right" />
 
             {/* Header with Back Button */}
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center justify-center mb-8 relative">
                 {!isNewSignup && (
                     <button
                         onClick={() => navigate(-1)}
-                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+                        className="absolute left-0 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
                     >
                         <ArrowBackRoundedIcon sx={{ fontSize: "1.5rem" }} />
                     </button>
                 )}
-                <h1 className="text-3xl font-bold text-white tracking-wide">
+                <h1 className="text-3xl font-bold text-white tracking-wide text-center">
                     {isNewSignup ? 'Choose Your Plan' : 'Subscription Plans'}
                 </h1>
             </div>
+
+            {/* Current Plan Card for Upgrade Flow */}
+            {!isNewSignup && currentPlanId && (
+                <div className="w-full max-w-6xl mx-auto mb-6">
+                    <div className="glass-card rounded-2xl p-6 border border-green-500/30 bg-green-500/5">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
+                                    <span className="text-green-400 text-xl">✓</span>
+                                </div>
+                                <div>
+                                    <p className="text-white/60 text-sm">Your Current Plan</p>
+                                    <h3 className="text-xl font-bold text-white">
+                                        {plans.find(p => p.id === currentPlanId)?.planName || localStorage.getItem('currentPlan')}
+                                    </h3>
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap gap-6 text-sm">
+                                <div>
+                                    <p className="text-white/50">Validity</p>
+                                    <p className="text-white font-medium">{plans.find(p => p.id === currentPlanId)?.validityDays || '—'} Days</p>
+                                </div>
+                                <div>
+                                    <p className="text-white/50">Usage</p>
+                                    <p className="text-white font-medium">{plans.find(p => p.id === currentPlanId)?.usage || '—'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-white/50">Status</p>
+                                    <p className="text-green-400 font-medium">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Section Title for Upgrade */}
+            {!isNewSignup && (
+                <div className="w-full max-w-6xl mx-auto mb-2 text-center">
+                    <h2 className="text-xl font-semibold text-white/80">Upgrade Your Plan</h2>
+                    <p className="text-white/50 text-sm mt-1">Choose a plan that suits your needs</p>
+                </div>
+            )}
 
             {/* Main Content Card */}
             <div className="glass-card w-full max-w-6xl mx-auto rounded-3xl p-6 md:p-10 flex flex-col gap-8">
@@ -184,36 +227,33 @@ export default function SubscriptionPage() {
                                     <div
                                         key={plan.id}
                                         onClick={() => isNewSignup && handleSelectPlan(plan)}
-                                        className={`relative flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 transform hover:-translate-y-1 ${
-                                            isNewSignup ? 'cursor-pointer' : ''
-                                        } ${
-                                            isCurrent
+                                        className={`relative flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 transform hover:-translate-y-1 ${isNewSignup ? 'cursor-pointer' : ''
+                                            } ${isCurrent
                                                 ? "bg-white/10 border-green-500/50 shadow-[0_0_25px_rgba(34,197,94,0.15)]"
                                                 : isSelected
                                                     ? "bg-white/15 border-white/50 shadow-[0_0_25px_rgba(255,255,255,0.15)]"
                                                     : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 hover:shadow-xl"
-                                        }`}
+                                            }`}
                                     >
                                         {/* Selection Radio for New Signup */}
                                         {isNewSignup && (
                                             <div className="absolute top-4 right-4">
-                                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                                    isSelected ? 'border-white bg-white' : 'border-white/30'
-                                                }`}>
+                                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-white bg-white' : 'border-white/30'
+                                                    }`}>
                                                     {isSelected && (
                                                         <div className="w-2.5 h-2.5 rounded-full bg-black"></div>
                                                     )}
                                                 </div>
                                             </div>
                                         )}
-                                        
+
                                         {/* Discount Badge */}
                                         {plan.discount !== "0%" && (
                                             <div className="absolute top-0 left-0 bg-gradient-to-r from-green-500 to-green-600 text-black text-xs font-bold px-3 py-1.5 rounded-br-xl rounded-tl-xl shadow-md">
                                                 {plan.discount} OFF
                                             </div>
                                         )}
-                                        
+
                                         {/* Trial Badge */}
                                         {plan.isTrial && (
                                             <div className="absolute top-0 left-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-br-xl rounded-tl-xl shadow-md">
@@ -280,18 +320,17 @@ export default function SubscriptionPage() {
                                 );
                             })}
                         </div>
-                        
+
                         {/* Continue Button for New Signup */}
                         {isNewSignup && (
                             <div className="flex justify-center mt-4">
                                 <button
                                     onClick={handleContinue}
                                     disabled={!selectedPlanId || loading}
-                                    className={`px-12 py-4 rounded-xl font-bold text-lg tracking-wide transition-all transform ${
-                                        selectedPlanId && !loading
+                                    className={`px-12 py-4 rounded-xl font-bold text-lg tracking-wide transition-all transform ${selectedPlanId && !loading
                                             ? 'bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-white/20 active:scale-95 hover:scale-[1.02]'
                                             : 'bg-white/20 text-white/50 cursor-not-allowed'
-                                    }`}
+                                        }`}
                                 >
                                     {loading ? 'Processing...' : 'Continue'}
                                 </button>

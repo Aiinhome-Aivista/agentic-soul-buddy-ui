@@ -564,7 +564,7 @@ export default function PaymentPage() {
                             <button
                                 onClick={processPayment}
                                 disabled={loading}
-                                className="w-full py-4 rounded-xl bg-white/20 hover:bg-white/80 text-black font-bold text-lg  transition-all transform active:scale-[0.99] flex items-center justify-center gap-3"
+                                className="w-full py-4 rounded-xl bg-white/90 hover:bg-white/100 text-black font-bold text-lg  transition-all transform active:scale-[0.99] flex items-center justify-center gap-3"
                             >
                                 {loading ? (
                                     <>
