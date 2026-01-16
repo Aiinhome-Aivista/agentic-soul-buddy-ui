@@ -9,6 +9,8 @@ import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { Toast } from 'primereact/toast';
+import { apiService } from '../service/apiService';
+import { POST_url1 } from '../connection/connection';
 import '../styles/PaymentPage.css';
 import '../styles/modal.css';
 
@@ -41,6 +43,11 @@ export default function PaymentPage() {
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [transactionId, setTransactionId] = useState(null);
     const [paymentDate, setPaymentDate] = useState(null);
+    const [validTill, setValidTill] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState(null);
+    
+    // Check if this is a fresh signup flow
+    const isNewSignup = location.state?.isNewSignup || false;
 
     // Billing Address State
     const [billingDetails, setBillingDetails] = useState({
@@ -103,7 +110,7 @@ export default function PaymentPage() {
     };
     const validateCVV = (cvv) => /^\d{3}$/.test(cvv);
 
-    const processPayment = () => {
+    const processPayment = async () => {
         // Billing Validation
         const { fullName, email, addressLine1, city, state, zipCode } = billingDetails;
 
@@ -150,14 +157,66 @@ export default function PaymentPage() {
 
         setLoading(true);
 
-        // Simulate API call
-        setTimeout(() => {
+        try {
+            const userId = localStorage.getItem('userId');
+            const userName = localStorage.getItem('name');
+            
+            if (!userId) {
+                toast.current.show({ severity: 'error', summary: 'Error', detail: 'User session not found. Please login again.', life: 3000 });
+                setLoading(false);
+                return;
+            }
+
+            // Determine payment method string
+            let paymentMethodStr = 'CARD';
+            if (activeTab === 'upi') paymentMethodStr = 'UPI';
+            else if (activeTab === 'vpa') paymentMethodStr = 'VPA';
+
+            const payload = {
+                user_id: userId,
+                plan_name: planDetails.planName,
+                email: billingDetails.email,
+                full_name: billingDetails.fullName || userName,
+                billing: {
+                    address_line1: billingDetails.addressLine1,
+                    address_line2: billingDetails.addressLine2 || '',
+                    city: billingDetails.city,
+                    state: billingDetails.state,
+                    zip_code: billingDetails.zipCode,
+                    country: billingDetails.country
+                },
+                payment: {
+                    method: paymentMethodStr,
+                    amount: planDetails.finalPrice,
+                    currency: 'INR'
+                }
+            };
+
+            const response = await apiService({
+                url: POST_url1.start_subscription,
+                method: 'POST',
+                data: payload
+            });
+
+            if (response && response.status === 'PAID') {
+                // Store the current plan in localStorage
+                localStorage.setItem('currentPlan', planDetails.planName);
+                
+                setTransactionId(response.transaction_id);
+                setPaymentDate(response.date);
+                setValidTill(response.valid_till);
+                setPaymentMethod(response.payment_method);
+                setPaymentSuccess(true);
+                toast.current.show({ severity: 'success', summary: 'Payment Successful', detail: 'Your subscription is now active!', life: 3000 });
+            } else {
+                toast.current.show({ severity: 'error', summary: 'Payment Failed', detail: response?.message || 'Payment could not be processed. Please try again.', life: 3000 });
+            }
+        } catch (error) {
+            console.error('Payment error:', error);
+            toast.current.show({ severity: 'error', summary: 'Payment Error', detail: 'An unexpected error occurred. Please try again.', life: 3000 });
+        } finally {
             setLoading(false);
-            setTransactionId(`TXN-${Math.floor(Math.random() * 100000000)}`);
-            setPaymentDate(new Date().toLocaleString());
-            setPaymentSuccess(true);
-            toast.current.show({ severity: 'success', summary: 'Payment Successful', detail: 'Your subscription is now active!', life: 3000 });
-        }, 2000);
+        }
     };
 
     const downloadReceipt = () => {
@@ -213,8 +272,14 @@ export default function PaymentPage() {
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-gray-600">Payment Method</span>
-                                <span className="font-medium capitalize">{activeTab === 'card' ? `Card ending in ${cardDetails.number.slice(-4)}` : activeTab === 'mock' ? 'UPI' : activeTab.toUpperCase()}</span>
+                                <span className="font-medium capitalize">{paymentMethod || (activeTab === 'card' ? `Card ending in ${cardDetails.number.slice(-4)}` : activeTab.toUpperCase())}</span>
                             </div>
+                            {validTill && (
+                                <div className="flex justify-between">
+                                    <span className="text-gray-600">Valid Till</span>
+                                    <span className="font-medium text-green-600">{validTill}</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="border-t border-dashed border-gray-300 pt-4 flex justify-between items-center text-lg font-bold">
@@ -235,7 +300,7 @@ export default function PaymentPage() {
                             onClick={() => navigate('/home')}
                             className="w-full py-3 bg-white/90 rounded-xl bg- hover:bg-white/100 text-black font-bold transition-all shadow-lg"
                         >
-                            Go to Dashboard
+                            {isNewSignup ? 'Get Started' : 'Go to Dashboard'}
                         </button>
                     </div>
                 </div>
@@ -421,7 +486,7 @@ export default function PaymentPage() {
                                                     name="number"
                                                     value={cardDetails.number}
                                                     onChange={handleCardChange}
-                                                    maxLength="19"
+                                                    maxLength="16"
                                                     placeholder="0000 0000 0000 0000"
                                                     className="w-full pl-12 pr-4 py-3 rounded-xl glass-input font-mono tracking-widest"
                                                 />

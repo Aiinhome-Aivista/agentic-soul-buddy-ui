@@ -5,7 +5,6 @@ import IntroPage from '../../pages/IntroPage'
 import Home from '../../pages/Home'
 import LoginLogoutIcon from '../../components/LoginLogoutIcon'
 import Questionnaire from '../../pages/Questionnaire/Questionnaire'
-import SubscriptionPlane from '../modal/SubscribtionPlane'
 import DisclaimerModal from '../modal/DisclaimerModal'
 import ContactModal from '../modal/ContactModal'
 import WellBeingProfile from '../modal/WellBeingProfile'
@@ -45,7 +44,6 @@ function Index() {
                 <Route path="/home" element={<Home />} />
                 <Route path="/wave" element={<LoginLogoutIcon />} />
                 <Route path="/questionnaire" element={<Questionnaire />} />
-                <Route path="/sub" element={<SubscriptionPlane />} />
                 <Route path="/disclaimer" element={<DisclaimerWrapper />} />
                 <Route path="/terms" element={<TermsWrapper />} />
 

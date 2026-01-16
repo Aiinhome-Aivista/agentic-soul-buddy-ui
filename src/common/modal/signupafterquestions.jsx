@@ -11,10 +11,12 @@ import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const { tempUserName, tempUserId, setIsLoggedIn, setAudioUrl, setIsLoading } =
     useContext(Context);
+  const navigate = useNavigate();
 
   const toast = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -132,11 +134,12 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
             setAudioUrl(response.Data?.audio_url);
           }, 3000);
 
-          // Call onSuccess callback to show subscription modal
+          // Call onSuccess callback to show wellbeing profile modal
           if (onSuccess) {
             onSuccess();
           } else {
-            OnClose();
+            // Fallback: Navigate to subscription page directly
+            navigate('/subscription', { state: { isNewSignup: true } });
           }
         } else {
           console.error("Submission failed:", response?.message);

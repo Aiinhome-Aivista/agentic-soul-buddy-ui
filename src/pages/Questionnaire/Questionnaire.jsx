@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Context } from '../../common/helper/Context';
 import LoginModal from '../../common/modal/LoginModal';
 import SignupModal2 from '../../common/modal/signupafterquestions';
-import SubscriptionPlane from '../../common/modal/SubscribtionPlane';
 import QuestionCard from './QuestionCard';
 import { apiService } from '../../service/apiService';
 import { get_url1 } from '../../connection/connection';
@@ -19,7 +18,6 @@ const Questionnaire = () => {
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [subscriptionModal, setSubscriptionModal] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
     const [disclaimerModal, setDisclaimerModal] = useState(false);
 
@@ -102,17 +100,13 @@ const Questionnaire = () => {
 
     const handleProfileContinue = () => {
         setShowProfile(false);
-        setSubscriptionModal(true);
+        // Navigate to subscription page for plan selection
+        navigate('/subscription', { state: { isNewSignup: true } });
     };
 
     const handleDisclaimerConfirm = () => {
         setDisclaimerModal(false);
         setSignupModal2(true);
-    };
-
-    const handleSubscriptionClose = () => {
-        setSubscriptionModal(false);
-        navigate('/');
     };
 
     if (loading) {
@@ -149,7 +143,7 @@ const Questionnaire = () => {
 
     return (
         <>
-            {!signupModal2 && !subscriptionModal && !showProfile && !disclaimerModal ? (
+            {!signupModal2 && !showProfile && !disclaimerModal ? (
                 <div
                     className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-white/5 backdrop-blur-sm animate-fadeIn z-5">
                     {/* Header / Progress Bar */}
@@ -199,8 +193,6 @@ const Questionnaire = () => {
                     onClose={() => setShowProfile(false)}
                     onContinue={handleProfileContinue}
                 />
-            ) : subscriptionModal ? (
-                <SubscriptionPlane OnClose={handleSubscriptionClose} />
             ) : disclaimerModal ? (
                 <DisclaimerModal OnClose={() => setDisclaimerModal(false)} onConfirm={handleDisclaimerConfirm} />
             ) : null}

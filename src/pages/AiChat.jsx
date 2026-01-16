@@ -14,7 +14,6 @@ import SignupModal2 from "../common/modal/signupafterquestions";
 import WellBeingProfile from "../common/modal/WellBeingProfile";
 import DisclaimerModal from "../common/modal/DisclaimerModal";
 import AccountModal from "../common/modal/AccountModal";
-import SubscriptionPlane from "../common/modal/SubscribtionPlane";
 import { useMicVolume } from "../common/hooks/useMicVolume";
 import { BackgroundAudioContext } from "../common/helper/BackgroundAudioProvider";
 
@@ -92,7 +91,6 @@ const AiChat = () => {
   const [currentPlan, setCurrentPlan] = useState(
     localStorage.getItem("currentPlan") || ""
   );
-  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const [showLimitReachedModal, setShowLimitReachedModal] = useState(false);
   const [isPlanHovered, setIsPlanHovered] = useState(false);
 
@@ -248,12 +246,8 @@ const AiChat = () => {
 
   const handleUpgradePlan = () => {
     setShowLimitReachedModal(false);
-    setShowSubscriptionModal(true);
-  };
-
-  const handleSubscriptionSuccess = async () => {
-    await checkSubscriptionStatus();
-    setShowSubscriptionModal(false);
+    // Navigate to subscription page for upgrade
+    navigate('/subscription');
   };
 
   /* New context usage for background audio */
@@ -484,15 +478,6 @@ const AiChat = () => {
         )
       }
       {accountModal && <AccountModal OnClose={() => setAccountModal(false)} />}
-      {
-        showSubscriptionModal && (
-          <SubscriptionPlane
-            OnClose={() => setShowSubscriptionModal(false)}
-            showAllPlans={false}
-            onSuccess={handleSubscriptionSuccess}
-          />
-        )
-      }
 
       {/* Limit Reached Modal */}
       {
