@@ -187,7 +187,7 @@ export default function PaymentPage() {
                 },
                 payment: {
                     method: paymentMethodStr,
-                    amount: planDetails.finalPrice,
+                    amount: parseInt(planDetails.finalPrice) || 0,
                     currency: 'INR'
                 }
             };
