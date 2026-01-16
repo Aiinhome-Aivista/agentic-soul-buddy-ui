@@ -52,39 +52,8 @@ export default function SubscriptionPage() {
         fetchPlans();
     }, []);
 
-    const handleUpgrade = async (plan) => {
-        // setLoading(true); // Don't show full page loader for upgrade action as per user request to only show "before data not coming"
-        // But if user wants feedback, we might need a different mechanism.
-        // User said "only loader visible before data not coming". This implies initial fetch.
-        // For upgrade, I'll keep the button disabled/processing state but maybe not the spinner replacing content.
-
-        try {
-            const payload = {
-                user_id: localStorage.getItem("userId"),
-                plan_name: plan.planName
-            };
-
-            console.log("Upgrading plan:", payload);
-
-            const response = await apiService({
-                url: POST_url1.start_subscription,
-                method: 'POST',
-                data: payload
-            });
-
-            if (response && response.status === 'success') {
-                toast.current.show({ severity: 'success', summary: 'Success', detail: `You have switched to the ${plan.planName}.`, life: 3000 });
-                setCurrentPlanId(plan.id);
-                localStorage.setItem('currentPlan', plan.planName); // Update local storage
-            } else {
-                console.error("Upgrade failed", response);
-                toast.current.show({ severity: 'error', summary: 'Error', detail: response?.message || "Failed to upgrade plan.", life: 3000 });
-            }
-
-        } catch (error) {
-            console.error("Error upgrading plan:", error);
-            toast.current.show({ severity: 'error', summary: 'Error', detail: "An error occurred while upgrading.", life: 3000 });
-        }
+    const handleUpgrade = (plan) => {
+        navigate('/payment', { state: { plan } });
     };
 
     return (

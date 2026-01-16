@@ -23,6 +23,8 @@ import TermsOfUse from '../../pages/legal/TermsOfUse'
 // Support Pages
 import ContactPage from '../../pages/support/ContactPage'
 import SubscriptionPage from '../../pages/SubscriptionPage'
+import PaymentPage from '../../pages/PaymentPage'
+
 
 const DisclaimerWrapper = () => {
     const navigate = useNavigate();
@@ -56,6 +58,7 @@ function Index() {
                 {/* Support Pages */}
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/subscription" element={<SubscriptionPage />} />
+                <Route path="/payment" element={<PaymentPage />} />
             </Routes>
             {contactModal && <ContactModal />}
             {profileModal && <WellBeingProfile onClose={() => setProfileModal(false)} />}

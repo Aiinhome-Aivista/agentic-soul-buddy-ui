@@ -1,0 +1,100 @@
+/* PaymentPage.css */
+
+/* Custom animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes checkmark {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.4s ease-out forwards;
+}
+
+.animate-checkmark {
+  animation: checkmark 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Glass inputs */
+.glass-input {
+  background: rgba(255, 255, 255, 0.05); /* Very subtle white tint */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(34, 197, 94, 0.5); /* Green-500 equivalent */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+.glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Payment Method Tabs */
+.payment-tab {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-tab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #4ade80; /* Green-400 */
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.payment-tab.active::after {
+  transform: scaleX(1);
+}
+
+/* Card Visuals */
+.credit-card-visual {
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Receipt Paper Effect */
+.receipt-paper {
+  background-size: 51% 51%;
+  background-repeat: no-repeat;
+  /* Filter: drop-shadow for the "cutout" look if needed, but simple white bg works for now */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Hide scrollbar for layout */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
