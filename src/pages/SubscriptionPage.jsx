@@ -27,13 +27,8 @@ export default function SubscriptionPage() {
                     method: 'GET'
                 });
                 if (response && response.status === 'success') {
-                    // For new signup, show all plans including trial
-                    // For existing users (upgrade), filter out trial plans
-                    const filteredPlans = isNewSignup
-                        ? response.data
-                        : response.data.filter(p => !p.isTrial);
-
-                    setPlans(filteredPlans);
+                    // Show all plans for both new signup and upgrade
+                    setPlans(response.data);
 
                     // Check local storage for current plan (only for existing users)
                     if (!isNewSignup) {
@@ -54,8 +49,8 @@ export default function SubscriptionPage() {
 
                     // For new signup, select trial plan by default if available
                     if (isNewSignup) {
-                        const trialPlan = filteredPlans.find(p => p.isTrial);
-                        setSelectedPlanId(trialPlan?.id || filteredPlans[0]?.id);
+                        const trialPlan = response.data.find(p => p.isTrial);
+                        setSelectedPlanId(trialPlan?.id || response.data[0]?.id);
                     }
                 }
             } catch (error) {
@@ -185,6 +180,14 @@ export default function SubscriptionPage() {
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-6 text-sm">
+                                <div>
+                                    <p className="text-white/50">Price</p>
+                                    <p className="text-white font-medium">
+                                        {plans.find(p => p.id === currentPlanId)?.isTrial || plans.find(p => p.id === currentPlanId)?.finalPrice === 0
+                                            ? 'FREE'
+                                            : `₹${plans.find(p => p.id === currentPlanId)?.finalPrice || '—'}`}
+                                    </p>
+                                </div>
                                 <div>
                                     <p className="text-white/50">Validity</p>
                                     <p className="text-white font-medium">{plans.find(p => p.id === currentPlanId)?.validityDays || '—'} Days</p>
@@ -328,8 +331,8 @@ export default function SubscriptionPage() {
                                     onClick={handleContinue}
                                     disabled={!selectedPlanId || loading}
                                     className={`px-12 py-4 rounded-xl font-bold text-lg tracking-wide transition-all transform ${selectedPlanId && !loading
-                                            ? 'bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-white/20 active:scale-95 hover:scale-[1.02]'
-                                            : 'bg-white/20 text-white/50 cursor-not-allowed'
+                                        ? 'bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-white/20 active:scale-95 hover:scale-[1.02]'
+                                        : 'bg-white/20 text-white/50 cursor-not-allowed'
                                         }`}
                                 >
                                     {loading ? 'Processing...' : 'Continue'}
