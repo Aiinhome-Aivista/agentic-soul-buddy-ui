@@ -94,6 +94,8 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
           const nameToStore = response.full_name || values.full_name;
           console.log("Setting name for fresh signup:", nameToStore);
           localStorage.setItem("name", nameToStore);
+          // Store email for subscription
+          localStorage.setItem("email", values.email);
           // Clean up temporary Firebase UID from sessionStorage
           sessionStorage.removeItem("firebaseUid");
           sessionStorage.removeItem("signupName");

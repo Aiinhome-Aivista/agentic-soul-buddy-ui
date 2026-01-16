@@ -14,6 +14,7 @@ export default function SubscriptionPage() {
     const [plans, setPlans] = useState([]);
     const [currentPlanId, setCurrentPlanId] = useState(null);
     const [selectedPlanId, setSelectedPlanId] = useState(null);
+    const [subscriptionStatus, setSubscriptionStatus] = useState(null);
 
     // Check if this is a new signup flow
     const isNewSignup = location.state?.isNewSignup || false;
@@ -22,6 +23,24 @@ export default function SubscriptionPage() {
         const fetchPlans = async () => {
             setLoading(true);
             try {
+                // Fetch subscription status for existing users
+                if (!isNewSignup) {
+                    const userId = localStorage.getItem('userId');
+                    if (userId) {
+                        try {
+                            const statusResponse = await apiService({
+                                url: `${get_url1.subscription_status}?user_id=${userId}`,
+                                method: 'GET'
+                            });
+                            if (statusResponse) {
+                                setSubscriptionStatus(statusResponse);
+                            }
+                        } catch (err) {
+                            console.error('Error fetching subscription status:', err);
+                        }
+                    }
+                }
+
                 const response = await apiService({
                     url: get_url1.subscription_plan,
                     method: 'GET'
@@ -73,14 +92,52 @@ export default function SubscriptionPage() {
     };
 
     // Handle continue button for new signup
-    const handleContinue = () => {
+    const handleContinue = async () => {
         const selectedPlan = plans.find(p => p.id === selectedPlanId);
         if (selectedPlan) {
             // Check if it's a free trial plan
             if (selectedPlan.isTrial || selectedPlan.finalPrice === 0) {
-                // For free trial, go directly to home
-                localStorage.setItem('currentPlan', selectedPlan.planName);
-                navigate('/home');
+                // For free trial, call API then go to home
+                setLoading(true);
+                try {
+                    const userId = localStorage.getItem('userId');
+                    const userName = localStorage.getItem('name');
+                    const userEmail = localStorage.getItem('email');
+
+                    if (!userId) {
+                        toast.current.show({ severity: 'error', summary: 'Error', detail: 'User session not found.', life: 3000 });
+                        setLoading(false);
+                        return;
+                    }
+
+                    const payload = {
+                        user_id: userId,
+                        plan_name: selectedPlan.planName,
+                        email: userEmail || '',
+                        full_name: userName || ''
+                    };
+
+                    const response = await apiService({
+                        url: POST_url1.start_subscription,
+                        method: 'POST',
+                        data: payload
+                    });
+
+                    if (response && (response.status === 'FREE' || response.status === 'PAID' || response.status === 'ACTIVE')) {
+                        localStorage.setItem('currentPlan', selectedPlan.planName);
+                        toast.current.show({ severity: 'success', summary: 'Success', detail: 'Free plan activated successfully!', life: 2000 });
+                        setTimeout(() => {
+                            navigate('/home');
+                        }, 1500);
+                    } else {
+                        toast.current.show({ severity: 'error', summary: 'Error', detail: response?.message || 'Failed to activate plan.', life: 3000 });
+                    }
+                } catch (error) {
+                    console.error('Error starting free plan:', error);
+                    toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to activate plan.', life: 3000 });
+                } finally {
+                    setLoading(false);
+                }
             } else {
                 // Navigate to payment page
                 navigate('/payment', { state: { plan: selectedPlan, isNewSignup: true } });
@@ -180,6 +237,14 @@ export default function SubscriptionPage() {
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-6 text-sm">
+                                {subscriptionStatus?.daily_minutes_left !== undefined && (
+                                    <div>
+                                        <p className="text-white/50">Remaining Time</p>
+                                        <p className="text-white font-medium">
+                                            {subscriptionStatus.daily_minutes_left} min
+                                        </p>
+                                    </div>
+                                )}
                                 <div>
                                     <p className="text-white/50">Price</p>
                                     <p className="text-white font-medium">
@@ -189,8 +254,12 @@ export default function SubscriptionPage() {
                                     </p>
                                 </div>
                                 <div>
-                                    <p className="text-white/50">Validity</p>
-                                    <p className="text-white font-medium">{plans.find(p => p.id === currentPlanId)?.validityDays || '—'} Days</p>
+                                    <p className="text-white/50">Valid Till</p>
+                                    <p className="text-white font-medium">
+                                        {subscriptionStatus?.validity_days_left !== undefined
+                                            ? new Date(Date.now() + subscriptionStatus.validity_days_left * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                                            : '—'}
+                                    </p>
                                 </div>
                                 <div>
                                     <p className="text-white/50">Usage</p>
