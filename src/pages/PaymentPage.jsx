@@ -101,7 +101,7 @@ export default function PaymentPage() {
         const currentMonth = new Date().getMonth() + 1;
         return year > currentYear || (year === currentYear && month >= currentMonth);
     };
-    const validateCVV = (cvv) => /^\d{3,4}$/.test(cvv);
+    const validateCVV = (cvv) => /^\d{3}$/.test(cvv);
 
     const processPayment = () => {
         // Billing Validation
@@ -138,7 +138,7 @@ export default function PaymentPage() {
                 return;
             }
             if (!validateCVV(cvv)) {
-                toast.current.show({ severity: 'warn', summary: 'Invalid CVV', detail: 'Please enter a valid 3 or 4 digit CVV.', life: 3000 });
+                toast.current.show({ severity: 'warn', summary: 'Invalid CVV', detail: 'Please enter a valid 3 digit CVV.', life: 3000 });
                 return;
             }
         }
@@ -198,9 +198,18 @@ export default function PaymentPage() {
                                 <span className="text-gray-600">Plan</span>
                                 <span className="font-medium">{planDetails.planName}</span>
                             </div>
-                            <div className="flex justify-between">
-                                <span className="text-gray-600">To</span>
-                                <span className="font-medium text-right">{billingDetails.fullName}</span>
+                            <div className="flex flex-col gap-1 border-b border-dashed border-gray-200 pb-3">
+                                <span className="text-gray-600 text-xs uppercase font-bold tracking-wider mb-1">Billed To</span>
+                                <span className="font-bold text-gray-800">{billingDetails.fullName}</span>
+                                <span className="text-gray-600 text-xs">{billingDetails.email}</span>
+                                <span className="text-gray-600 text-xs">
+                                    {billingDetails.addressLine1}
+                                    {billingDetails.addressLine2 && `, ${billingDetails.addressLine2}`}
+                                </span>
+                                <span className="text-gray-600 text-xs">
+                                    {billingDetails.city}, {billingDetails.state} - {billingDetails.zipCode}
+                                </span>
+                                <span className="text-gray-600 text-xs">{billingDetails.country}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-gray-600">Payment Method</span>
@@ -440,7 +449,7 @@ export default function PaymentPage() {
                                                         name="cvv"
                                                         value={cardDetails.cvv}
                                                         onChange={handleCardChange}
-                                                        maxLength="4"
+                                                        maxLength="3"
                                                         placeholder="123"
                                                         className="w-full px-4 py-3 rounded-xl glass-input text-center"
                                                     />
