@@ -227,13 +227,13 @@ export default function PaymentPage() {
                     <div className="flex flex-col gap-3">
                         <button
                             onClick={downloadReceipt}
-                            className="w-full py-3 rounded-xl bg-white/20 hover:bg-white/80 text-black font-medium flex items-center justify-center gap-2 transition-all"
+                            className="w-full py-3 rounded-xl bg-white/90 hover:bg-white/100 text-black font-medium flex items-center justify-center gap-2 transition-all"
                         >
                             <DownloadRoundedIcon /> Download Receipt
                         </button>
                         <button
                             onClick={() => navigate('/home')}
-                            className="w-full py-3 bg-white/20 rounded-xl bg- hover:bg-white/80 text-black font-bold transition-all shadow-lg"
+                            className="w-full py-3 bg-white/90 rounded-xl bg- hover:bg-white/100 text-black font-bold transition-all shadow-lg"
                         >
                             Go to Dashboard
                         </button>
