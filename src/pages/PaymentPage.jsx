@@ -45,7 +45,7 @@ export default function PaymentPage() {
     const [paymentDate, setPaymentDate] = useState(null);
     const [validTill, setValidTill] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState(null);
-    
+
     // Check if this is a fresh signup flow
     const isNewSignup = location.state?.isNewSignup || false;
 
@@ -160,7 +160,7 @@ export default function PaymentPage() {
         try {
             const userId = localStorage.getItem('userId');
             const userName = localStorage.getItem('name');
-            
+
             if (!userId) {
                 toast.current.show({ severity: 'error', summary: 'Error', detail: 'User session not found. Please login again.', life: 3000 });
                 setLoading(false);
@@ -201,7 +201,7 @@ export default function PaymentPage() {
             if (response && response.status === 'PAID') {
                 // Store the current plan in localStorage
                 localStorage.setItem('currentPlan', planDetails.planName);
-                
+
                 setTransactionId(response.transaction_id);
                 setPaymentDate(response.date);
                 setValidTill(response.valid_till);
@@ -290,12 +290,12 @@ export default function PaymentPage() {
 
                     {/* Actions */}
                     <div className="flex flex-col gap-3">
-                        <button
+                        {/* <button
                             onClick={downloadReceipt}
                             className="w-full py-3 rounded-xl bg-white/90 hover:bg-white/100 text-black font-medium flex items-center justify-center gap-2 transition-all"
                         >
                             <DownloadRoundedIcon /> Download Receipt
-                        </button>
+                        </button> */}
                         <button
                             onClick={() => navigate('/home')}
                             className="w-full py-3 bg-white/90 rounded-xl bg- hover:bg-white/100 text-black font-bold transition-all shadow-lg"
