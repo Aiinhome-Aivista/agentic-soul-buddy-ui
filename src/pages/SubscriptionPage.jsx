@@ -57,7 +57,7 @@ export default function SubscriptionPage() {
     };
 
     return (
-        <div className="w-full h-full flex flex-col p-4 md:p-8 animate-fadeIn overflow-y-auto relative">
+        <div className="w-full h-full flex flex-col p-4 md:p-8 animate-fadeIn overflow-y-auto relative bg-white/5 backdrop-blur-sm">
             <Toast ref={toast} className="custom-toast-message" position="top-right" />
 
             {/* Header with Back Button */}
