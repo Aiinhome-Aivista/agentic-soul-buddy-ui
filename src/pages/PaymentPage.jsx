@@ -62,7 +62,7 @@ export default function PaymentPage() {
     });
 
     // Payment Method State
-    const [activeTab, setActiveTab] = useState('upi'); // 'upi', 'card', 'vpa'
+    const [activeTab, setActiveTab] = useState('card'); // 'upi', 'card', 'vpa'
 
     // Card Details State
     const [cardDetails, setCardDetails] = useState({
@@ -83,27 +83,27 @@ export default function PaymentPage() {
 
     const handleBillingChange = (e) => {
         const { name, value } = e.target;
-        
+
         // For zipCode, only allow numbers
         if (name === 'zipCode') {
             const numericValue = value.replace(/\D/g, '');
             setBillingDetails(prev => ({ ...prev, [name]: numericValue }));
             return;
         }
-        
+
         setBillingDetails(prev => ({ ...prev, [name]: value }));
     };
 
     const handleCardChange = (e) => {
         const { name, value } = e.target;
-        
+
         // Card number - only numbers allowed
         if (name === 'number') {
             const numericValue = value.replace(/\D/g, '');
             setCardDetails(prev => ({ ...prev, [name]: numericValue }));
             return;
         }
-        
+
         // Expiry date - only numbers with auto-format MM/YY
         if (name === 'expiry') {
             let numericValue = value.replace(/\D/g, '');
@@ -113,21 +113,21 @@ export default function PaymentPage() {
             setCardDetails(prev => ({ ...prev, [name]: numericValue }));
             return;
         }
-        
+
         // CVV - only numbers allowed
         if (name === 'cvv') {
             const numericValue = value.replace(/\D/g, '');
             setCardDetails(prev => ({ ...prev, [name]: numericValue }));
             return;
         }
-        
+
         // Cardholder name - only letters and spaces allowed (no numbers)
         if (name === 'holder') {
             const textValue = value.replace(/[0-9]/g, '');
             setCardDetails(prev => ({ ...prev, [name]: textValue }));
             return;
         }
-        
+
         setCardDetails(prev => ({ ...prev, [name]: value }));
     };
 
