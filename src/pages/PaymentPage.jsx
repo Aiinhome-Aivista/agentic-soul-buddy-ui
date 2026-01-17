@@ -266,7 +266,7 @@ export default function PaymentPage() {
     if (paymentSuccess) {
         return (
             <div className="w-full min-h-screen flex flex-col items-center justify-center p-4 animate-fadeIn bg-white/5 backdrop-blur-sm">
-                <Toast ref={toast} className="custom-toast-message" position="top-right" />
+                <Toast ref={toast} className="custom-toast-message" position="bottom-right" />
 
                 <div className="glass-card w-full max-w-lg rounded-3xl p-8 relative overflow-hidden">
                     {/* Success Header */}
@@ -349,7 +349,7 @@ export default function PaymentPage() {
 
     return (
         <div className="w-full h-full flex flex-col p-4 md:p-8 animate-fadeIn overflow-y-auto relative no-scrollbar bg-white/5 backdrop-blur-sm">
-            <Toast ref={toast} className="custom-toast-message" position="top-right" />
+            <Toast ref={toast} className="custom-toast-message" position="bottom-right" />
 
             {/* Header */}
             <div className="flex items-center gap-4 mb-6 max-w-6xl mx-auto w-full">
