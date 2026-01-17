@@ -202,7 +202,7 @@ export default function SubscriptionPage() {
     };
 
     return (
-        <div className="w-full h-full flex flex-col p-4 md:p-8 animate-fadeIn overflow-y-auto relative bg-white/5 backdrop-blur-sm">
+        <div className="w-full min-h-full flex flex-col p-4 md:p-8 animate-fadeIn overflow-y-auto relative bg-white/5 backdrop-blur-sm">
             <Toast ref={toast} className="custom-toast-message" position="top-right" />
 
             {/* Header with Back Button */}
@@ -284,7 +284,7 @@ export default function SubscriptionPage() {
             )}
 
             {/* Main Content Card */}
-            <div className="glass-card w-full max-w-6xl mx-auto rounded-3xl p-6 md:p-10 flex flex-col gap-8">
+            <div className="glass-card w-full max-w-6xl mx-auto rounded-3xl p-5  flex flex-col gap-8">
                 {loading ? (
                     <div className="flex justify-center items-center h-40">
                         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>

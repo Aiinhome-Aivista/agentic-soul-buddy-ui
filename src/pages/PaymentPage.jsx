@@ -83,12 +83,51 @@ export default function PaymentPage() {
 
     const handleBillingChange = (e) => {
         const { name, value } = e.target;
+        
+        // For zipCode, only allow numbers
+        if (name === 'zipCode') {
+            const numericValue = value.replace(/\D/g, '');
+            setBillingDetails(prev => ({ ...prev, [name]: numericValue }));
+            return;
+        }
+        
         setBillingDetails(prev => ({ ...prev, [name]: value }));
     };
 
     const handleCardChange = (e) => {
         const { name, value } = e.target;
-        // Simple formatting logic could go here (e.g., spaces for card number)
+        
+        // Card number - only numbers allowed
+        if (name === 'number') {
+            const numericValue = value.replace(/\D/g, '');
+            setCardDetails(prev => ({ ...prev, [name]: numericValue }));
+            return;
+        }
+        
+        // Expiry date - only numbers with auto-format MM/YY
+        if (name === 'expiry') {
+            let numericValue = value.replace(/\D/g, '');
+            if (numericValue.length >= 2) {
+                numericValue = numericValue.slice(0, 2) + '/' + numericValue.slice(2, 4);
+            }
+            setCardDetails(prev => ({ ...prev, [name]: numericValue }));
+            return;
+        }
+        
+        // CVV - only numbers allowed
+        if (name === 'cvv') {
+            const numericValue = value.replace(/\D/g, '');
+            setCardDetails(prev => ({ ...prev, [name]: numericValue }));
+            return;
+        }
+        
+        // Cardholder name - only letters and spaces allowed (no numbers)
+        if (name === 'holder') {
+            const textValue = value.replace(/[0-9]/g, '');
+            setCardDetails(prev => ({ ...prev, [name]: textValue }));
+            return;
+        }
+        
         setCardDetails(prev => ({ ...prev, [name]: value }));
     };
 
@@ -405,6 +444,7 @@ export default function PaymentPage() {
                                 <label className="block text-white/60 text-sm mb-2">Zip Code <span className="text-red-400">*</span></label>
                                 <input
                                     type="text"
+                                    inputMode="numeric"
                                     name="zipCode"
                                     value={billingDetails.zipCode}
                                     onChange={handleBillingChange}
@@ -436,12 +476,12 @@ export default function PaymentPage() {
 
                         {/* Tabs */}
                         <div className="flex gap-4 border-b border-white/10 mb-8 overflow-x-auto pb-1">
-                            <button
+                            {/* <button
                                 onClick={() => setActiveTab('upi')}
                                 className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-medium transition-all whitespace-nowrap ${activeTab === 'upi' ? 'text-green-400 bg-white/5 border-b-2 border-green-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
                             >
                                 <QrCodeRoundedIcon fontSize="small" /> UPI QR
-                            </button>
+                            </button> */}
                             <button
                                 onClick={() => setActiveTab('card')}
                                 className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-medium transition-all whitespace-nowrap ${activeTab === 'card' ? 'text-green-400 bg-white/5 border-b-2 border-green-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
@@ -483,11 +523,12 @@ export default function PaymentPage() {
                                             <div className="relative">
                                                 <input
                                                     type="text"
+                                                    inputMode="numeric"
                                                     name="number"
                                                     value={cardDetails.number}
                                                     onChange={handleCardChange}
                                                     maxLength="16"
-                                                    placeholder="0000 0000 0000 0000"
+                                                    placeholder="0000000000000000"
                                                     className="w-full pl-12 pr-4 py-3 rounded-xl glass-input font-mono tracking-widest"
                                                 />
                                                 <CreditCardRoundedIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
@@ -498,6 +539,7 @@ export default function PaymentPage() {
                                                 <label className="block text-white/60 text-sm mb-2">Expiry Date <span className="text-red-400">*</span></label>
                                                 <input
                                                     type="text"
+                                                    inputMode="numeric"
                                                     name="expiry"
                                                     value={cardDetails.expiry}
                                                     onChange={handleCardChange}
@@ -511,6 +553,7 @@ export default function PaymentPage() {
                                                 <div className="relative">
                                                     <input
                                                         type="password"
+                                                        inputMode="numeric"
                                                         name="cvv"
                                                         value={cardDetails.cvv}
                                                         onChange={handleCardChange}
