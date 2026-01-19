@@ -271,7 +271,7 @@ const AiChat = () => {
           onClick={toggleBackgroundAudio}
           className="h-[2.5rem] px-3 pr-2 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 cursor-pointer flex items-center gap-3 hover:bg-[#474747]/40 transition-colors"
         >
-          <span className="text-[0.75rem] font-medium text-[#7D7E7F]">Background Sound</span>
+          <span className="text-[0.75rem] font-medium text-[#7D7E7F]">Background Music</span>
 
           {/* Switch Track */}
           <div className={`relative w-8 h-4 rounded-full transition-colors duration-300 ${bgPlaying ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
