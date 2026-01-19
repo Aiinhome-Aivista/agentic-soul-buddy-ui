@@ -346,7 +346,7 @@ export default function PaymentPage() {
                             </div>
                             <div className="text-xs text-gray-500">
                                 <p>Transaction ID: {transactionId}</p>
-                                <p>Date: {paymentDate}</p>
+                                <p>Date: {paymentDate || new Date().toLocaleDateString()}</p>
                             </div>
                         </div>
 
@@ -375,14 +375,28 @@ export default function PaymentPage() {
                             {validTill && (
                                 <div className="flex justify-between">
                                     <span className="text-gray-600">Valid Till</span>
-                                    <span className="font-medium text-green-600">{validTill}</span>
+                                    <span className="font-medium capitalize">{validTill}</span>
                                 </div>
+                            )}
+
+                            {/* Coupon Details in Receipt */}
+                            {couponDetails && (
+                                <>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-600">Coupon Code</span>
+                                        <span className="font-medium capitalize">{couponDetails.coupon_code}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-600">Discount Added</span>
+                                        <span className="font-medium capitalize">- ${couponDetails.discount_amount}</span>
+                                    </div>
+                                </>
                             )}
                         </div>
 
                         <div className="border-t border-dashed border-gray-300 pt-4 flex justify-between items-center text-lg font-bold">
                             <span>Total Paid</span>
-                            <span>${planDetails.finalPrice}</span>
+                            <span>${finalPayableAmount}</span>
                         </div>
                     </div>
 
