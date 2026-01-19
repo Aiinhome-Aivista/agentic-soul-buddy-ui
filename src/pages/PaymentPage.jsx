@@ -227,7 +227,7 @@ export default function PaymentPage() {
                 payment: {
                     method: paymentMethodStr,
                     amount: parseInt(planDetails.finalPrice) || 0,
-                    currency: 'INR'
+                    currency: 'USD'
                 }
             };
 

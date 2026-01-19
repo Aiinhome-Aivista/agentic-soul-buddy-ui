@@ -174,7 +174,7 @@ export default function SubscriptionPage() {
                 payment: {
                     method: 'FREE_TRIAL',
                     amount: 0,
-                    currency: 'INR'
+                    currency: 'USD'
                 }
             };
 
