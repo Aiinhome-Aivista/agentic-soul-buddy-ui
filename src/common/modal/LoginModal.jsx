@@ -370,18 +370,12 @@ export default function LoginModal({ OnClose }) {
                                         </span>
                                     </button>
                                 </div>
-                                <button
-                                    type="button"
-                                    className="text-xs text-primary hover:text-primary-dark transition-colors cursor-pointer text-right"
-                                    onClick={() => setView('forgot_request')}
-                                >
-                                    Forgot Password?
-                                </button>
+
                             </div>
 
                             {/* Captcha Section */}
                             <div className="flex flex-col gap-2">
-                                <label className="text-sm text-[#FFFFFF]/70">Security Check</label>
+                                <label className="text-sm text-[#FFFFFF]/70">Captcha</label>
                                 <div className="flex gap-2">
                                     <div className="flex-1 bg-white/10 border border-white/10 rounded-xl flex items-center justify-center text-white/90 text-lg font-bold tracking-widest select-none font-mono tracking-[0.2em] relative overflow-hidden">
                                         <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '4px 4px' }}></div>
@@ -404,6 +398,13 @@ export default function LoginModal({ OnClose }) {
                                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
                                     required
                                 />
+                                <button
+                                    type="button"
+                                    className="text-xs text-primary hover:text-primary-dark transition-colors cursor-pointer text-right"
+                                    onClick={() => setView('forgot_request')}
+                                >
+                                    Forgot Password?
+                                </button>
                             </div>
 
                             <button
@@ -411,7 +412,7 @@ export default function LoginModal({ OnClose }) {
                                 disabled={isSubmitting}
                                 className="w-full py-3 mt-2 bg-primary-dark hover:bg-primary-deep text-white font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isSubmitting ? 'Logging in...' : 'Login'}
+                                {isSubmitting ? 'Logging in' : 'Login'}
                             </button>
                         </form>
                     )}
