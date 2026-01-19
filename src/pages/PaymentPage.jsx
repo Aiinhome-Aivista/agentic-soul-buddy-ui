@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CreditCardRoundedIcon from '@mui/icons-material/CreditCardRounded';
 import QrCodeRoundedIcon from '@mui/icons-material/QrCodeRounded';
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded';
@@ -12,7 +13,9 @@ import { Toast } from 'primereact/toast';
 import { apiService } from '../service/apiService';
 import { POST_url1 } from '../connection/connection';
 import '../styles/PaymentPage.css';
+
 import '../styles/modal.css';
+import Confetti from '../common/components/Confetti';
 
 // Mock QR Code (keeping it simple with a placeholder or external service if allowed, using a div placeholder for "Static" request)
 const MockQRCode = () => (
@@ -48,6 +51,12 @@ export default function PaymentPage() {
 
     // Check if this is a fresh signup flow
     const isNewSignup = location.state?.isNewSignup || false;
+
+    // Coupon State
+    const [couponCode, setCouponCode] = useState('');
+    const [couponDetails, setCouponDetails] = useState(null);
+    const [showConfetti, setShowConfetti] = useState(false);
+    const [verifyingCoupon, setVerifyingCoupon] = useState(false);
 
     // Billing Address State
     const [billingDetails, setBillingDetails] = useState({
@@ -128,8 +137,56 @@ export default function PaymentPage() {
             return;
         }
 
-        setCardDetails(prev => ({ ...prev, [name]: value }));
+
     };
+
+    // Coupon Functions
+    const handleApplyCoupon = async () => {
+        if (!couponCode.trim()) {
+            toast.current.show({ severity: 'warn', summary: 'Empty Code', detail: 'Please enter a coupon code.', life: 2000 });
+            return;
+        }
+
+        setVerifyingCoupon(true);
+        try {
+            // Using POST_url1.cupon_validate (note the typo 'cupon' in connection.js if strictly following user provided update, 
+            // but assuming user meant 'cupon_validate' based on diff)
+            const response = await apiService({
+                url: POST_url1.cupon_validate,
+                method: 'POST',
+                data: {
+                    coupon_code: couponCode,
+                    amount: parseInt(planDetails.finalPrice) // Applying on the already potentially discounted price
+                }
+            });
+
+            if (response && response.valid) {
+                setCouponDetails(response);
+                setShowConfetti(true);
+                toast.current.show({ severity: 'success', summary: 'Coupon Applied', detail: `You saved $${response.discount_amount}!`, life: 3000 });
+                setTimeout(() => setShowConfetti(false), 5000);
+            } else {
+                setCouponDetails(null);
+                toast.current.show({ severity: 'error', summary: 'Invalid Coupon', detail: response?.message || 'Coupon code is not valid.', life: 3000 });
+            }
+        } catch (error) {
+            console.error("Coupon Error:", error);
+            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Failed to apply coupon.', life: 3000 });
+        } finally {
+            setVerifyingCoupon(false);
+        }
+    };
+
+    const handleRemoveCoupon = () => {
+        setCouponDetails(null);
+        setCouponCode('');
+        toast.current.show({ severity: 'info', summary: 'Removed', detail: 'Coupon removed.', life: 2000 });
+    };
+
+    // Calculate Final Payable Amount
+    const finalPayableAmount = couponDetails
+        ? planDetails.finalPrice - couponDetails.discount_amount
+        : planDetails.finalPrice;
 
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text);
@@ -226,8 +283,10 @@ export default function PaymentPage() {
                 },
                 payment: {
                     method: paymentMethodStr,
-                    amount: parseInt(planDetails.finalPrice) || 0,
-                    currency: 'USD'
+                    amount: finalPayableAmount || 0,
+                    currency: 'USD',
+                    coupon_code: couponDetails ? couponDetails.coupon_code : null,
+                    discount_amount: couponDetails ? couponDetails.discount_amount : 0
                 }
             };
 
@@ -350,6 +409,7 @@ export default function PaymentPage() {
     return (
         <div className="w-full h-full flex flex-col p-4 md:p-8 animate-fadeIn overflow-y-auto relative no-scrollbar bg-white/5 backdrop-blur-sm">
             <Toast ref={toast} className="custom-toast-message" position="top-right" />
+            {showConfetti && <Confetti />}
 
             {/* Header */}
             <div className="flex items-center gap-4 mb-6 max-w-6xl mx-auto w-full">
@@ -616,7 +676,7 @@ export default function PaymentPage() {
                                     </>
                                 ) : (
                                     <>
-                                        Pay ${planDetails.finalPrice}
+                                        Pay ${finalPayableAmount}
                                         <LockRoundedIcon fontSize="small" className="opacity-80" />
                                     </>
                                 )}
@@ -645,12 +705,58 @@ export default function PaymentPage() {
                             </div>
                             <div className="flex justify-between text-green-400 text-sm">
                                 <span>Discount ({planDetails.discount})</span>
+
                                 <span>- ${planDetails.originalPrice - planDetails.finalPrice}</span>
                             </div>
+
+                            {/* Coupon Input Section */}
+                            {!couponDetails ? (
+                                <div className="flex gap-2 my-2">
+                                    <input
+                                        type="text"
+                                        value={couponCode}
+                                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                                        placeholder="Enter Coupon Code"
+                                        className="w-full px-4 py-2 rounded-xl glass-input text-sm uppercase"
+                                    />
+                                    <button
+                                        onClick={handleApplyCoupon}
+                                        disabled={verifyingCoupon || !couponCode}
+                                        className="px-4 py-2 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-xl font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {verifyingCoupon ? '...' : 'APPLY'}
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="glass-card p-3 rounded-xl flex justify-between items-center border border-green-500/30 bg-green-500/10">
+                                    <div>
+                                        <p className="text-green-400 text-xs font-bold flex items-center gap-1">
+                                            <CheckCircleRoundedIcon fontSize="inherit" />
+                                            {couponDetails.coupon_code} APPLIED
+                                        </p>
+                                        <p className="text-white/60 text-xs">You saved ${couponDetails.discount_amount}</p>
+                                    </div>
+                                    <button
+                                        onClick={handleRemoveCoupon}
+                                        className="text-white/40 hover:text-white transition-colors"
+                                    >
+                                        <CloseRoundedIcon fontSize="small" />
+                                    </button>
+                                </div>
+                            )}
+
+                            {couponDetails && (
+                                <div className="flex justify-between text-green-400 text-sm animate-fadeIn">
+                                    <span>Coupon Discount</span>
+                                    <span>- ${couponDetails.discount_amount}</span>
+                                </div>
+                            )}
+
                             <div className="h-px bg-white/10 my-2"></div>
+
                             <div className="flex justify-between text-xl font-bold text-white">
                                 <span>Total</span>
-                                <span>${planDetails.finalPrice}</span>
+                                <span>${finalPayableAmount}</span>
                             </div>
                         </div>
 

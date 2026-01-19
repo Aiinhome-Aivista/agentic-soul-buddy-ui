@@ -22,6 +22,7 @@ export const POST_url1 = {
   start_subscription: devUrl1 + "start_subscription",
   send_otp: devUrl1 + "send_otp",
   verify_otp: devUrl1 + "verify_otp",
+  cupon_validate: devUrl1 + "validate_coupon"
 };
 
 export const get_url1 = {
