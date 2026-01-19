@@ -2,11 +2,10 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import "../../styles/modal.css";
 import { Context } from "../helper/Context";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-// import WarningRoundedIcon from "@mui/icons-material/WarningRounded"; // Unused
 import { useFormik, setNestedObjectValues } from "formik";
 import * as Yup from "yup";
 import { apiService } from "../../service/apiService";
-import { POST_url1 } from "../../connection/connection";
+import { POST_url1, get_url1 } from "../../connection/connection";
 import { Dropdown } from "primereact/dropdown";
 import { Toast } from "primereact/toast";
 import Visibility from "@mui/icons-material/Visibility";
@@ -27,6 +26,11 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const [emailVerified, setEmailVerified] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
   const [verifyingOtp, setVerifyingOtp] = useState(false);
+
+  // Captcha States
+  const [captchaId, setCaptchaId] = useState('');
+  const [captchaText, setCaptchaText] = useState('');
+  const [captchaLoading, setCaptchaLoading] = useState(false);
 
   // Single-error banner visibility + auto-hide timer - REMOVED for Toast
   // const [bannerVisible, setBannerVisible] = useState(false);
@@ -53,6 +57,36 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     { relationship: "Divorced" },
     { relationship: "It's Complicated" },
   ];
+
+  // Fetch Captcha
+  const fetchCaptcha = async () => {
+    setCaptchaLoading(true);
+    try {
+      const response = await apiService({
+        url: get_url1.capcha,
+        method: 'GET',
+      });
+      if (response && response.status === "success") {
+        setCaptchaId(response.captchaId);
+        setCaptchaText(response.captchaText);
+      } else {
+        toast.current.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load captcha',
+          life: 3000
+        });
+      }
+    } catch (error) {
+      console.error("Captcha Fetch Error:", error);
+    } finally {
+      setCaptchaLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCaptcha();
+  }, []);
 
   // Send OTP function
   const handleSendOtp = async () => {
@@ -179,6 +213,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     health: Yup.string().required("Health status is required."),
     emotional_state: Yup.string().nullable(),
     relationship: Yup.string().required("Relationship status is required."),
+    captchaValue: Yup.string().required("Captcha is required."),
   });
 
   const formik = useFormik({
@@ -193,16 +228,21 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       emotional_state: "",
       relationship: "",
       user_id: sessionStorage.getItem("firebaseUid") || tempUserId, // Send Firebase UID to backend
+      captchaValue: "",
     },
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
         // Formatting payload as per user JSON requirement
         // { "full_name":..., "email":..., "age":..., "gender":..., "work":..., "health":..., "emotional_state":..., "relationship":... }
+        const payload = {
+          ...values,
+          captchaId: captchaId
+        };
         const response = await apiService({
           url: POST_url1.signup, // Verify if this endpoint accepts this payload structure
           method: "POST",
-          data: values,
+          data: payload,
         });
 
         if (response && !response.error && response !== null) {
@@ -268,8 +308,11 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
             severity: 'error',
             summary: 'Error',
             detail: response?.message || 'Signup failed. Please try again.',
+            detail: response?.message || 'Signup failed. Please try again.',
             life: 3000
           });
+          fetchCaptcha();
+          formik.setFieldValue('captchaValue', '');
         }
       } catch (error) {
         console.error("An error occurred during submission:", error);
@@ -296,7 +339,9 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       "work",
       "health",
       "relationship",
+      "relationship",
       "emotional_state",
+      "captchaValue",
     ];
 
     for (const key of priority) {
@@ -445,8 +490,6 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
                 </button>
               </div>
             )}
-
-            {/* Password */}
             {/* Password */}
             <div className="relative w-full">
               <input
@@ -552,6 +595,34 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
               className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
             />
 
+            <div className="flex flex-col gap-2 w-full">
+              <label className="text-sm text-[#D9D9D9]/70">Captcha</label>
+              <div className="flex gap-2">
+                <div className="flex-1 bg-white/10 border border-white/10 rounded-xl flex items-center justify-center text-white/90 text-lg font-bold tracking-widest select-none font-mono tracking-[0.2em] relative overflow-hidden h-[50px]">
+                  <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '4px 4px' }}></div>
+                  {captchaLoading ? '...' : captchaText}
+                </div>
+                <button
+                  type="button"
+                  onClick={fetchCaptcha}
+                  className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/70 transition-colors"
+                  title="Refresh Captcha"
+                >
+                  <span className="material-symbols-outlined">refresh</span>
+                </button>
+              </div>
+              <input
+                id="captchaValue"
+                name="captchaValue"
+                type="text"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.captchaValue}
+                placeholder="Enter Captcha"
+                className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+              />
+            </div>
+
             <div className="pt-4 w-full">
               <button
                 type="submit"
@@ -565,8 +636,6 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
           </div>
         </form>
       </div>
-
-      {/* Error Banner - Removed, using Toast instead */}
     </div>
   );
 }
