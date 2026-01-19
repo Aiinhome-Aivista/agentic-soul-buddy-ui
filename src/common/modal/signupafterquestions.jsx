@@ -342,7 +342,6 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       "work",
       "health",
       "relationship",
-      "relationship",
       "emotional_state",
       "captchaValue",
     ];
@@ -358,10 +357,9 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     [formik.errors],
   );
 
-  const anyTouched = Object.keys(formik.touched).length > 0;
-  const shouldShow =
-    Boolean(firstError) && (formik.submitCount > 0 || anyTouched);
+  const shouldShow = Boolean(firstError) && formik.submitCount > 0;
 
+  // Show error toast on submit
   useEffect(() => {
     if (shouldShow && firstError) {
       toast.current?.show({
@@ -376,7 +374,30 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if email is verified
+    // First, check if email is empty
+    if (!formik.values.email || formik.values.email.trim() === "") {
+      toast.current.show({
+        severity: "error",
+        summary: "Email Required",
+        detail: "Email is required.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // Second, check if email format is valid
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formik.values.email)) {
+      toast.current.show({
+        severity: "error",
+        summary: "Invalid Email",
+        detail: "Please enter a valid email address.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // Third, check if email is verified
     if (!emailVerified) {
       toast.current.show({
         severity: "error",
@@ -387,6 +408,124 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       return;
     }
 
+    // After email verification, check other fields in order
+    // 1. Check Full Name
+    if (!formik.values.full_name || formik.values.full_name.trim() === "") {
+      toast.current.show({
+        severity: "error",
+        summary: "Name Required",
+        detail: "Full name is required.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // 2. Check Password
+    if (!formik.values.password || formik.values.password.trim() === "") {
+      toast.current.show({
+        severity: "error",
+        summary: "Password Required",
+        detail: "Password is required.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // 3. Check Age
+    if (!formik.values.age || formik.values.age === "") {
+      toast.current.show({
+        severity: "error",
+        summary: "Age Required",
+        detail: "Age is required.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // Validate age range
+    const age = Number(formik.values.age);
+    if (age < 18) {
+      toast.current.show({
+        severity: "error",
+        summary: "Invalid Age",
+        detail: "Age must be at least 18 years.",
+        life: 3000,
+      });
+      return;
+    }
+
+    if (age > 120) {
+      toast.current.show({
+        severity: "error",
+        summary: "Invalid Age",
+        detail: "Invalid age!",
+        life: 3000,
+      });
+      return;
+    }
+
+    // 4. Check Gender
+    if (!formik.values.gender || formik.values.gender.trim() === "") {
+      toast.current.show({
+        severity: "error",
+        summary: "Gender Required",
+        detail: "Gender is required.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // 5. Check Profession
+    if (!formik.values.work || formik.values.work.trim() === "") {
+      toast.current.show({
+        severity: "error",
+        summary: "Profession Required",
+        detail: "Profession is required.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // 6. Check Health Status
+    if (!formik.values.health || formik.values.health.trim() === "") {
+      toast.current.show({
+        severity: "error",
+        summary: "Health Status Required",
+        detail: "Health status is required.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // 7. Check Relationship Status
+    if (
+      !formik.values.relationship ||
+      formik.values.relationship.trim() === ""
+    ) {
+      toast.current.show({
+        severity: "error",
+        summary: "Relationship Status Required",
+        detail: "Relationship status is required.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // Check Captcha
+    if (
+      !formik.values.captchaValue ||
+      formik.values.captchaValue.trim() === ""
+    ) {
+      toast.current.show({
+        severity: "error",
+        summary: "Captcha Required",
+        detail: "Captcha is required.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // All validations passed, proceed with form submission
     const errors = await formik.validateForm();
     if (Object.keys(errors).length === 0) {
       formik.handleSubmit(e);
@@ -477,7 +616,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
                   </button>
                 )}
                 {emailVerified && (
-                  <div className="px-4 py-2 rounded-xl bg-green-500/20 text-green-400 border-2 border-green-500/25 font-medium text-sm flex items-center">
+                  <div className="px-2 py-2 rounded-xl bg-green-500/20 text-green-400 border-2 border-green-500/25 font-medium text-sm flex items-center">
                     ✓ Verified
                   </div>
                 )}
