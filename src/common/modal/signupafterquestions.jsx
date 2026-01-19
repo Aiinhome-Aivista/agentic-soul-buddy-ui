@@ -21,6 +21,13 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const toast = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
 
+  // Email verification states
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+
   // Single-error banner visibility + auto-hide timer
   const [bannerVisible, setBannerVisible] = useState(false);
   const hideTimerRef = useRef(null);
@@ -46,6 +53,118 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     { relationship: "Divorced" },
     { relationship: "It's Complicated" },
   ];
+
+  // Send OTP function
+  const handleSendOtp = async () => {
+    const email = formik.values.email;
+    if (!email) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please enter your email address first.',
+        life: 3000
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please enter a valid email address.',
+        life: 3000
+      });
+      return;
+    }
+
+    setSendingOtp(true);
+    try {
+      const response = await apiService({
+        url: POST_url1.send_otp,
+        method: "POST",
+        data: { email },
+      });
+
+      if (response && response.success) {
+        setOtpSent(true);
+        toast.current.show({
+          severity: 'success',
+          summary: 'Success',
+          detail: response.message || 'OTP sent to your email.',
+          life: 3000
+        });
+      } else {
+        toast.current.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: response?.message || 'Failed to send OTP. Please try again.',
+          life: 3000
+        });
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to send OTP. Please try again.',
+        life: 3000
+      });
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
+  // Verify OTP function
+  const handleVerifyOtp = async () => {
+    const email = formik.values.email;
+    if (!otpValue) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please enter the OTP.',
+        life: 3000
+      });
+      return;
+    }
+
+    setVerifyingOtp(true);
+    try {
+      const response = await apiService({
+        url: POST_url1.verify_otp,
+        method: "POST",
+        data: { email, otp: otpValue },
+      });
+
+      if (response && response.success) {
+        setEmailVerified(true);
+        toast.current.show({
+          severity: 'success',
+          summary: 'Success',
+          detail: response.message || 'Email verified successfully!',
+          life: 3000
+        });
+      } else {
+        toast.current.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: response?.message || 'Invalid OTP. Please try again.',
+          life: 3000
+        });
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      toast.current.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to verify OTP. Please try again.',
+        life: 3000
+      });
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
 
   const validationSchema = Yup.object({
     full_name: Yup.string().required("Full name is required."),
@@ -210,6 +329,18 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check if email is verified
+    if (!emailVerified) {
+      toast.current.show({
+        severity: 'error',
+        summary: 'Email Not Verified',
+        detail: 'Please verify your email address before signing up.',
+        life: 3000
+      });
+      return;
+    }
+    
     const errors = await formik.validateForm();
     if (Object.keys(errors).length === 0) {
       formik.handleSubmit(e);
@@ -223,7 +354,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-5">
-      <Toast ref={toast} className="custom-toast-message" />
+      <Toast ref={toast} position="top-right" className="custom-toast-message" />
       <div className="glass-card flex flex-col items-center justify-center w-[25%] relative overflow-auto animate-slideUp rounded-2xl p-2 max-h-[90vh]">
         {/* <div className="flex items-start justify-end w-full pt-2 mr-2">
                     <CloseRoundedIcon
@@ -256,19 +387,68 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
                 }`}
             />
 
-            {/* Email */}
-            <input
-              id="email"
-              name="email"
-              type="email"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.email}
-              placeholder="Email Address"
-              readOnly={!!sessionStorage.getItem("signupEmail")}
-              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupEmail") ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-            />
+            {/* Email with Verify Button */}
+            <div className="flex gap-2 w-full">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                onBlur={formik.handleBlur}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  // Reset verification if email changes
+                  if (emailVerified || otpSent) {
+                    setEmailVerified(false);
+                    setOtpSent(false);
+                    setOtpValue("");
+                  }
+                }}
+                value={formik.values.email}
+                placeholder="Email Address"
+                readOnly={!!sessionStorage.getItem("signupEmail") || emailVerified}
+                className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl flex-1 px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${(sessionStorage.getItem("signupEmail") || emailVerified) ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+              />
+              {!emailVerified && (
+                <button
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={sendingOtp || !formik.values.email}
+                  className="px-4 py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/80 border-2 border-[#D9D9D9]/25 font-medium text-sm cursor-pointer transition hover:bg-[#D9D9D9]/30 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                >
+                  {sendingOtp ? "Sending..." : otpSent ? "Resend" : "Verify"}
+                </button>
+              )}
+              {emailVerified && (
+                <div className="px-4 py-2 rounded-xl bg-green-500/20 text-green-400 border-2 border-green-500/25 font-medium text-sm flex items-center">
+                  ✓ Verified
+                </div>
+              )}
+            </div>
+
+            {/* OTP Input Field - shown after OTP is sent */}
+            {otpSent && !emailVerified && (
+              <div className="flex gap-2 w-full">
+                <input
+                  id="otp"
+                  name="otp"
+                  type="text"
+                  value={otpValue}
+                  onChange={(e) => setOtpValue(e.target.value)}
+                  placeholder="Enter OTP"
+                  maxLength={6}
+                  className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl flex-1 px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+                />
+                <button
+                  type="button"
+                  onClick={handleVerifyOtp}
+                  disabled={verifyingOtp || !otpValue}
+                  className="px-4 py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/80 border-2 border-[#D9D9D9]/25 font-medium text-sm cursor-pointer transition hover:bg-[#D9D9D9]/30 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                >
+                  {verifyingOtp ? "Verifying..." : "Confirm OTP"}
+                </button>
+              </div>
+            )}
 
             {/* Password */}
             {/* Password */}
