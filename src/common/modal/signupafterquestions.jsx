@@ -305,7 +305,6 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
             severity: 'error',
             summary: 'Error',
             detail: response?.message || 'Signup failed. Please try again.',
-            detail: response?.message || 'Signup failed. Please try again.',
             life: 3000
           });
           fetchCaptcha();

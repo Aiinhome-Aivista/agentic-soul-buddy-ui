@@ -236,15 +236,19 @@ export default function SubscriptionPage() {
                                     </h3>
                                 </div>
                             </div>
-                            <div className="flex flex-wrap gap-6 text-sm">
-                                {subscriptionStatus?.daily_minutes_left !== undefined && (
-                                    <div>
-                                        <p className="text-white/50">Remaining Time</p>
-                                        <p className="text-white font-medium">
-                                            {subscriptionStatus.daily_minutes_left} min
-                                        </p>
-                                    </div>
-                                )}
+                            <div className="flex flex-wrap gap-6 text-sm">{subscriptionStatus?.daily_minutes_left !== undefined && (
+                                <div>
+                                    <p className="text-white/50">Remaining Time</p>
+                                    <p className="text-white font-medium">
+                                        {subscriptionStatus.daily_minutes_left}
+                                        {subscriptionStatus?.plan?.toLowerCase() !== "gold plan"
+                                            && " min"}
+                                    </p>
+                                </div>
+                            )}
+
+
+
                                 <div>
                                     <p className="text-white/50">Price</p>
                                     <p className="text-white font-medium">

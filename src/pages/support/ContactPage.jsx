@@ -94,8 +94,8 @@ const ContactPage = () => {
             icon: "mail",
             title: "Email Us",
             description: "For general inquiries and support",
-            value: "support@souljunction.app",
-            action: "mailto:support@souljunction.app"
+            value: "support@souljunction.life",
+            action: "mailto:support@souljunction.life"
         },
         {
             icon: "schedule",
