@@ -384,9 +384,9 @@ const IntroPage = () => {
                         <p className="text-lg text-gray-300 leading-relaxed">
                             We don't punish absence. We celebrate return.
                         </p>
-                        <div className="pt-4">
+                        {/* <div className="pt-4">
                             <button className="text-primary font-bold border-b-2 border-primary/30 hover:border-primary transition-colors pb-1">Read our pledge to you</button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
