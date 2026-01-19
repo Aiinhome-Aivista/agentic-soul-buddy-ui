@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 
 import IntroPage from '../../pages/IntroPage'
 import Home from '../../pages/Home'
@@ -10,7 +10,8 @@ import ContactModal from '../modal/ContactModal'
 import WellBeingProfile from '../modal/WellBeingProfile'
 import TermsModal from '../modal/TermsModal'
 import FaqModal from '../modal/FaqModal'
-import { useContext } from 'react'
+import SignupModal2 from '../modal/signupafterquestions';
+import { useContext, useState } from 'react'
 import { Context } from '../helper/Context'
 
 // Legal Pages
@@ -27,7 +28,25 @@ import PaymentPage from '../../pages/PaymentPage'
 
 const DisclaimerWrapper = () => {
     const navigate = useNavigate();
-    return <DisclaimerModal OnClose={() => navigate(-1)} onConfirm={() => navigate(-1)} hideFooter={true} />;
+    const location = useLocation(); // Need useLocation imported? It's not imported in original snippet but used in logic I plan. Wait, I checked imports and useLocation is NOT imported.
+    const [showSignup, setShowSignup] = useState(false);
+
+    // answers passed from Questionnaire
+    const answers = location.state?.answers;
+
+    const handleConfirm = () => {
+        setShowSignup(true);
+    };
+
+    const handleSignupSuccess = () => {
+        navigate('/subscription', { state: { isNewSignup: true } });
+    };
+
+    if (showSignup) {
+        return <SignupModal2 OnClose={() => navigate('/')} onSuccess={handleSignupSuccess} answers={answers} />;
+    }
+
+    return <DisclaimerModal OnClose={() => navigate(-1)} onConfirm={handleConfirm} />;
 };
 
 const TermsWrapper = () => {
