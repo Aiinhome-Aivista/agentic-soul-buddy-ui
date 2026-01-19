@@ -30,5 +30,6 @@ export const get_url1 = {
       disclaimer: devUrl1 + "disclaimer",
       faq: devUrl1 + "faqs",
       subscription_status: devUrl1 + "subscription_status",
-      subscription_plan: devUrl1 + "subscription_plan"
+  subscription_plan: devUrl1 + "subscription_plan",
+  capcha: devUrl1 + "generate_captcha"
 };

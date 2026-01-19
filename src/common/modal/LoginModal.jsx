@@ -5,7 +5,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { auth, googleProvider, facebookProvider } from "../../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { apiService } from "../../service/apiService";
-import { POST_url1 } from "../../connection/connection";
+import { POST_url1, get_url1 } from "../../connection/connection";
 import { useNavigate } from "react-router-dom";
 import { Toast } from 'primereact/toast';
 
@@ -21,6 +21,12 @@ export default function LoginModal({ OnClose }) {
     const [otp, setOtp] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [showNewPassword, setShowNewPassword] = useState(false);
+
+    // Captcha States
+    const [captchaId, setCaptchaId] = useState('');
+    const [captchaText, setCaptchaText] = useState('');
+    const [captchaValue, setCaptchaValue] = useState('');
+    const [captchaLoading, setCaptchaLoading] = useState(false);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const toast = useRef(null);
@@ -111,42 +117,76 @@ export default function LoginModal({ OnClose }) {
         }
     }
 
+
+
+    const fetchCaptcha = async () => {
+        setCaptchaLoading(true);
+        try {
+            const response = await apiService({
+                url: get_url1.capcha,
+                method: 'GET',
+            });
+            if (response && response.status === "success") {
+                setCaptchaId(response.captchaId);
+                setCaptchaText(response.captchaText);
+            } else {
+                showToast('error', 'Error', 'Failed to load captcha');
+            }
+        } catch (error) {
+            console.error("Captcha Fetch Error:", error);
+        } finally {
+            setCaptchaLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (view === 'email_login') {
+            fetchCaptcha();
+        }
+    }, [view]);
+
     const handleEmailLogin = async (e) => {
         e.preventDefault();
         if (!email || !password) {
             showToast('warn', 'Warning', 'Please enter both email and password');
             return;
         }
+        if (!captchaValue) {
+            showToast('warn', 'Warning', 'Please enter the captcha');
+            return;
+        }
+
         setIsSubmitting(true);
         try {
             const payload = {
                 "email": email,
-                "password": password
+                "password": password,
+                "captchaId": captchaId,
+                "captchaValue": captchaValue
             }
             const response = await apiService({
                 url: POST_url1.login_with_email,
                 method: 'POST',
                 data: payload,
             });
-            if (response && !response.error) {
-                if (response.status === "success") {
-                    setIsLoggedIn(true);
-                    OnClose();
-                    localStorage.setItem('userId', response.user_id);
-                    localStorage.setItem('name', response.full_name);
-                    localStorage.setItem('sessionId', response.session_id);
-                    localStorage.setItem("loginType", response.login_type);
-                    navigate('/home');
-                    setIsLoading(true);
-                    setTimeout(() => {
-                        setIsLoading(false);
-                        setAudioUrl(response.audio_url);
-                    }, 3000);
-                } else {
-                    showToast('error', 'Login Failed', response?.message || 'Invalid credentials.');
-                }
+
+            if (response && response.status === "success") {
+                setIsLoggedIn(true);
+                OnClose();
+                localStorage.setItem('userId', response.user_id);
+                localStorage.setItem('name', response.full_name);
+                localStorage.setItem('sessionId', response.session_id);
+                localStorage.setItem("loginType", response.login_type);
+                navigate('/home');
+                setIsLoading(true);
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setAudioUrl(response.audio_url);
+                }, 3000);
             } else {
                 showToast('error', 'Login Failed', response?.message || 'Invalid credentials.');
+                fetchCaptcha();
+                setCaptchaValue('');
             }
         } catch (error) {
             console.error('Email login error:', error);
@@ -184,7 +224,7 @@ export default function LoginModal({ OnClose }) {
         } finally {
             setIsSubmitting(false);
         }
-    }
+    };
 
     const handlePasswordReset = async (e) => {
         e.preventDefault();
@@ -223,8 +263,7 @@ export default function LoginModal({ OnClose }) {
         } finally {
             setIsSubmitting(false);
         }
-    }
-
+    };
 
     const handleFacebookSignIn = async () => {
         try {
@@ -267,6 +306,8 @@ export default function LoginModal({ OnClose }) {
                         {view === 'forgot_request' && 'Forgot Password'}
                         {view === 'forgot_reset' && 'Reset Password'}
                     </div>
+
+                    {/* Login View Content */}
 
                     {view === 'login' && (
                         <>
@@ -337,6 +378,34 @@ export default function LoginModal({ OnClose }) {
                                     Forgot Password?
                                 </button>
                             </div>
+
+                            {/* Captcha Section */}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm text-[#FFFFFF]/70">Security Check</label>
+                                <div className="flex gap-2">
+                                    <div className="flex-1 bg-white/10 border border-white/10 rounded-xl flex items-center justify-center text-white/90 text-lg font-bold tracking-widest select-none font-mono tracking-[0.2em] relative overflow-hidden">
+                                        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '4px 4px' }}></div>
+                                        {captchaLoading ? '...' : captchaText}
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={fetchCaptcha}
+                                        className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/70 transition-colors"
+                                        title="Refresh Captcha"
+                                    >
+                                        <span className="material-symbols-outlined">refresh</span>
+                                    </button>
+                                </div>
+                                <input
+                                    type="text"
+                                    value={captchaValue}
+                                    onChange={(e) => setCaptchaValue(e.target.value)}
+                                    placeholder="Enter Captcha"
+                                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-white/30 transition-colors"
+                                    required
+                                />
+                            </div>
+
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
