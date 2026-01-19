@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import "../../styles/modal.css";
 import { Context } from "../helper/Context";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+// import WarningRoundedIcon from "@mui/icons-material/WarningRounded"; // Unused
 import { useFormik, setNestedObjectValues } from "formik";
 import * as Yup from "yup";
 import { apiService } from "../../service/apiService";
@@ -28,9 +28,9 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const [sendingOtp, setSendingOtp] = useState(false);
   const [verifyingOtp, setVerifyingOtp] = useState(false);
 
-  // Single-error banner visibility + auto-hide timer
-  const [bannerVisible, setBannerVisible] = useState(false);
-  const hideTimerRef = useRef(null);
+  // Single-error banner visibility + auto-hide timer - REMOVED for Toast
+  // const [bannerVisible, setBannerVisible] = useState(false);
+  // const hideTimerRef = useRef(null);
 
   const Genders = [
     { gender: "Male" },
@@ -315,21 +315,19 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     Boolean(firstError) && (formik.submitCount > 0 || anyTouched);
 
   useEffect(() => {
-    if (shouldShow) {
-      setBannerVisible(true);
-      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
-      hideTimerRef.current = setTimeout(() => setBannerVisible(false), 3000);
-    } else {
-      setBannerVisible(false);
+    if (shouldShow && firstError) {
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: firstError,
+        life: 3000
+      });
     }
-    return () => {
-      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
-    };
   }, [shouldShow, firstError]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Check if email is verified
     if (!emailVerified) {
       toast.current.show({
@@ -340,22 +338,20 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       });
       return;
     }
-    
+
     const errors = await formik.validateForm();
     if (Object.keys(errors).length === 0) {
       formik.handleSubmit(e);
     } else {
       formik.setTouched(setNestedObjectValues(errors, true));
-      setBannerVisible(true);
-      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
-      hideTimerRef.current = setTimeout(() => setBannerVisible(false), 3000);
+      // Toast execution handled by useEffect watching shouldShow/firstError
     }
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-5">
+    <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-5 ">
       <Toast ref={toast} position="top-right" className="custom-toast-message" />
-      <div className="glass-card flex flex-col items-center justify-center w-[25%] relative overflow-auto animate-slideUp rounded-2xl p-2 max-h-[90vh]">
+      <div className="glass-card flex flex-col items-center justify-start w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] relative animate-slideUp rounded-2xl p-6 my-4 max-h-[90vh] ">
         {/* <div className="flex items-start justify-end w-full pt-2 mr-2">
                     <CloseRoundedIcon
                         onClick={OnClose}
@@ -366,7 +362,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
         <form
           onSubmit={formik.handleSubmit}
-          className="w-full flex flex-col items-center pb-4"
+          className="w-full flex flex-col items-center pb-4 h-full overflow-y-auto "
         >
           <h2 className="text-xl font-bold text-[#D9D9D9] mb-4 cursor-default">
             Complete Your Profile
@@ -416,7 +412,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
                   disabled={sendingOtp || !formik.values.email}
                   className="px-4 py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/80 border-2 border-[#D9D9D9]/25 font-medium text-sm cursor-pointer transition hover:bg-[#D9D9D9]/30 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                 >
-                  {sendingOtp ? "Sending..." : otpSent ? "Resend" : "Verify"}
+                  {sendingOtp ? "Sending" : otpSent ? "Resend" : "Verify"}
                 </button>
               )}
               {emailVerified && (
@@ -570,36 +566,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
         </form>
       </div>
 
-      {/* Error Banner */}
-      {firstError ? (
-        <div
-          className={`glass-card flex justify-between items-center w-[25%] rounded-2xl p-2 mt-4
-           transition-opacity duration-300 ease-in-out
-           ${bannerVisible && firstError
-              ? "opacity-100"
-              : "opacity-0 pointer-events-none"
-            }`}
-        >
-          <div className="flex gap-2 h-full items-center">
-            <WarningRoundedIcon
-              sx={{ color: "rgba(255, 255, 255, 0.4)", fontSize: "1.2rem" }}
-            />
-            <p className="text-white/80 text-xs font-medium">
-              {firstError || ""}
-            </p>
-          </div>
-          <CloseRoundedIcon
-            className="cursor-pointer modalCloseIcon"
-            sx={{
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
-              borderRadius: "50%",
-              fontSize: "1rem",
-              color: "white",
-            }}
-            onClick={() => setBannerVisible(false)}
-          />
-        </div>
-      ) : null}
+      {/* Error Banner - Removed, using Toast instead */}
     </div>
   );
 }
