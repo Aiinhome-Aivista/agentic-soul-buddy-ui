@@ -83,11 +83,7 @@ const Questionnaire = () => {
         if (isLastQuestion) {
             // Finish flow - handle submission here
             console.log('Final Answers:', answers);
-            setDisclaimerModal(true);
-            // setSignupModal2(true);
-            // navigate('/');
-            // setLoginModal(true);
-
+            navigate('/disclaimer', { state: { from: 'questionnaire', answers } });
         } else {
             setCurrentIndex((prev) => prev + 1);
         }
@@ -193,8 +189,6 @@ const Questionnaire = () => {
                     onClose={() => setShowProfile(false)}
                     onContinue={handleProfileContinue}
                 />
-            ) : disclaimerModal ? (
-                <DisclaimerModal OnClose={() => setDisclaimerModal(false)} onConfirm={handleDisclaimerConfirm} />
             ) : null}
         </>
     );

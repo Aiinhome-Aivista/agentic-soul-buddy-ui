@@ -5,7 +5,7 @@ import "../../styles/modal.css";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useNavigate } from 'react-router-dom';
-export default function DisclaimerModal({ OnClose, onConfirm, hideFooter }) {
+export default function DisclaimerModal({ OnClose, onConfirm }) {
     const [acceptedTerms, setAcceptedTerms] = useState(false);
     const [disclaimerData, setDisclaimerData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ export default function DisclaimerModal({ OnClose, onConfirm, hideFooter }) {
     }, []);
 
     const navigateTerms = () => {
-        window.open('/terms', '_blank');
+        navigate('/terms');
     };
     return (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md animate-fadeIn z-50">
@@ -71,46 +71,44 @@ export default function DisclaimerModal({ OnClose, onConfirm, hideFooter }) {
                     )}
                 </div>
 
-                {/* Footer */}
-                {!hideFooter && (
-                    <div className="w-full px-8 py-5 border-t border-white/10 bg-white/5">
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                            <label className="flex items-center gap-3 cursor-pointer group">
-                                <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${acceptedTerms
-                                    ? 'bg-white/90 border-white/90'
-                                    : 'border-white/30 group-hover:border-white/50'
-                                    }`}>
-                                    {acceptedTerms && (
-                                        <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    )}
-                                </div>
-                                <input
-                                    id="acceptTerms"
-                                    type="checkbox"
-                                    checked={acceptedTerms}
-                                    onChange={(e) => setAcceptedTerms(e.target.checked)}
-                                    className="sr-only"
-                                />
-                                <span className="text-white/80 group-hover:text-white transition-colors select-none">
-                                    I have read and accept the <span className="text-blue-500  underline cursor-pointer" onClick={navigateTerms}>Terms and Conditions</span>
-                                </span>
-                            </label>
+                {/* Footer (always visible) */}
+                <div className="w-full px-8 py-5 border-t border-white/10 bg-white/5">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <label className="flex items-center gap-3 cursor-pointer group">
+                            <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${acceptedTerms
+                                ? 'bg-white/90 border-white/90'
+                                : 'border-white/30 group-hover:border-white/50'
+                                }`}>
+                                {acceptedTerms && (
+                                    <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                )}
+                            </div>
+                            <input
+                                id="acceptTerms"
+                                type="checkbox"
+                                checked={acceptedTerms}
+                                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                                className="sr-only"
+                            />
+                            <span className="text-white/80 group-hover:text-white transition-colors select-none">
+                                I have read and accept the <span className="text-blue-500  underline cursor-pointer" onClick={navigateTerms}>Terms and Conditions</span>
+                            </span>
+                        </label>
 
-                            <button
-                                onClick={onConfirm}
-                                disabled={!acceptedTerms}
-                                className={`px-8 py-3 text-base rounded-xl font-semibold shadow-lg transition-all duration-300 ${acceptedTerms
-                                    ? "bg-white/90 text-black cursor-pointer hover:bg-white hover:shadow-xl transform hover:-translate-y-0.5"
-                                    : "bg-white/10 text-white/30 cursor-not-allowed"
-                                    }`}
-                            >
-                                Continue
-                            </button>
-                        </div>
+                        <button
+                            onClick={onConfirm}
+                            disabled={!acceptedTerms}
+                            className={`px-8 py-3 text-base rounded-xl font-semibold shadow-lg transition-all duration-300 ${acceptedTerms
+                                ? "bg-white/90 text-black cursor-pointer hover:bg-white hover:shadow-xl transform hover:-translate-y-0.5"
+                                : "bg-white/10 text-white/30 cursor-not-allowed"
+                                }`}
+                        >
+                            Continue
+                        </button>
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );
