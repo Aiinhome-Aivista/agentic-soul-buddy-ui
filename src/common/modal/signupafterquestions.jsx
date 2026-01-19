@@ -32,9 +32,6 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const [captchaText, setCaptchaText] = useState('');
   const [captchaLoading, setCaptchaLoading] = useState(false);
 
-  // Single-error banner visibility + auto-hide timer - REMOVED for Toast
-  // const [bannerVisible, setBannerVisible] = useState(false);
-  // const hideTimerRef = useRef(null);
 
   const Genders = [
     { gender: "Male" },

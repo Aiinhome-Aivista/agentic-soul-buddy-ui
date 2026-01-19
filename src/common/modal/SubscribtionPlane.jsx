@@ -26,8 +26,8 @@ const SubscriptionPlane = ({ OnClose, showAllPlans = true, onSuccess }) => {
               id: plan.id,
               title: plan.isTrial ? "FREE TRIAL" : plan.title.toUpperCase() + " PLAN",
               planName: plan.planName,
-              originalPrice: plan.originalPrice ? `₹${plan.originalPrice}` : "",
-              finalPrice: plan.isTrial ? "FREE" : `₹${plan.finalPrice}`,
+              originalPrice: plan.originalPrice ? `$${plan.originalPrice}` : "",
+              finalPrice: plan.isTrial ? "FREE" : `$${plan.finalPrice}`,
               discount: plan.discount,
               usage: plan.usage,
               validityDays: plan.validityDays,
@@ -94,9 +94,9 @@ const SubscriptionPlane = ({ OnClose, showAllPlans = true, onSuccess }) => {
   };
 
   const splitPrice = (p) => {
-    // expects "₹50.94" or "₹133.27"
-    const currency = p?.trim()?.startsWith("₹") ? "₹" : "";
-    const raw = p?.replace("₹", "") ?? "";
+    // expects "$50.94" or "$133.27"
+    const currency = p?.trim()?.startsWith("$") ? "$" : "";
+    const raw = p?.replace("$", "") ?? "";
     const [intPart, decPart] = raw.split(".");
     return { currency, intPart, decPart };
   };

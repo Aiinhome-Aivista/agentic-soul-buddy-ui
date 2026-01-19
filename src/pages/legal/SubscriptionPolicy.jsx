@@ -19,8 +19,8 @@ const SubscriptionPolicy = () => {
                 if (response && response.status === "success" && response.data) {
                     const transformedPlans = response.data.map(plan => ({
                         name: plan.planName,
-                        price: `₹${plan.finalPrice}`,
-                        originalPrice: plan.originalPrice ? `₹${plan.originalPrice}` : null,
+                        price: `$${plan.finalPrice}`,
+                        originalPrice: plan.originalPrice ? `$${plan.originalPrice}` : null,
                         period: "",
                         perDay: plan.usage,
                         discount: plan.discount,

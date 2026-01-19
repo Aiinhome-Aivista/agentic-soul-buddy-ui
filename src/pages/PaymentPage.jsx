@@ -323,7 +323,7 @@ export default function PaymentPage() {
 
                         <div className="border-t border-dashed border-gray-300 pt-4 flex justify-between items-center text-lg font-bold">
                             <span>Total Paid</span>
-                            <span>₹{planDetails.finalPrice}</span>
+                            <span>${planDetails.finalPrice}</span>
                         </div>
                     </div>
 
@@ -616,7 +616,7 @@ export default function PaymentPage() {
                                     </>
                                 ) : (
                                     <>
-                                        Pay ₹{planDetails.finalPrice}
+                                        Pay ${planDetails.finalPrice}
                                         <LockRoundedIcon fontSize="small" className="opacity-80" />
                                     </>
                                 )}
@@ -641,16 +641,16 @@ export default function PaymentPage() {
                                     <p className="text-white font-medium">{planDetails.planName}</p>
                                     <p className="text-white/50 text-xs">{planDetails.validityDays} Days Validity</p>
                                 </div>
-                                <span className="text-white font-medium">₹{planDetails.originalPrice}</span>
+                                <span className="text-white font-medium">${planDetails.originalPrice}</span>
                             </div>
                             <div className="flex justify-between text-green-400 text-sm">
                                 <span>Discount ({planDetails.discount})</span>
-                                <span>- ₹{planDetails.originalPrice - planDetails.finalPrice}</span>
+                                <span>- ${planDetails.originalPrice - planDetails.finalPrice}</span>
                             </div>
                             <div className="h-px bg-white/10 my-2"></div>
                             <div className="flex justify-between text-xl font-bold text-white">
                                 <span>Total</span>
-                                <span>₹{planDetails.finalPrice}</span>
+                                <span>${planDetails.finalPrice}</span>
                             </div>
                         </div>
 

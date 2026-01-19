@@ -316,7 +316,7 @@ const AiChat = () => {
                             <div className="space-y-1.5">
                               <div className="flex justify-between text-xs">
                                 <span className="text-gray-400">Price</span>
-                                <span className="text-white font-medium">₹{details.finalPrice}</span>
+                                <span className="text-white font-medium">${details.finalPrice}</span>
                               </div>
                               <div className="flex justify-between text-xs">
                                 <span className="text-gray-400">Usage</span>

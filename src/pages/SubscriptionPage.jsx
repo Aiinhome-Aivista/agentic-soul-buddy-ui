@@ -250,7 +250,7 @@ export default function SubscriptionPage() {
                                     <p className="text-white font-medium">
                                         {plans.find(p => p.id === currentPlanId)?.isTrial || plans.find(p => p.id === currentPlanId)?.finalPrice === 0
                                             ? 'FREE'
-                                            : `₹${plans.find(p => p.id === currentPlanId)?.finalPrice || '—'}`}
+                                            : `$${plans.find(p => p.id === currentPlanId)?.finalPrice || '—'}`}
                                     </p>
                                 </div>
                                 <div>
@@ -338,10 +338,10 @@ export default function SubscriptionPage() {
                                                 <h3 className="text-2xl font-bold text-white mb-3">{plan.planName}</h3>
                                                 <div className="flex items-baseline gap-3">
                                                     <span className="text-3xl font-bold text-green-400">
-                                                        {plan.isTrial ? 'FREE' : `₹${plan.finalPrice}`}
+                                                        {plan.isTrial ? 'FREE' : `$${plan.finalPrice}`}
                                                     </span>
                                                     {plan.originalPrice && !plan.isTrial && (
-                                                        <span className="text-sm text-white/40 line-through">₹{plan.originalPrice}</span>
+                                                        <span className="text-sm text-white/40 line-through">${plan.originalPrice}</span>
                                                     )}
                                                 </div>
                                             </div>
