@@ -100,6 +100,13 @@ export default function PaymentPage() {
             return;
         }
 
+        // Country - only letters and spaces
+        if (name === 'country') {
+            const textValue = value.replace(/[^a-zA-Z\s]/g, '');
+            setBillingDetails(prev => ({ ...prev, [name]: textValue }));
+            return;
+        }
+
         setBillingDetails(prev => ({ ...prev, [name]: value }));
     };
 
@@ -116,6 +123,18 @@ export default function PaymentPage() {
         // Expiry date - only numbers with auto-format MM/YY
         if (name === 'expiry') {
             let numericValue = value.replace(/\D/g, '');
+
+            // Validate Month (01-12)
+            if (numericValue.length >= 2) {
+                let month = parseInt(numericValue.slice(0, 2));
+                if (month > 12) month = 12;
+                if (month === 0) month = 1;
+
+                // Reconstruct string with valid month
+                const monthStr = month.toString().padStart(2, '0');
+                numericValue = monthStr + numericValue.slice(2);
+            }
+
             if (numericValue.length >= 2) {
                 numericValue = numericValue.slice(0, 2) + '/' + numericValue.slice(2, 4);
             }
