@@ -11,6 +11,7 @@ import { Toast } from "primereact/toast";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
+import OtpVerificationModal from "./OtpVerificationModal";
 
 export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const { tempUserName, tempUserId, setIsLoggedIn, setAudioUrl, setIsLoading } =
@@ -22,16 +23,14 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
   // Email verification states
   const [otpSent, setOtpSent] = useState(false);
-  const [otpValue, setOtpValue] = useState("");
   const [emailVerified, setEmailVerified] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
-  const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
 
   // Captcha States
-  const [captchaId, setCaptchaId] = useState('');
-  const [captchaText, setCaptchaText] = useState('');
+  const [captchaId, setCaptchaId] = useState("");
+  const [captchaText, setCaptchaText] = useState("");
   const [captchaLoading, setCaptchaLoading] = useState(false);
-
 
   const Genders = [
     { gender: "Male" },
@@ -61,17 +60,17 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     try {
       const response = await apiService({
         url: get_url1.capcha,
-        method: 'GET',
+        method: "GET",
       });
       if (response && response.status === "success") {
         setCaptchaId(response.captchaId);
         setCaptchaText(response.captchaText);
       } else {
         toast.current.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load captcha',
-          life: 3000
+          severity: "error",
+          summary: "Error",
+          detail: "Failed to load captcha",
+          life: 3000,
         });
       }
     } catch (error) {
@@ -90,10 +89,10 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     const email = formik.values.email;
     if (!email) {
       toast.current.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Please enter your email address first.',
-        life: 3000
+        severity: "error",
+        summary: "Error",
+        detail: "Please enter your email address first.",
+        life: 3000,
       });
       return;
     }
@@ -102,10 +101,10 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       toast.current.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Please enter a valid email address.',
-        life: 3000
+        severity: "error",
+        summary: "Error",
+        detail: "Please enter a valid email address.",
+        life: 3000,
       });
       return;
     }
@@ -120,27 +119,28 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
       if (response && response.success) {
         setOtpSent(true);
+        setShowOtpModal(true); // Open OTP modal
         toast.current.show({
-          severity: 'success',
-          summary: 'Success',
-          detail: response.message || 'OTP sent to your email.',
-          life: 3000
+          severity: "success",
+          summary: "Success",
+          detail: response.message || "OTP sent to your email.",
+          life: 3000,
         });
       } else {
         toast.current.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: response?.message || 'Failed to send OTP. Please try again.',
-          life: 3000
+          severity: "error",
+          summary: "Error",
+          detail: response?.message || "Failed to send OTP. Please try again.",
+          life: 3000,
         });
       }
     } catch (error) {
       console.error("Error sending OTP:", error);
       toast.current.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to send OTP. Please try again.',
-        life: 3000
+        severity: "error",
+        summary: "Error",
+        detail: "Failed to send OTP. Please try again.",
+        life: 3000,
       });
     } finally {
       setSendingOtp(false);
@@ -148,19 +148,18 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   };
 
   // Verify OTP function
-  const handleVerifyOtp = async () => {
+  const handleVerifyOtp = async (otpValue) => {
     const email = formik.values.email;
     if (!otpValue) {
       toast.current.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Please enter the OTP.',
-        life: 3000
+        severity: "error",
+        summary: "Error",
+        detail: "Please enter the OTP.",
+        life: 3000,
       });
-      return;
+      return { success: false };
     }
 
-    setVerifyingOtp(true);
     try {
       const response = await apiService({
         url: POST_url1.verify_otp,
@@ -171,30 +170,36 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       if (response && response.success) {
         setEmailVerified(true);
         toast.current.show({
-          severity: 'success',
-          summary: 'Success',
-          detail: response.message || 'Email verified successfully!',
-          life: 3000
+          severity: "success",
+          summary: "Success",
+          detail: response.message || "Email verified successfully!",
+          life: 3000,
         });
+        return { success: true };
       } else {
         toast.current.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: response?.message || 'Invalid OTP. Please try again.',
-          life: 3000
+          severity: "error",
+          summary: "Error",
+          detail: response?.message || "Invalid OTP. Please try again.",
+          life: 3000,
         });
+        return { success: false };
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
       toast.current.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to verify OTP. Please try again.',
-        life: 3000
+        severity: "error",
+        summary: "Error",
+        detail: "Failed to verify OTP. Please try again.",
+        life: 3000,
       });
-    } finally {
-      setVerifyingOtp(false);
+      return { success: false };
     }
+  };
+
+  // Handle OTP modal close
+  const handleOtpModalClose = () => {
+    setShowOtpModal(false);
   };
 
   const validationSchema = Yup.object({
@@ -234,7 +239,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
         // { "full_name":..., "email":..., "age":..., "gender":..., "work":..., "health":..., "emotional_state":..., "relationship":... }
         const payload = {
           ...values,
-          captchaId: captchaId
+          captchaId: captchaId,
         };
         const response = await apiService({
           url: POST_url1.signup, // Verify if this endpoint accepts this payload structure
@@ -260,27 +265,28 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
           // Submit Questionnaire Responses
           if (answers) {
             try {
-              const formattedResponses = Object.keys(answers).map((questionId) => {
-                const val = answers[questionId];
-                return {
-                  question_id: Number(questionId),
-                  answer_value: Array.isArray(val) ? val.join(", ") : val
-                };
-              });
+              const formattedResponses = Object.keys(answers).map(
+                (questionId) => {
+                  const val = answers[questionId];
+                  return {
+                    question_id: Number(questionId),
+                    answer_value: Array.isArray(val) ? val.join(", ") : val,
+                  };
+                },
+              );
 
               const responsePayload = {
                 user_id: response.user_id,
-                responses: formattedResponses
+                responses: formattedResponses,
               };
 
               console.log("Submitting responses payload:", responsePayload);
 
               await apiService({
                 url: POST_url1.submit_response,
-                method: 'POST',
-                data: responsePayload
+                method: "POST",
+                data: responsePayload,
               });
-
             } catch (resErr) {
               console.error("Error submitting responses:", resErr);
             }
@@ -297,7 +303,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
             onSuccess();
           } else {
             // Fallback: Navigate to subscription page directly
-            navigate('/subscription', { state: { isNewSignup: true } });
+            navigate("/subscription", { state: { isNewSignup: true } });
           }
         } else {
           console.error("Submission failed:", response?.message);
@@ -308,15 +314,15 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
             life: 3000
           });
           fetchCaptcha();
-          formik.setFieldValue('captchaValue', '');
+          formik.setFieldValue("captchaValue", "");
         }
       } catch (error) {
         console.error("An error occurred during submission:", error);
         toast.current.show({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'An unexpected error occurred. Please try again.',
-          life: 3000
+          severity: "error",
+          summary: "Error",
+          detail: "An unexpected error occurred. Please try again.",
+          life: 3000,
         });
       } finally {
         setSubmitting(false);
@@ -329,7 +335,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     const priority = [
       "full_name",
       "email",
-      'password',
+      "password",
       "age",
       "gender",
       "work",
@@ -348,7 +354,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
   const firstError = useMemo(
     () => pickFirstError(formik.errors),
-    [formik.errors]
+    [formik.errors],
   );
 
   const anyTouched = Object.keys(formik.touched).length > 0;
@@ -358,10 +364,10 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   useEffect(() => {
     if (shouldShow && firstError) {
       toast.current?.show({
-        severity: 'error',
-        summary: 'Error',
+        severity: "error",
+        summary: "Error",
         detail: firstError,
-        life: 3000
+        life: 3000,
       });
     }
   }, [shouldShow, firstError]);
@@ -372,10 +378,10 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
     // Check if email is verified
     if (!emailVerified) {
       toast.current.show({
-        severity: 'error',
-        summary: 'Email Not Verified',
-        detail: 'Please verify your email address before signing up.',
-        life: 3000
+        severity: "error",
+        summary: "Email Not Verified",
+        detail: "Please verify your email address before signing up.",
+        life: 3000,
       });
       return;
     }
@@ -391,9 +397,14 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center gap-[2%] bg-black/10 backdrop-blur-sm animate-fadeIn z-5 ">
-      <Toast ref={toast} position="top-right" className="custom-toast-message" />
-      <div className="glass-card flex flex-col items-center justify-start w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] relative animate-slideUp rounded-2xl p-6 my-4 max-h-[90vh] ">
-        {/* <div className="flex items-start justify-end w-full pt-2 mr-2">
+      <Toast
+        ref={toast}
+        position="top-right"
+        className="custom-toast-message"
+      />
+      {!showOtpModal && (
+        <div className="glass-card flex flex-col items-center justify-start w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] relative animate-slideUp rounded-2xl p-6 my-4 max-h-[90vh] ">
+          {/* <div className="flex items-start justify-end w-full pt-2 mr-2">
                     <CloseRoundedIcon
                         onClick={OnClose}
                         className="cursor-pointer modalCloseIcon hover:scale-110 transition-transform"
@@ -401,237 +412,245 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
                     />
                 </div> */}
 
-        <form
-          onSubmit={formik.handleSubmit}
-          className="w-full flex flex-col items-center pb-4 h-full overflow-y-auto "
-        >
-          <h2 className="text-xl font-bold text-[#D9D9D9] mb-4 cursor-default">
-            Complete Your Profile
-          </h2>
+          <form
+            onSubmit={formik.handleSubmit}
+            className="w-full flex flex-col items-center pb-4 h-full overflow-y-auto "
+          >
+            <h2 className="text-xl font-bold text-[#D9D9D9] mb-4 cursor-default">
+              Complete Your Profile
+            </h2>
 
-          <div className="flex flex-col items-center justify-center gap-3 w-full px-[8%]">
-            {/* Full Name */}
-            <input
-              id="full_name"
-              name="full_name"
-              type="text"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.full_name}
-              placeholder="Full Name"
-              readOnly={!!sessionStorage.getItem("signupName")}
-              className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${sessionStorage.getItem("signupName") ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-            />
-
-            {/* Email with Verify Button */}
-            <div className="flex gap-2 w-full">
+            <div className="flex flex-col items-center justify-center gap-3 w-full px-[8%]">
+              {/* Full Name */}
               <input
-                id="email"
-                name="email"
-                type="email"
-                onBlur={formik.handleBlur}
-                onChange={(e) => {
-                  formik.handleChange(e);
-                  // Reset verification if email changes
-                  if (emailVerified || otpSent) {
-                    setEmailVerified(false);
-                    setOtpSent(false);
-                    setOtpValue("");
-                  }
-                }}
-                value={formik.values.email}
-                placeholder="Email Address"
-                readOnly={!!sessionStorage.getItem("signupEmail") || emailVerified}
-                className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl flex-1 px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${(sessionStorage.getItem("signupEmail") || emailVerified) ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-              />
-              {!emailVerified && (
-                <button
-                  type="button"
-                  onClick={handleSendOtp}
-                  disabled={sendingOtp || !formik.values.email}
-                  className="px-4 py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/80 border-2 border-[#D9D9D9]/25 font-medium text-sm cursor-pointer transition hover:bg-[#D9D9D9]/30 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                >
-                  {sendingOtp ? "Sending" : otpSent ? "Resend" : "Verify"}
-                </button>
-              )}
-              {emailVerified && (
-                <div className="px-4 py-2 rounded-xl bg-green-500/20 text-green-400 border-2 border-green-500/25 font-medium text-sm flex items-center">
-                  ✓ Verified
-                </div>
-              )}
-            </div>
-
-            {/* OTP Input Field - shown after OTP is sent */}
-            {otpSent && !emailVerified && (
-              <div className="flex gap-2 w-full">
-                <input
-                  id="otp"
-                  name="otp"
-                  type="text"
-                  value={otpValue}
-                  onChange={(e) => setOtpValue(e.target.value)}
-                  placeholder="Enter OTP"
-                  maxLength={6}
-                  className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl flex-1 px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={handleVerifyOtp}
-                  disabled={verifyingOtp || !otpValue}
-                  className="px-4 py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/80 border-2 border-[#D9D9D9]/25 font-medium text-sm cursor-pointer transition hover:bg-[#D9D9D9]/30 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                >
-                  {verifyingOtp ? "Verifying..." : "Confirm OTP"}
-                </button>
-              </div>
-            )}
-            {/* Password */}
-            <div className="relative w-full">
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.password}
-                placeholder="Password"
-                className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all pr-12"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#D9D9D9]/70 hover:text-white transition-colors cursor-pointer flex items-center justify-center p-1"
-              >
-                {showPassword ? <VisibilityOff sx={{ fontSize: '1.2rem' }} /> : <Visibility sx={{ fontSize: '1.2rem' }} />}
-              </button>
-            </div>
-
-            {/* Age */}
-            <input
-              id="age"
-              name="age"
-              type="number"
-              onBlur={formik.handleBlur}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (value === "" || Number(value) >= 0) {
-                  formik.setFieldValue("age", value);
-                }
-              }}
-              value={formik.values.age}
-              placeholder="Age"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all no-spinner"
-              min={0}
-            />
-
-            {/* Gender Dropdown */}
-            <Dropdown
-              id="gender"
-              name="gender"
-              value={formik.values.gender}
-              onChange={(e) => formik.setFieldValue("gender", e.value)}
-              onBlur={() => formik.setFieldTouched("gender", true)}
-              options={Genders}
-              optionLabel="gender"
-              optionValue="gender"
-              placeholder="Gender"
-              className="w-full"
-            />
-
-            {/* Profession */}
-            <input
-              id="work"
-              name="work"
-              type="text"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.work}
-              placeholder="Profession"
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
-            />
-
-            {/* Health Dropdown */}
-            <Dropdown
-              id="health"
-              name="health"
-              value={formik.values.health}
-              onChange={(e) => formik.setFieldValue("health", e.value)}
-              onBlur={() => formik.setFieldTouched("health", true)}
-              options={Health_Status}
-              optionLabel="health"
-              optionValue="health"
-              placeholder="Health Status"
-              className="w-full"
-            />
-
-            {/* Relationship Dropdown */}
-            <Dropdown
-              id="relationship"
-              name="relationship"
-              value={formik.values.relationship}
-              onChange={(e) => formik.setFieldValue("relationship", e.value)}
-              onBlur={() => formik.setFieldTouched("relationship", true)}
-              options={Relationship_Status}
-              optionLabel="relationship"
-              optionValue="relationship"
-              placeholder="Relationship Status"
-              className="w-full"
-            />
-
-            {/* Emotional State */}
-            <input
-              id="emotional_state"
-              name="emotional_state"
-              type="text"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              placeholder="How are you feeling? (Optional)"
-              value={formik.values.emotional_state}
-              className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
-            />
-
-            <div className="flex flex-col gap-2 w-full">
-              <label className="text-sm text-[#D9D9D9]/70">Captcha</label>
-              <div className="flex gap-2">
-                <div className="flex-1 bg-white/10 border border-white/10 rounded-xl flex items-center justify-center text-white/90 text-lg font-bold tracking-widest select-none font-mono tracking-[0.2em] relative overflow-hidden h-[50px]">
-                  <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '4px 4px' }}></div>
-                  {captchaLoading ? '...' : captchaText}
-                </div>
-                <button
-                  type="button"
-                  onClick={fetchCaptcha}
-                  className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/70 transition-colors"
-                  title="Refresh Captcha"
-                >
-                  <span className="material-symbols-outlined">refresh</span>
-                </button>
-              </div>
-              <input
-                id="captchaValue"
-                name="captchaValue"
+                id="full_name"
+                name="full_name"
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.captchaValue}
-                placeholder="Enter Captcha"
+                value={formik.values.full_name}
+                placeholder="Full Name"
+                readOnly={!!sessionStorage.getItem("signupName")}
+                className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${
+                  sessionStorage.getItem("signupName")
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+              />
+
+              {/* Email with Verify Button */}
+              <div className="flex gap-2 w-full">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  onBlur={formik.handleBlur}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    // Reset verification if email changes
+                    if (emailVerified || otpSent) {
+                      setEmailVerified(false);
+                      setOtpSent(false);
+                      setShowOtpModal(false);
+                    }
+                  }}
+                  value={formik.values.email}
+                  placeholder="Email Address"
+                  readOnly={
+                    !!sessionStorage.getItem("signupEmail") || emailVerified
+                  }
+                  className={`bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl flex-1 px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all ${
+                    sessionStorage.getItem("signupEmail") || emailVerified
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                />
+                {!emailVerified && (
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={sendingOtp || !formik.values.email}
+                    className="px-4 py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/80 border-2 border-[#D9D9D9]/25 font-medium text-sm cursor-pointer transition hover:bg-[#D9D9D9]/30 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                  >
+                    {sendingOtp ? "Sending" : otpSent ? "Resend" : "Verify"}
+                  </button>
+                )}
+                {emailVerified && (
+                  <div className="px-4 py-2 rounded-xl bg-green-500/20 text-green-400 border-2 border-green-500/25 font-medium text-sm flex items-center">
+                    ✓ Verified
+                  </div>
+                )}
+              </div>
+
+              {/* Password */}
+              <div className="relative w-full">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
+                  placeholder="Password"
+                  className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#D9D9D9]/70 hover:text-white transition-colors cursor-pointer flex items-center justify-center p-1"
+                >
+                  {showPassword ? (
+                    <VisibilityOff sx={{ fontSize: "1.2rem" }} />
+                  ) : (
+                    <Visibility sx={{ fontSize: "1.2rem" }} />
+                  )}
+                </button>
+              </div>
+
+              {/* Age */}
+              <input
+                id="age"
+                name="age"
+                type="number"
+                onBlur={formik.handleBlur}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "" || Number(value) >= 0) {
+                    formik.setFieldValue("age", value);
+                  }
+                }}
+                value={formik.values.age}
+                placeholder="Age"
+                className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all no-spinner"
+                min={0}
+              />
+
+              {/* Gender Dropdown */}
+              <Dropdown
+                id="gender"
+                name="gender"
+                value={formik.values.gender}
+                onChange={(e) => formik.setFieldValue("gender", e.value)}
+                onBlur={() => formik.setFieldTouched("gender", true)}
+                options={Genders}
+                optionLabel="gender"
+                optionValue="gender"
+                placeholder="Gender"
+                className="w-full"
+              />
+
+              {/* Profession */}
+              <input
+                id="work"
+                name="work"
+                type="text"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.work}
+                placeholder="Profession"
                 className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
               />
-            </div>
 
-            <div className="pt-4 w-full">
-              <button
-                type="submit"
-                disabled={formik.isSubmitting}
-                onClick={handleFormSubmit}
-                className="w-full py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/80 border-2 border-[#D9D9D9]/25 font-bold tracking-wide cursor-pointer shadow-lg transition hover:bg-[#D9D9D9]/30 hover:text-white"
-              >
-                {formik.isSubmitting ? "Submitting..." : "Sign Up"}
-              </button>
+              {/* Health Dropdown */}
+              <Dropdown
+                id="health"
+                name="health"
+                value={formik.values.health}
+                onChange={(e) => formik.setFieldValue("health", e.value)}
+                onBlur={() => formik.setFieldTouched("health", true)}
+                options={Health_Status}
+                optionLabel="health"
+                optionValue="health"
+                placeholder="Health Status"
+                className="w-full"
+              />
+
+              {/* Relationship Dropdown */}
+              <Dropdown
+                id="relationship"
+                name="relationship"
+                value={formik.values.relationship}
+                onChange={(e) => formik.setFieldValue("relationship", e.value)}
+                onBlur={() => formik.setFieldTouched("relationship", true)}
+                options={Relationship_Status}
+                optionLabel="relationship"
+                optionValue="relationship"
+                placeholder="Relationship Status"
+                className="w-full"
+              />
+
+              {/* Emotional State */}
+              <input
+                id="emotional_state"
+                name="emotional_state"
+                type="text"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                placeholder="How are you feeling? (Optional)"
+                value={formik.values.emotional_state}
+                className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+              />
+
+              <div className="flex flex-col gap-2 w-full">
+                <label className="text-sm text-[#D9D9D9]/70">Captcha</label>
+                <div className="flex gap-2">
+                  <div className="flex-1 bg-white/10 border border-white/10 rounded-xl flex items-center justify-center text-white/90 text-lg font-bold tracking-widest select-none font-mono tracking-[0.2em] relative overflow-hidden h-[50px]">
+                    <div
+                      className="absolute inset-0 opacity-20"
+                      style={{
+                        backgroundImage:
+                          "radial-gradient(#fff 1px, transparent 1px)",
+                        backgroundSize: "4px 4px",
+                      }}
+                    ></div>
+                    {captchaLoading ? "..." : captchaText}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={fetchCaptcha}
+                    className="p-3 h-[50px] bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white/70 transition-colors"
+                    title="Refresh Captcha"
+                  >
+                    <span className="material-symbols-outlined">refresh</span>
+                  </button>
+                </div>
+                <input
+                  id="captchaValue"
+                  name="captchaValue"
+                  type="text"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.captchaValue}
+                  placeholder="Enter Captcha"
+                  className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all"
+                />
+              </div>
+
+              <div className="pt-4 w-full">
+                <button
+                  type="submit"
+                  disabled={formik.isSubmitting}
+                  onClick={handleFormSubmit}
+                  className="w-full py-2 rounded-xl bg-[#D9D9D9]/25 text-[#D9D9D9]/80 border-2 border-[#D9D9D9]/25 font-bold tracking-wide cursor-pointer shadow-lg transition hover:bg-[#D9D9D9]/30 hover:text-white"
+                >
+                  {formik.isSubmitting ? "Submitting..." : "Sign Up"}
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      )}
+
+      {/* OTP Verification Modal - Replaces signup modal */}
+      {showOtpModal && (
+        <OtpVerificationModal
+          email={formik.values.email}
+          onClose={handleOtpModalClose}
+          onVerifySuccess={handleVerifyOtp}
+          onResendOtp={handleSendOtp}
+          toast={toast}
+        />
+      )}
     </div>
   );
 }
