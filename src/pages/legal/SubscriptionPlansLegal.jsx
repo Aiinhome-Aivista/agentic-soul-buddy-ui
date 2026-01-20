@@ -84,7 +84,7 @@ const SubscriptionPlansLegal = () => {
             </header>
 
             {/* Hero Section */}
-            <section className="relative py-20 px-6 md:px-12 overflow-hidden text-center">
+            <section className="relative py-10 px-6 md:px-12 overflow-hidden text-center">
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"></div>
 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white mb-6 relative z-10">
@@ -95,7 +95,7 @@ const SubscriptionPlansLegal = () => {
                 </p>
 
                 {/* Billing Toggle */}
-                <div className="relative z-10 inline-flex items-center bg-white/5 rounded-full p-1 border border-white/10 mb-8">
+                <div className="relative z-10 inline-flex items-center bg-white/5 rounded-full p-1 border border-white/10 ">
                     <button
                         onClick={() => setBillingCycle('monthly')}
                         className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${billingCycle === 'monthly' ? 'bg-primary text-black shadow-lg' : 'text-gray-400 hover:text-white'
@@ -116,9 +116,11 @@ const SubscriptionPlansLegal = () => {
             {/* Pricing Plans */}
             <section className="py-8 px-6 md:px-12">
                 <div className="max-w-[1200px] mx-auto">
+
                     {loading ? (
-                        <div className="text-center text-white/60">Loading plans...</div>
-                    ) : (
+                        <div className="flex justify-center items-center h-40">
+                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+                        </div>) : (
                         <div className="grid md:grid-cols-3 gap-6">
                             {plans
                                 .filter(plan => {
