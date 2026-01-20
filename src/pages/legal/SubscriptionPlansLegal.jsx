@@ -9,10 +9,14 @@ const SubscriptionPlansLegal = () => {
     const [plans, setPlans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [billingCycle, setBillingCycle] = useState('monthly'); // 'monthly' or 'yearly'
-    const [activeFaqIndex, setActiveFaqIndex] = useState(0);
+    const [activeFaqIndices, setActiveFaqIndices] = useState([0]);
 
     const toggleFaq = (index) => {
-        setActiveFaqIndex(activeFaqIndex === index ? -1 : index);
+        if (activeFaqIndices.includes(index)) {
+            setActiveFaqIndices(activeFaqIndices.filter(i => i !== index));
+        } else {
+            setActiveFaqIndices([...activeFaqIndices, index]);
+        }
     }
 
     useEffect(() => {
@@ -208,11 +212,11 @@ const SubscriptionPlansLegal = () => {
                                     className="w-full px-6 py-4 flex items-center justify-between text-left focus:outline-none"
                                 >
                                     <span className="text-lg font-medium text-white">{faq.question}</span>
-                                    <span className={`material-symbols-outlined text-gray-400 transition-transform duration-300 ${activeFaqIndex === index ? 'rotate-180' : ''}`}>
+                                    <span className={`material-symbols-outlined text-gray-400 transition-transform duration-300 ${activeFaqIndices.includes(index) ? 'rotate-180' : ''}`}>
                                         keyboard_arrow_down
                                     </span>
                                 </button>
-                                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeFaqIndex === index ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${activeFaqIndices.includes(index) ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
                                     <div className="px-6 pb-6 text-gray-400 leading-relaxed border-t border-white/5 pt-4">
                                         {faq.answer}
                                     </div>
