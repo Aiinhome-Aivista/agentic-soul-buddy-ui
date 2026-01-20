@@ -27,8 +27,8 @@ const Footer = () => {
                             <a href="/privacy-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Privacy Policy</a>
                             <a href="/terms-of-use" className="text-gray-400 text-sm hover:text-primary transition-colors">Terms of Use</a>
                             <a href="/cookie-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Cookie Policy</a>
-                            <a href="/subscription-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Subscription Policy</a>
-                            <a href="/subscription-plans" className="text-gray-400 text-sm hover:text-primary transition-colors">Pricing</a>
+                            {/* <a href="/subscription-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Subscription Policy</a>
+                            <a href="/subscription-plans" className="text-gray-400 text-sm hover:text-primary transition-colors">Pricing</a> */}
                         </div>
                     </div>
                 </div>

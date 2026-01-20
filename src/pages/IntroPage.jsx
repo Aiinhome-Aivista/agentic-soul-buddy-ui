@@ -85,6 +85,20 @@ const IntroPage = () => {
         }, 800);
     };
 
+    const handlePricingClick = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setTransitionOrigin({
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2
+        });
+        setTransitionColor('bg-primary-dark');
+        setIsTransitioning(true);
+
+        setTimeout(() => {
+            navigate('/pricing');
+        }, 800);
+    };
+
     const handleNavigateWithTransition = (e, path, color = 'bg-primary-dark') => {
         const rect = e.currentTarget.getBoundingClientRect();
         setTransitionOrigin({
@@ -221,6 +235,9 @@ const IntroPage = () => {
                         <button onClick={handleEnterSpace} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
                             <span>Begin</span>
                         </button>
+                        <button onClick={handlePricingClick} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
+                            <span>Pricing</span>
+                        </button>
                         <button onClick={(e) => handleNavigateWithTransition(e, '/contact', 'bg-secondary')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-secondary text-black text-sm font-medium hover:bg-secondary/90 transition-colors shadow-sm">
                             <span>Contact Us</span>
                         </button>
@@ -281,10 +298,10 @@ const IntroPage = () => {
                         <span className="material-symbols-outlined text-secondary">psychology</span>
                         <span className="text-sm font-medium text-gray-300">Cognitive Rest</span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                         <span className="material-symbols-outlined text-secondary">verified_user</span>
                         <span className="text-sm font-medium text-gray-300">Ethical Design</span>
-                    </div>
+                    </div> */}
                 </div>
             </section>
 
@@ -574,7 +591,7 @@ const IntroPage = () => {
                         <button onClick={handleEnterSpace} className="w-full max-w-xs h-14 rounded-full bg-primary-dark text-white text-lg font-medium shadow-xl shadow-primary-dark/25 hover:scale-105 hover:bg-primary-deep transition-all duration-300 cursor-pointer">
                             Enter the Space
                         </button>
-                        <p className="text-xs text-gray-500">Free 7-day sanctuary pass included.</p>
+                        <p className="text-xs text-gray-500">Access the free sanctuary pass today !</p>
                     </div>
                 </div>
             </section>

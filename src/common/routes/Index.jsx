@@ -74,7 +74,7 @@ function Index() {
                 <Route path="/terms-of-use" element={<TermsOfUse />} />
                 <Route path="/cookie-policy" element={<CookiePolicy />} />
                 <Route path="/subscription-policy" element={<SubscriptionPolicy />} />
-                <Route path="/subscription-plans" element={<SubscriptionPlansLegal />} />
+                <Route path="/pricing" element={<SubscriptionPlansLegal />} />
 
                 {/* Support Pages */}
                 <Route path="/contact" element={<ContactPage />} />

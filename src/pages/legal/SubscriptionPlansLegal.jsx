@@ -32,10 +32,10 @@ const SubscriptionPlansLegal = () => {
                         // Parse features if they are not already an array (assuming they might come as JSON string or need parsing logic similar to policy page)
                         // existing policy page logic hardcodes features based on title for now, reusing that logic for consistency
                         features: plan.isTrial
-                            ? ["14 days free trial", `${plan.usage}`, "Basic features access", "Personalized recommendations"]
+                            ? ["14 days free trial", `${plan.usage}`, "Basic features access"]
                             : plan.title.toLowerCase().includes("silver")
-                                ? [`${plan.validityDays} days access`, `${plan.usage}`, "Priority support", "Advanced analytics", "Journal features"]
-                                : [`${plan.validityDays} days access`, `${plan.usage}`, "All Silver features", "Exclusive workshops", "Early access to features", "Best value"],
+                                ? [`${plan.validityDays} days access`, `${plan.usage}`, "Priority support"]
+                                : [`${plan.validityDays} days access`, `${plan.usage}`, "All Silver features", "Early access to features", "Best value"],
                         highlighted: plan.title.toLowerCase().includes("gold")
                     }));
                     setPlans(transformedPlans);
@@ -88,7 +88,7 @@ const SubscriptionPlansLegal = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"></div>
 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-white mb-6 relative z-10">
-                    Subscription <span className="font-serif italic text-primary">Plans</span>
+                    Pricing <span className="font-serif italic text-primary">Plans</span>
                 </h1>
                 <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed relative z-10 mb-10">
                     Choose the perfect plan for your journey to inner peace.
