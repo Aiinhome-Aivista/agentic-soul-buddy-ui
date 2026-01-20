@@ -13,6 +13,7 @@ import FaqModal from '../modal/FaqModal'
 import SignupModal2 from '../modal/signupafterquestions';
 import { useContext, useState } from 'react'
 import { Context } from '../helper/Context'
+import GoogleAnalyticsTracker from '../helper/GoogleAnalyticsTracker'
 
 // Legal Pages
 import PrivacyPolicy from '../../pages/legal/PrivacyPolicy'
@@ -59,6 +60,7 @@ function Index() {
     const { contactModal, profileModal, setProfileModal, faqModal, setFaqModal } = useContext(Context);
     return (
         <>
+            <GoogleAnalyticsTracker />
             <Routes>
                 <Route path="/" element={<IntroPage />} />
                 <Route path="/home" element={<Home />} />
