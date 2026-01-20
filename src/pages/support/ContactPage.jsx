@@ -104,13 +104,13 @@ const ContactPage = () => {
             value: "24-48 hours",
             action: null
         },
-        {
-            icon: "forum",
-            title: "Community",
-            description: "Join our mindful community",
-            value: "Community Forum",
-            action: "#"
-        }
+        // {
+        //     icon: "forum",
+        //     title: "Community",
+        //     description: "Join our mindful community",
+        //     value: "Community Forum",
+        //     action: "#"
+        // }
     ];
 
     const faqs = [
@@ -218,7 +218,7 @@ const ContactPage = () => {
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
                     <div onClick={() => navigate('/')} className="flex items-center gap-3 text-white cursor-pointer group">
-                        <h2 className="text-lg font-semibold tracking-wide uppercase text-primary">Soul Junction</h2>
+                        <h2 className="text-3xl font-semibold tracking-wide uppercase text-primary">Soul Junction</h2>
                     </div>
                     <button onClick={handleGoBack} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors">
                         <span className="material-symbols-outlined">arrow_back</span>
@@ -248,7 +248,7 @@ const ContactPage = () => {
             </section>
 
             {/* Contact Methods */}
-            <section className="py-8 px-6 md:px-12">
+            <section className="py-8 px-6 md:px-12 ">
                 <div className="max-w-[1000px] mx-auto">
                     <div className="grid md:grid-cols-3 gap-6">
                         {contactMethods.map((method, index) => (
@@ -256,7 +256,7 @@ const ContactPage = () => {
                                 key={index}
                                 className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-secondary/30 transition-all duration-300 text-center"
                             >
-                                <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mx-auto mb-4">
+                                <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mx-auto mb-4 ">
                                     <span className="material-symbols-outlined text-2xl text-secondary">{method.icon}</span>
                                 </div>
                                 <h3 className="text-lg font-semibold text-white mb-1">{method.title}</h3>
@@ -373,7 +373,7 @@ const ContactPage = () => {
                         </div>
 
                         {/* Additional Help */}
-                        <div className="mt-8 p-6 bg-gradient-to-br from-primary-dark/20 to-primary-deep/20 rounded-2xl border border-primary/20">
+                        {/* <div className="mt-8 p-6 bg-gradient-to-br from-primary-dark/20 to-primary-deep/20 rounded-2xl border border-primary/20">
                             <div className="flex items-start gap-4">
                                 <span className="material-symbols-outlined text-2xl text-primary">lightbulb</span>
                                 <div>
@@ -387,7 +387,7 @@ const ContactPage = () => {
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
