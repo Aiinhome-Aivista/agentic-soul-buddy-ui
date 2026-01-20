@@ -103,14 +103,7 @@ const ContactPage = () => {
             description: "We typically respond within",
             value: "24-48 hours",
             action: null
-        },
-        // {
-        //     icon: "forum",
-        //     title: "Community",
-        //     description: "Join our mindful community",
-        //     value: "Community Forum",
-        //     action: "#"
-        // }
+        }
     ];
 
     const faqs = [
@@ -250,11 +243,11 @@ const ContactPage = () => {
             {/* Contact Methods */}
             <section className="py-8 px-6 md:px-12 ">
                 <div className="max-w-[1000px] mx-auto">
-                    <div className="grid md:grid-cols-3 gap-6">
+                    <div className="flex flex-wrap justify-center gap-6">
                         {contactMethods.map((method, index) => (
                             <div
                                 key={index}
-                                className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-secondary/30 transition-all duration-300 text-center"
+                                className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-secondary/30 transition-all duration-300 text-center w-full md:w-80"
                             >
                                 <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mx-auto mb-4 ">
                                     <span className="material-symbols-outlined text-2xl text-secondary">{method.icon}</span>
