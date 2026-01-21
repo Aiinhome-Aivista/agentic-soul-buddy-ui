@@ -28,6 +28,20 @@ const MockQRCode = () => (
     </div>
 );
 
+const loadScript = (src) => {
+    return new Promise((resolve) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = () => {
+            resolve(true);
+        };
+        script.onerror = () => {
+            resolve(false);
+        };
+        document.body.appendChild(script);
+    });
+};
+
 export default function PaymentPage() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -244,9 +258,15 @@ export default function PaymentPage() {
             return;
         }
 
-        // Card Validation
+        // Card Validation (only if Card tab is active AND not using Razorpay, though we might route all through Razorpay)
+        // For this implementation, let's assume if it's "Card" tab, we still try to use Razorpay or the selected method.
+        // User requested "add razorpay gateway", usually this implies replacing the mock flow or adding it. 
+        // We'll update the logic to treat the "Card" or generic "Pay" action as triggering Razorpay if suitable.
+
         if (activeTab === 'card') {
             const { number, expiry, cvv, holder } = cardDetails;
+            // Basic validation just to ensure user filled something if they think they are entering card details locally.
+            // If we use Razorpay, we don't strictly need these as Razorpay has its own form, but let's keep it for now or make it optional if method is Razorpay.
             if (!number || !expiry || !cvv || !holder) {
                 toast.current.show({ severity: 'warn', summary: 'Missing Details', detail: 'Please fill in all card details.', life: 3000 });
                 return;
@@ -272,6 +292,13 @@ export default function PaymentPage() {
 
         setLoading(true);
 
+        const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+        if (!res) {
+            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Razorpay SDK failed to load. Are you online?', life: 3000 });
+            setLoading(false);
+            return;
+        }
+
         try {
             const userId = localStorage.getItem('userId');
             const userName = localStorage.getItem('name');
@@ -282,10 +309,11 @@ export default function PaymentPage() {
                 return;
             }
 
-            // Determine payment method string
-            let paymentMethodStr = 'CARD';
-            if (activeTab === 'upi') paymentMethodStr = 'UPI';
-            else if (activeTab === 'vpa') paymentMethodStr = 'VPA';
+            // Always use RAZORPAY for now based on user request "add razorpay gateway for payment"
+            // Or we can map tabs: Card -> RAZORPAY, UPI -> RAZORPAY etc.
+            let paymentMethodStr = 'RAZORPAY';
+            // if (activeTab === 'upi') paymentMethodStr = 'UPI';
+            // else if (activeTab === 'vpa') paymentMethodStr = 'VPA';
 
             const payload = {
                 user_id: userId,
@@ -315,10 +343,84 @@ export default function PaymentPage() {
                 data: payload
             });
 
-            if (response && response.status === 'PAID') {
-                // Store the current plan in localStorage
-                localStorage.setItem('currentPlan', planDetails.planName);
+            if (response && (response.status === 'PENDING' || response.razorpay_key)) {
+                // Initialize Razorpay
+                const options = {
+                    key: response.razorpay_key,
+                    amount: response.gateway_order.amount, // Amount is in subunits (paise/cents)
+                    currency: response.gateway_order.currency,
+                    name: "Soul Junction",
+                    description: `Subscription for ${planDetails.planName}`,
+                    image: "/src/assets/icon/sblogo.svg", // Replace with your logo URL
+                    order_id: response.gateway_order.id, // This is a sample Order ID
+                    handler: async function (razorpayResponse) {
+                        // alert(razorpayResponse.razorpay_payment_id);
+                        // alert(razorpayResponse.razorpay_order_id);
+                        // alert(razorpayResponse.razorpay_signature);
 
+                        // Call verify API
+                        try {
+                            const verifyPayload = {
+                                transaction_id: response.transaction_id,
+                                razorpay_order_id: razorpayResponse.razorpay_order_id,
+                                razorpay_payment_id: razorpayResponse.razorpay_payment_id,
+                                razorpay_signature: razorpayResponse.razorpay_signature
+                            };
+
+                            const verifyRes = await apiService({
+                                url: POST_url1.razorpay_verify,
+                                method: 'POST',
+                                data: verifyPayload
+                            });
+
+                            if (verifyRes && verifyRes.success) {
+                                // Store the current plan and update state
+                                localStorage.setItem('currentPlan', planDetails.planName);
+
+                                setTransactionId(response.transaction_id);
+                                setPaymentDate(new Date().toLocaleDateString()); // Use response date if avail
+                                setValidTill(response.valid_till);
+                                setPaymentMethod("RAZORPAY");
+                                setPaymentSuccess(true);
+                                toast.current.show({ severity: 'success', summary: 'Payment Successful', detail: 'Your subscription is now active!', life: 3000 });
+                            } else {
+                                toast.current.show({ severity: 'error', summary: 'Verification Failed', detail: 'Payment verification failed.', life: 3000 });
+                            }
+
+                        } catch (err) {
+                            console.error("Verification Error", err);
+                            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Verification failed.', life: 3000 });
+                        }
+                    },
+                    prefill: {
+                        name: billingDetails.fullName || userName,
+                        email: billingDetails.email,
+                        contact: "" // Can add phone if collected
+                    },
+                    notes: {
+                        address: billingDetails.addressLine1
+                    },
+                    theme: {
+                        color: "#3399cc"
+                    }
+                };
+
+                const rzp1 = new window.Razorpay(options);
+                rzp1.on('payment.failed', function (response) {
+                    // alert(response.error.code);
+                    // alert(response.error.description);
+                    // alert(response.error.source);
+                    // alert(response.error.step);
+                    // alert(response.error.reason);
+                    // alert(response.error.metadata.order_id);
+                    // alert(response.error.metadata.payment_id);
+                    toast.current.show({ severity: 'error', summary: 'Payment Failed', detail: response.error.description, life: 3000 });
+                });
+                rzp1.open();
+
+            } else if (response && response.status === 'PAID') {
+                // Direct success (if logic allows)
+                localStorage.setItem('currentPlan', planDetails.planName);
                 setTransactionId(response.transaction_id);
                 setPaymentDate(response.date);
                 setValidTill(response.valid_till);
@@ -326,7 +428,7 @@ export default function PaymentPage() {
                 setPaymentSuccess(true);
                 toast.current.show({ severity: 'success', summary: 'Payment Successful', detail: 'Your subscription is now active!', life: 3000 });
             } else {
-                toast.current.show({ severity: 'error', summary: 'Payment Failed', detail: response?.message || 'Payment could not be processed. Please try again.', life: 3000 });
+                toast.current.show({ severity: 'error', summary: 'Payment Failed', detail: response?.message || 'Payment initiation failed.', life: 3000 });
             }
         } catch (error) {
             console.error('Payment error:', error);

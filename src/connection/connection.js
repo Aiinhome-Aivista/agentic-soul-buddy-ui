@@ -1,5 +1,5 @@
 // import { devUrl } from "../env/env";
-import { devUrl1} from "../env/env";
+import { devUrl1 } from "../env/env";
 
 // export const POST_url = {
 //       login: devUrl + "social-login",
@@ -23,15 +23,15 @@ export const POST_url1 = {
   send_otp: devUrl1 + "send_otp",
   verify_otp: devUrl1 + "verify_otp",
   cupon_validate: devUrl1 + "validate_coupon",
-  
+  razorpay_verify: devUrl1 + "payment_razorpay_verify"
 };
 
 export const get_url1 = {
-      questions: devUrl1 + "fetch_questions",
-      terms: devUrl1 + "terms-and-conditions",
-      disclaimer: devUrl1 + "disclaimer",
-      faq: devUrl1 + "faqs",
-      subscription_status: devUrl1 + "subscription_status",
+  questions: devUrl1 + "fetch_questions",
+  terms: devUrl1 + "terms-and-conditions",
+  disclaimer: devUrl1 + "disclaimer",
+  faq: devUrl1 + "faqs",
+  subscription_status: devUrl1 + "subscription_status",
   subscription_plan: devUrl1 + "subscription_plan",
   capcha: devUrl1 + "generate_captcha",
   seo: devUrl1 + "seo"
