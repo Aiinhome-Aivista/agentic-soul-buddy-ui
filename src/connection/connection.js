@@ -22,7 +22,8 @@ export const POST_url1 = {
   start_subscription: devUrl1 + "start_subscription",
   send_otp: devUrl1 + "send_otp",
   verify_otp: devUrl1 + "verify_otp",
-  cupon_validate: devUrl1 + "validate_coupon"
+  cupon_validate: devUrl1 + "validate_coupon",
+  
 };
 
 export const get_url1 = {
@@ -32,5 +33,6 @@ export const get_url1 = {
       faq: devUrl1 + "faqs",
       subscription_status: devUrl1 + "subscription_status",
   subscription_plan: devUrl1 + "subscription_plan",
-  capcha: devUrl1 + "generate_captcha"
+  capcha: devUrl1 + "generate_captcha",
+  seo: devUrl1 + "seo"
 };

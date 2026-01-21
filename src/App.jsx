@@ -1,6 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import Index from "./common/routes/Index";
 import { ContextProvider } from "./common/helper/Context";
+import SeoHelper from "./common/helper/SeoHelper";
 import VideoBackground from "./common/background/VideoBackground";
 import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 
@@ -16,6 +17,7 @@ const App = () => (
           {/* <DarkVeil hueShift={186} speed={1} /> */}
         </div>
         <BrowserRouter>
+          <SeoHelper />
           <Index />
         </BrowserRouter>
       </ContextProvider>
