@@ -21,25 +21,55 @@ const SeoHelper = ({
                 if (response.ok) {
                     const data = await response.json();
 
-                    // Match current path with page_url from API
                     const currentPath = location.pathname;
-                    const matchedSeo = data.find(item => item.page_url === currentPath);
+                    // console.log("SEO: Current Path:", currentPath);
+                    // console.log("SEO: API Data:", data);
+
+                    // Normalize path: clean slashes for consistent matching
+                    // 1. Remove trailing slash if length > 1 (e.g. /pricing/ -> /pricing)
+                    // 2. Ensure leading slash (e.g. pricing -> /pricing)
+                    let normalizedPath = currentPath;
+                    if (normalizedPath.endsWith('/') && normalizedPath.length > 1) {
+                        normalizedPath = normalizedPath.slice(0, -1);
+                    }
+                    if (!normalizedPath.startsWith('/')) {
+                        normalizedPath = '/' + normalizedPath;
+                    }
+
+                    // console.log("SEO: Normalized Path:", normalizedPath);
+
+                    const matchedSeo = data.find(item => {
+                        let itemPath = item.page_url || ""; // handle null/undefined
+
+                        // Normalize item path similarly
+                        if (itemPath.endsWith('/') && itemPath.length > 1) {
+                            itemPath = itemPath.slice(0, -1);
+                        }
+                        if (itemPath && !itemPath.startsWith('/')) {
+                            itemPath = '/' + itemPath;
+                        }
+
+                        return itemPath === normalizedPath;
+                    });
 
                     if (matchedSeo) {
+                        // console.log("SEO: Match found:", matchedSeo);
                         setSeoData(matchedSeo);
                     } else {
-                        // Fallback or maintain default if no match
-                        // Optionally look for a default entry (e.g. empty string or specific default)
-                        const defaultSeo = data.find(item => item.page_url === "");
+                        // console.log("SEO: No direct match found. Looking for default.");
+                        // Fallback to default (empty string or root)
+                        const defaultSeo = data.find(item => item.page_url === "" || item.page_url === "/");
                         if (defaultSeo) {
                             setSeoData(defaultSeo);
                         } else {
                             setSeoData(null);
                         }
                     }
+                } else {
+                    console.warn("SEO: API response not OK");
                 }
             } catch (error) {
-                console.error("Error fetching SEO data:", error);
+                console.error("SEO: Error fetching data:", error);
             }
         };
 
@@ -48,8 +78,11 @@ const SeoHelper = ({
 
     // Use fetched data or fallback to props/defaults
     const title = seoData?.seo_title || defaultTitle;
+    // console.log( "111111111------"  , title);
     const description = seoData?.meta_description || defaultDescription;
+    // console.log( "2222222222222------" , description);
     const keywords = seoData?.target_keyword || defaultKeywords;
+    // console.log( "333333333333333------" , keywords);
 
     return (
         <Helmet>
