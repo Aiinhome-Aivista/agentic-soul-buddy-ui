@@ -91,7 +91,7 @@ const IntroPage = () => {
             x: rect.left + rect.width / 2,
             y: rect.top + rect.height / 2
         });
-        setTransitionColor('bg-primary-dark');
+        setTransitionColor('bg-[#646459]');
         setIsTransitioning(true);
 
         setTimeout(() => {
@@ -235,7 +235,7 @@ const IntroPage = () => {
                         <button onClick={handleEnterSpace} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
                             <span>Begin</span>
                         </button>
-                        <button onClick={handlePricingClick} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
+                        <button onClick={handlePricingClick} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-[#646459] text-white text-sm font-medium hover:bg-[#646459]/90 transition-colors shadow-sm">
                             <span>Pricing</span>
                         </button>
                         <button onClick={(e) => handleNavigateWithTransition(e, '/contact', 'bg-secondary')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-secondary text-black text-sm font-medium hover:bg-secondary/90 transition-colors shadow-sm">
