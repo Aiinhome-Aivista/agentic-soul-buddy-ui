@@ -17,52 +17,6 @@ import AccountModal from "../common/modal/AccountModal";
 import { useMicVolume } from "../common/hooks/useMicVolume";
 import { BackgroundAudioContext } from "../common/helper/BackgroundAudioProvider";
 
-const getPlanDetails = (planName) => {
-  if (!planName) return null;
-  const lowerPlan = planName.toLowerCase();
-
-  switch (true) {
-    case lowerPlan.includes("free"):
-      return {
-        discount: "0%",
-        finalPrice: "0.00",
-        id: 1,
-        isTrial: true,
-        originalPrice: null,
-        planName: "Free Plan",
-        title: "free",
-        usage: "10 minutes/day",
-        validityDays: 14
-      };
-    case lowerPlan.includes("silver"):
-      return {
-        discount: "50%",
-        finalPrice: "1000.00",
-        id: 2,
-        isTrial: false,
-        originalPrice: "2000.00",
-        planName: "Silver Plan",
-        title: "silver",
-        usage: "20 minutes/day",
-        validityDays: 30
-      };
-    case lowerPlan.includes("gold"):
-      return {
-        discount: "60%",
-        finalPrice: "1600.00",
-        id: 3,
-        isTrial: false,
-        originalPrice: "4000.00",
-        planName: "Gold Plan",
-        title: "gold",
-        usage: "Unlimited",
-        validityDays: 30
-      };
-    default:
-      return null;
-  }
-};
-
 const AiChat = () => {
   const navigate = useNavigate();
   const {
@@ -89,13 +43,32 @@ const AiChat = () => {
   const [subscriptionActive, setSubscriptionActive] = useState(true);
   const [dailyMinutesLeft, setDailyMinutesLeft] = useState(null);
   const [currentPlan, setCurrentPlan] = useState(
-    localStorage.getItem("currentPlan") || ""
+    localStorage.getItem("currentPlan") || "",
   );
+  const [plans, setPlans] = useState([]);
   const [showLimitReachedModal, setShowLimitReachedModal] = useState(false);
   const [isPlanHovered, setIsPlanHovered] = useState(false);
 
   // Use the new hook
   const volume = useMicVolume(isRecording);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await apiService({
+          url: get_url1.subscription_plan,
+          method: "GET",
+        });
+        if (response && response.status === "success" && response.data) {
+          setPlans(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching subscription plans:", error);
+      }
+    };
+
+    fetchPlans();
+  }, []);
 
   const handleDisclaimerConfirm = () => {
     setDisclaimerModal(false);
@@ -216,7 +189,7 @@ const AiChat = () => {
       } else {
         console.error("Submission failed:", response?.message);
         console.log(
-          `Submission failed: ${response?.message || "An error occurred."}`
+          `Submission failed: ${response?.message || "An error occurred."}`,
         );
       }
     } catch (error) {
@@ -247,11 +220,15 @@ const AiChat = () => {
   const handleUpgradePlan = () => {
     setShowLimitReachedModal(false);
     // Navigate to subscription page for upgrade
-    navigate('/subscription');
+    navigate("/subscription");
   };
 
   /* New context usage for background audio */
-  const { playing: bgPlaying, play: bgPlay, pause: bgPause } = useContext(BackgroundAudioContext);
+  const {
+    playing: bgPlaying,
+    play: bgPlay,
+    pause: bgPause,
+  } = useContext(BackgroundAudioContext);
 
   const toggleBackgroundAudio = () => {
     if (bgPlaying) {
@@ -264,28 +241,42 @@ const AiChat = () => {
   return (
     <div className="flex flex-col items-center w-[100%] h-[100%]">
       <div className={`flex items-start justify-between gap-[1%] w-[100%] `}>
-
         {/* Background Audio Toggle */}
         {/* Background Audio Toggle Switch */}
         <div
           onClick={toggleBackgroundAudio}
           className="h-[2.5rem] px-3 pr-2 rounded-[1rem] border-2 border-[#333333] bg-[#474747]/22 cursor-pointer flex items-center gap-3 hover:bg-[#474747]/40 transition-colors"
         >
-          <span className="text-[0.75rem] font-medium text-[#7D7E7F]">Background Music</span>
+          <span className="text-[0.75rem] font-medium text-[#7D7E7F]">
+            Background Music
+          </span>
 
           {/* Switch Track */}
-          <div className={`relative w-8 h-4 rounded-full transition-colors duration-300 ${bgPlaying ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
+          <div
+            className={`relative w-8 h-4 rounded-full transition-colors duration-300 ${bgPlaying ? "bg-green-500/20" : "bg-red-500/20"}`}
+          >
             {/* Switch Dot */}
-            <div className={`absolute top-0.5 w-3 h-3 rounded-full shadow-sm transform transition-all duration-300 ${bgPlaying ? 'translate-x-4 bg-green-500' : 'translate-x-0.5 bg-red-500'}`} />
+            <div
+              className={`absolute top-0.5 w-3 h-3 rounded-full shadow-sm transform transition-all duration-300 ${bgPlaying ? "translate-x-4 bg-green-500" : "translate-x-0.5 bg-red-500"}`}
+            />
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          {isLoggedIn && currentPlan && (
+          {isLoggedIn &&
+            currentPlan &&
             (() => {
-              const details = getPlanDetails(currentPlan);
-              const isGold = details?.title === 'gold';
-              const isSilver = details?.title === 'silver';
+              // Find the plan details from the fetched plans
+              // Find the plan details from the fetched plans
+              // Use strict matching to distinguish between "Silver" and "Silver Pro", etc.
+              const details = plans.find(
+                (p) =>
+                  p.planName?.toLowerCase() === currentPlan.toLowerCase() ||
+                  p.title?.toLowerCase() === currentPlan.toLowerCase(),
+              );
+
+              const isGold = details?.title?.toLowerCase().includes("gold");
+              const isSilver = details?.title?.toLowerCase().includes("silver");
 
               const badgeStyle = isGold
                 ? "border-yellow-500/50 bg-yellow-500/10 text-yellow-200 shadow-[0_0_10px_rgba(234,179,8,0.2)]"
@@ -300,7 +291,9 @@ const AiChat = () => {
                   onMouseLeave={() => setIsPlanHovered(false)}
                 >
                   {/* <span className="text-[#D9D9D9]">✨</span> */}
-                  <span className="font-medium text-[0.75rem]">{currentPlan}</span>
+                  <span className="font-medium text-[0.75rem]">
+                    {currentPlan}
+                  </span>
 
                   {isPlanHovered && (
                     <div className="absolute top-full right-0 mt-2 w-48 p-3 rounded-xl bg-[#1a1a1a] border border-white/10 shadow-xl backdrop-blur-md z-50 text-left">
@@ -309,22 +302,30 @@ const AiChat = () => {
                         return (
                           <div className="flex flex-col gap-2">
                             <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-1">
-                              <span className="text-white font-semibold text-sm">{details.planName}</span>
+                              <span className="text-white font-semibold text-sm">
+                                {details.planName}
+                              </span>
                               {/* {details.discount !== "0%" && <span className="text-[0.65rem] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded">{details.discount} OFF</span>} */}
                             </div>
 
                             <div className="space-y-1.5">
                               <div className="flex justify-between text-xs">
                                 <span className="text-gray-400">Price</span>
-                                <span className="text-white font-medium">${details.finalPrice}</span>
+                                <span className="text-white font-medium">
+                                  ${details.finalPrice}
+                                </span>
                               </div>
                               <div className="flex justify-between text-xs">
                                 <span className="text-gray-400">Usage</span>
-                                <span className="text-white font-medium">{details.usage}</span>
+                                <span className="text-white font-medium">
+                                  {details.usage}
+                                </span>
                               </div>
                               <div className="flex justify-between text-xs">
                                 <span className="text-gray-400">Validity</span>
-                                <span className="text-white font-medium">{details.validityDays} Days</span>
+                                <span className="text-white font-medium">
+                                  {details.validityDays} Days
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -333,9 +334,8 @@ const AiChat = () => {
                     </div>
                   )}
                 </div>
-              )
-            })()
-          )}
+              );
+            })()}
           {!isLoggedIn && (
             <button
               onClick={() => navigate("/questionnaire")}
@@ -370,7 +370,7 @@ const AiChat = () => {
               className="absolute w-20 h-20 rounded-full bg-[#e57373]/40"
               style={{
                 transform: `scale(${1 + volume * 0.8})`,
-                transition: 'transform 0.1s ease-out'
+                transition: "transform 0.1s ease-out",
               }}
             />
             {/* Main red circular button */}
@@ -464,55 +464,49 @@ const AiChat = () => {
       {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
       {signupModal && <SignupModal OnClose={() => setSignupModal(false)} />}
       {signupModal2 && <SignupModal2 OnClose={() => setSignupModal2(false)} />}
-      {
-        showProfile && (
-          <WellBeingProfile onClose={() => setShowProfile(false)} />
-        )
-      }
-      {
-        disclaimerModal && (
-          <DisclaimerModal
-            OnClose={() => setDisclaimerModal(false)}
-            onConfirm={handleDisclaimerConfirm}
-          />
-        )
-      }
+      {showProfile && (
+        <WellBeingProfile onClose={() => setShowProfile(false)} />
+      )}
+      {disclaimerModal && (
+        <DisclaimerModal
+          OnClose={() => setDisclaimerModal(false)}
+          onConfirm={handleDisclaimerConfirm}
+        />
+      )}
       {accountModal && <AccountModal OnClose={() => setAccountModal(false)} />}
 
       {/* Limit Reached Modal */}
-      {
-        showLimitReachedModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fadeIn">
-            <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 max-w-sm w-[90%] text-center animate-slideUp">
-              <div className="text-4xl mb-4">⏰</div>
-              <h3 className="text-white text-xl font-semibold mb-2">
-                Plan Limit Reached
-              </h3>
-              <p className="text-white/60 text-sm mb-6">
-                You have reached your daily usage limit. Upgrade your plan to
-                continue your journey.
-              </p>
-              <div className="flex flex-col gap-3">
-                <button
-                  onClick={handleUpgradePlan}
-                  className="w-full py-3 rounded-xl bg-[#D9D9D9] text-black font-semibold
+      {showLimitReachedModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#1a1a1a] border border-white/10 rounded-2xl p-6 max-w-sm w-[90%] text-center animate-slideUp">
+            <div className="text-4xl mb-4">⏰</div>
+            <h3 className="text-white text-xl font-semibold mb-2">
+              Plan Limit Reached
+            </h3>
+            <p className="text-white/60 text-sm mb-6">
+              You have reached your daily usage limit. Upgrade your plan to
+              continue your journey.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={handleUpgradePlan}
+                className="w-full py-3 rounded-xl bg-[#D9D9D9] text-black font-semibold
                            hover:bg-white transition-all duration-300"
-                >
-                  Upgrade Plan
-                </button>
-                <button
-                  onClick={() => setShowLimitReachedModal(false)}
-                  className="w-full py-3 rounded-xl border border-white/20 text-white/70 font-medium
+              >
+                Upgrade Plan
+              </button>
+              <button
+                onClick={() => setShowLimitReachedModal(false)}
+                className="w-full py-3 rounded-xl border border-white/20 text-white/70 font-medium
                            hover:bg-white/10 transition-all duration-300"
-                >
-                  Maybe Later
-                </button>
-              </div>
+              >
+                Maybe Later
+              </button>
             </div>
           </div>
-        )
-      }
-    </div >
+        </div>
+      )}
+    </div>
   );
 };
 
