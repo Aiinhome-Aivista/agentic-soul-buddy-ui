@@ -84,6 +84,8 @@ const SeoHelper = ({
     const keywords = seoData?.target_keyword || defaultKeywords;
     // console.log( "333333333333333------" , keywords);
 
+    const canonical = window.location.href;
+
     return (
         <Helmet>
             {/* Standard metadata */}
@@ -91,13 +93,15 @@ const SeoHelper = ({
             <meta name="description" content={description} />
             {keywords && <meta name="keywords" content={keywords} />}
             <meta name="author" content={author} />
+            <link rel="canonical" href={canonical} />
+            <meta name="robots" content="index, follow" />
 
             {/* Open Graph / Facebook */}
             <meta property="og:type" content={type} />
             <meta property="og:title" content={title} />
             <meta property="og:description" content={description} />
             {defaultImage && <meta property="og:image" content={defaultImage} />}
-            <meta property="og:url" content={window.location.href} />
+            <meta property="og:url" content={canonical} />
 
             {/* Twitter */}
             <meta name="twitter:card" content="summary_large_image" />
