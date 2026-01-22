@@ -241,7 +241,7 @@ export default function SubscriptionPage() {
                                     <p className="text-white/50">Remaining Time</p>
                                     <p className="text-white font-medium">
                                         {subscriptionStatus.daily_minutes_left}
-                                        {subscriptionStatus?.plan?.toLowerCase() !== "gold plan"
+                                        {subscriptionStatus?.plan?.toLowerCase() !== "gold plan" && subscriptionStatus?.plan?.toLowerCase() !== "gold pro"
                                             && " min"}
                                     </p>
                                 </div>
