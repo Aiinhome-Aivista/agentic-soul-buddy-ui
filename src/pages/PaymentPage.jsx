@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { Toast } from 'primereact/toast';
@@ -43,7 +44,6 @@ export default function PaymentPage() {
     });
 
     const [loading, setLoading] = useState(false);
-    const [paymentSuccess, setPaymentSuccess] = useState(false);
     const [transactionId, setTransactionId] = useState(null);
     const [paymentDate, setPaymentDate] = useState(null);
     const [validTill, setValidTill] = useState(null);
@@ -258,12 +258,20 @@ export default function PaymentPage() {
                                 // Store the current plan and update state
                                 localStorage.setItem('currentPlan', planDetails.planName);
 
-                                setTransactionId(response.transaction_id);
-                                setPaymentDate(new Date().toLocaleDateString()); // Use response date if avail
-                                setValidTill(response.valid_till);
-                                setPaymentMethod("RAZORPAY");
-                                setPaymentSuccess(true);
-                                toast.current.show({ severity: 'success', summary: 'Payment Successful', detail: 'Your subscription is now active!', life: 3000 });
+                                // Navigate to Receipt Page
+                                navigate('/receipt', {
+                                    state: {
+                                        transactionId: response.transaction_id,
+                                        paymentDate: new Date().toLocaleDateString(),
+                                        validTill: response.valid_till,
+                                        paymentMethod: "RAZORPAY",
+                                        planDetails,
+                                        billingDetails,
+                                        finalPayableAmount,
+                                        couponDetails,
+                                        isNewSignup
+                                    }
+                                });
                             } else {
                                 toast.current.show({ severity: 'error', summary: 'Verification Failed', detail: 'Payment verification failed.', life: 3000 });
                             }
@@ -288,13 +296,6 @@ export default function PaymentPage() {
 
                 const rzp1 = new window.Razorpay(options);
                 rzp1.on('payment.failed', function (response) {
-                    // alert(response.error.code);
-                    // alert(response.error.description);
-                    // alert(response.error.source);
-                    // alert(response.error.step);
-                    // alert(response.error.reason);
-                    // alert(response.error.metadata.order_id);
-                    // alert(response.error.metadata.payment_id);
                     toast.current.show({ severity: 'error', summary: 'Payment Failed', detail: response.error.description, life: 3000 });
                 });
                 rzp1.open();
@@ -302,12 +303,20 @@ export default function PaymentPage() {
             } else if (response && response.status === 'PAID') {
                 // Direct success (if logic allows)
                 localStorage.setItem('currentPlan', planDetails.planName);
-                setTransactionId(response.transaction_id);
-                setPaymentDate(response.date);
-                setValidTill(response.valid_till);
-                setPaymentMethod(response.payment_method);
-                setPaymentSuccess(true);
-                toast.current.show({ severity: 'success', summary: 'Payment Successful', detail: 'Your subscription is now active!', life: 3000 });
+
+                navigate('/receipt', {
+                    state: {
+                        transactionId: response.transaction_id,
+                        paymentDate: response.date,
+                        validTill: response.valid_till,
+                        paymentMethod: response.payment_method,
+                        planDetails,
+                        billingDetails,
+                        finalPayableAmount,
+                        couponDetails,
+                        isNewSignup
+                    }
+                });
             } else {
                 toast.current.show({ severity: 'error', summary: 'Payment Failed', detail: response?.message || 'Payment initiation failed.', life: 3000 });
             }
@@ -319,122 +328,20 @@ export default function PaymentPage() {
         }
     };
 
-    const downloadReceipt = () => {
-        toast.current.show({ severity: 'info', summary: 'Download', detail: 'Receipt download started...', life: 2000 });
-        // Logic to generate PDF would go here
-    };
-
-    if (paymentSuccess) {
-        return (
-            <div className="w-full min-h-screen flex flex-col items-center justify-center p-4 animate-fadeIn bg-white/5 backdrop-blur-sm">
-                <Toast ref={toast} className="custom-toast-message" position="top-right" />
-
-                <div className="glass-card w-full max-w-lg rounded-3xl p-8 relative overflow-hidden">
-                    {/* Success Header */}
-                    <div className="flex flex-col items-center mb-8">
-                        <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mb-4 animate-checkmark">
-                            <CheckCircleRoundedIcon sx={{ fontSize: "3.5rem" }} className="text-green-400" />
-                        </div>
-                        <h2 className="text-3xl font-bold text-white mb-2">Payment Successful!</h2>
-                        <p className="text-white/60">Thank you for your purchase.</p>
-                    </div>
-
-                    {/* Receipt Card */}
-                    <div className="bg-white text-gray-800 rounded-lg p-6 mb-8 shadow-lg relative receipt-paper transform transition-all hover:scale-[1.01]">
-                        <div className="border-b border-dashed border-gray-300 pb-4 mb-4">
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="font-bold text-lg">Soul Junction</span>
-                                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">PAID</span>
-                            </div>
-                            <div className="text-xs text-gray-500">
-                                <p>Transaction ID: {transactionId}</p>
-                                <p>Date: {paymentDate || new Date().toLocaleDateString()}</p>
-                            </div>
-                        </div>
-
-                        <div className="space-y-3 text-sm mb-6">
-                            <div className="flex justify-between">
-                                <span className="text-gray-600">Plan</span>
-                                <span className="font-medium">{planDetails.planName}</span>
-                            </div>
-                            <div className="flex flex-col gap-1 border-b border-dashed border-gray-200 pb-3">
-                                <span className="text-gray-600 text-xs uppercase font-bold tracking-wider mb-1">Billed To</span>
-                                <span className="font-bold text-gray-800">{billingDetails.fullName}</span>
-                                <span className="text-gray-600 text-xs">{billingDetails.email}</span>
-                                <span className="text-gray-600 text-xs">
-                                    {billingDetails.addressLine1}
-                                    {billingDetails.addressLine2 && `, ${billingDetails.addressLine2}`}
-                                </span>
-                                <span className="text-gray-600 text-xs">
-                                    {billingDetails.city}, {billingDetails.state} - {billingDetails.zipCode}
-                                </span>
-                                <span className="text-gray-600 text-xs">{billingDetails.country}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span className="font-medium capitalize">{paymentMethod || 'RAZORPAY'}</span>
-                            </div>
-                            {validTill && (
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">Valid Till</span>
-                                    <span className="font-medium capitalize">{validTill}</span>
-                                </div>
-                            )}
-
-                            {/* Coupon Details in Receipt */}
-                            {couponDetails && (
-                                <>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600">Coupon Code</span>
-                                        <span className="font-medium capitalize">{couponDetails.coupon_code}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600">Discount Added</span>
-                                        <span className="font-medium capitalize">- ${couponDetails.discount_amount}</span>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-
-                        <div className="border-t border-dashed border-gray-300 pt-4 flex justify-between items-center text-lg font-bold">
-                            <span>Total Paid</span>
-                            <span>${finalPayableAmount}</span>
-                        </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex flex-col gap-3">
-                        {/* <button
-                            onClick={downloadReceipt}
-                            className="w-full py-3 rounded-xl bg-white/90 hover:bg-white/100 text-black font-medium flex items-center justify-center gap-2 transition-all"
-                        >
-                            <DownloadRoundedIcon /> Download Receipt
-                        </button> */}
-                        <button
-                            onClick={() => navigate('/home')}
-                            className="w-full py-3 bg-white/90 rounded-xl bg- hover:bg-white/100 text-black font-bold transition-all shadow-lg"
-                        >
-                            {isNewSignup ? 'Get Started' : 'Go to Dashboard'}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="w-full h-full flex flex-col p-4 md:p-8 animate-fadeIn overflow-y-auto relative no-scrollbar bg-white/5 backdrop-blur-sm">
             <Toast ref={toast} className="custom-toast-message" position="top-right" />
             {showConfetti && <Confetti />}
 
             {/* Header */}
-            <div className="flex items-center gap-4 mb-6 max-w-6xl mx-auto w-full">
+            <div className="flex items-center gap-4 mb-4 max-w-6xl mx-auto w-full">
                 <button
                     onClick={() => navigate(-1)}
                     className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
                 >
                     <ArrowBackRoundedIcon sx={{ fontSize: "1.5rem" }} />
                 </button>
-                <h1 className="text-2xl md:text-3xl font-bold text-white tracking-wide">Secure Checkout</h1>
+                <h1 className="text-2xl md:text-2xl font-bold text-white tracking-wide">Secure Checkout</h1>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto w-full">
@@ -443,214 +350,210 @@ export default function PaymentPage() {
                 <div className="flex-1 flex flex-col gap-6">
 
                     {/* Billing Address Section */}
-                    <div className="glass-card rounded-3xl p-6 md:p-8">
-                        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                            <span className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-sm">1</span>
-                            Billing Details
-                        </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="md:col-span-1">
-                                <label className="block text-white/60 text-sm mb-2">Full Name <span className="text-red-400">*</span></label>
-                                <input
-                                    type="text"
-                                    name="fullName"
-                                    value={billingDetails.fullName}
-                                    onChange={handleBillingChange}
-                                    className="w-full px-4 py-3 rounded-xl glass-input"
-                                    placeholder="John Doe"
-                                />
-                            </div>
-                            <div className="md:col-span-1">
-                                <label className="block text-white/60 text-sm mb-2">Email Address <span className="text-red-400">*</span></label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={billingDetails.email}
-                                    onChange={handleBillingChange}
-                                    className="w-full px-4 py-3 rounded-xl glass-input"
-                                    placeholder="john@example.com"
-                                />
-                            </div>
-                            <div className="md:col-span-2">
-                                <label className="block text-white/60 text-sm mb-2">Address Line 1 <span className="text-red-400">*</span></label>
-                                <input
-                                    type="text"
-                                    name="addressLine1"
-                                    value={billingDetails.addressLine1}
-                                    onChange={handleBillingChange}
-                                    className="w-full px-4 py-3 rounded-xl glass-input"
-                                    placeholder="Street address, P.O. box"
-                                />
-                            </div>
-                            <div className="md:col-span-2">
-                                <label className="block text-white/60 text-sm mb-2">Address Line 2 <span className="text-white/30 text-xs">(Optional)</span></label>
-                                <input
-                                    type="text"
-                                    name="addressLine2"
-                                    value={billingDetails.addressLine2}
-                                    onChange={handleBillingChange}
-                                    className="w-full px-4 py-3 rounded-xl glass-input"
-                                    placeholder="Apartment, suite, unit, etc."
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-white/60 text-sm mb-2">City <span className="text-red-400">*</span></label>
-                                <input
-                                    type="text"
-                                    name="city"
-                                    value={billingDetails.city}
-                                    onChange={handleBillingChange}
-                                    className="w-full px-4 py-3 rounded-xl glass-input"
-                                    placeholder="City"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-white/60 text-sm mb-2">State <span className="text-red-400">*</span></label>
-                                <input
-                                    type="text"
-                                    name="state"
-                                    value={billingDetails.state}
-                                    onChange={handleBillingChange}
-                                    className="w-full px-4 py-3 rounded-xl glass-input"
-                                    placeholder="State"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-white/60 text-sm mb-2">Zip Code <span className="text-red-400">*</span></label>
-                                <input
-                                    type="text"
-                                    inputMode="numeric"
-                                    name="zipCode"
-                                    value={billingDetails.zipCode}
-                                    onChange={handleBillingChange}
-                                    className="w-full px-4 py-3 rounded-xl glass-input"
-                                    placeholder="123456"
-                                    maxLength="6"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-white/60 text-sm mb-2">Country <span className="text-red-400">*</span></label>
-                                <input
-                                    type="text"
-                                    name="country"
-                                    value={billingDetails.country}
-                                    onChange={handleBillingChange}
-                                    className="w-full px-4 py-3 rounded-xl glass-input"
-                                    placeholder="Country"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Payment Methods Section */}
-
-
-                    {/* Pay Button */}
-                    <div className="glass-card rounded-3xl p-6 md:p-8 mt-6">
-                        <div className="flex flex-col gap-4">
-                            <button
-                                onClick={processPayment}
-                                disabled={loading}
-                                className="w-full py-4 rounded-xl bg-white/90 hover:bg-white/100 text-black font-bold text-lg  transition-all transform active:scale-[0.99] flex items-center justify-center gap-3"
-                            >
-                                {loading ? (
-                                    <>
-                                        <div className="w-5 h-5 border-2 border-white/80 border-t-white rounded-full animate-spin"></div>
-                                        Processing...
-                                    </>
-                                ) : (
-                                    <>
-                                        Pay ${finalPayableAmount}
-                                        <LockRoundedIcon fontSize="small" className="opacity-80" />
-                                    </>
-                                )}
-                            </button>
-                            <p className="text-center text-white/30 text-xs flex items-center justify-center gap-1">
-                                <LockRoundedIcon style={{ fontSize: 12 }} />
-                                128-bit SSL Encrypted Payment
-                            </p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            {/* Right Column: Order Summary */}
-            <div className="w-full lg:w-96 flex flex-col gap-6">
-                <div className="glass-card rounded-3xl p-6 md:p-8">
-                    <h3 className="text-lg font-bold text-white mb-6">Order Summary</h3>
-
-                    <div className="flex flex-col gap-4 mb-6">
-                        <div className="flex justify-between items-start">
-                            <div>
-                                <p className="text-white font-medium">{planDetails.planName}</p>
-                                <p className="text-white/50 text-xs">{planDetails.validityDays} Days Validity</p>
-                            </div>
-                            <span className="text-white font-medium">${planDetails.originalPrice}</span>
-                        </div>
-                        <div className="flex justify-between text-green-400 text-sm">
-                            <span>Discount ({planDetails.discount})</span>
-
-                            <span>- ${planDetails.originalPrice - planDetails.finalPrice}</span>
-                        </div>
-
-                        {/* Coupon Input Section */}
-                        {!couponDetails ? (
-                            <div className="flex gap-2 my-2">
-                                <input
-                                    type="text"
-                                    value={couponCode}
-                                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                                    placeholder="Enter Coupon Code"
-                                    className="w-full px-4 py-2 rounded-xl glass-input text-sm uppercase"
-                                />
-                                <button
-                                    onClick={handleApplyCoupon}
-                                    disabled={verifyingCoupon || !couponCode}
-                                    className="px-4 py-2 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-xl font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {verifyingCoupon ? '...' : 'APPLY'}
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="glass-card p-3 rounded-xl flex justify-between items-center border border-green-500/30 bg-green-500/10">
-                                <div>
-                                    <p className="text-green-400 text-xs font-bold flex items-center gap-1">
-                                        <CheckCircleRoundedIcon fontSize="inherit" />
-                                        {couponDetails.coupon_code} APPLIED
-                                    </p>
-                                    <p className="text-white/60 text-xs">You saved ${couponDetails.discount_amount}</p>
+                    <div className="grid lg:grid-cols-5 grid-cols-1 gap-5 w-full">
+                        <div className="glass-card rounded-3xl p-6 md:p-8 w-full lg:col-span-3">
+                            <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                                Billing Details
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="md:col-span-1">
+                                    <label className="block text-white/60 text-sm mb-2">Full Name <span className="text-red-400">*</span></label>
+                                    <input
+                                        type="text"
+                                        name="fullName"
+                                        value={billingDetails.fullName}
+                                        onChange={handleBillingChange}
+                                        className="w-full px-4 py-3 rounded-xl glass-input"
+                                        placeholder="John Doe"
+                                    />
                                 </div>
-                                <button
-                                    onClick={handleRemoveCoupon}
-                                    className="text-white/40 hover:text-white transition-colors"
-                                >
-                                    <CloseRoundedIcon fontSize="small" />
-                                </button>
+                                <div className="md:col-span-1">
+                                    <label className="block text-white/60 text-sm mb-2">Email Address <span className="text-red-400">*</span></label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={billingDetails.email}
+                                        onChange={handleBillingChange}
+                                        className="w-full px-4 py-3 rounded-xl glass-input"
+                                        placeholder="john@example.com"
+                                    />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-white/60 text-sm mb-2">Billing Address Line 1 <span className="text-red-400">*</span></label>
+                                    <input
+                                        type="text"
+                                        name="addressLine1"
+                                        value={billingDetails.addressLine1}
+                                        onChange={handleBillingChange}
+                                        className="w-full px-4 py-3 rounded-xl glass-input"
+                                        placeholder="Street address, P.O. box"
+                                    />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-white/60 text-sm mb-2"> Billing Address Line 2 <span className="text-white/30 text-xs">(Optional)</span></label>
+                                    <input
+                                        type="text"
+                                        name="addressLine2"
+                                        value={billingDetails.addressLine2}
+                                        onChange={handleBillingChange}
+                                        className="w-full px-4 py-3 rounded-xl glass-input"
+                                        placeholder="Apartment, suite, unit, etc."
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-white/60 text-sm mb-2">City <span className="text-red-400">*</span></label>
+                                    <input
+                                        type="text"
+                                        name="city"
+                                        value={billingDetails.city}
+                                        onChange={handleBillingChange}
+                                        className="w-full px-4 py-3 rounded-xl glass-input"
+                                        placeholder="City"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-white/60 text-sm mb-2">State <span className="text-red-400">*</span></label>
+                                    <input
+                                        type="text"
+                                        name="state"
+                                        value={billingDetails.state}
+                                        onChange={handleBillingChange}
+                                        className="w-full px-4 py-3 rounded-xl glass-input"
+                                        placeholder="State"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-white/60 text-sm mb-2">Zip Code <span className="text-red-400">*</span></label>
+                                    <input
+                                        type="text"
+                                        inputMode="numeric"
+                                        name="zipCode"
+                                        value={billingDetails.zipCode}
+                                        onChange={handleBillingChange}
+                                        className="w-full px-4 py-3 rounded-xl glass-input"
+                                        placeholder="123456"
+                                        maxLength="6"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-white/60 text-sm mb-2">Country <span className="text-red-400">*</span></label>
+                                    <input
+                                        type="text"
+                                        name="country"
+                                        value={billingDetails.country}
+                                        onChange={handleBillingChange}
+                                        className="w-full px-4 py-3 rounded-xl glass-input"
+                                        placeholder="Country"
+                                    />
+                                </div>
                             </div>
-                        )}
+                        </div>
+                        {/* Right Column: Order Summary */}
+                        <div className="w-full flex flex-col gap-6 lg:col-span-2 h-full">
+                            <div className="glass-card rounded-3xl p-6 md:p-8 h-full flex flex-col justify-between gap-4 ">
 
-                        {couponDetails && (
-                            <div className="flex justify-between text-green-400 text-sm animate-fadeIn">
-                                <span>Coupon Discount</span>
-                                <span>- ${couponDetails.discount_amount}</span>
+
+                                <div className="flex flex-col gap-4 ">
+                                    <h3 className="text-lg font-bold text-white mb-6">Order Summary</h3>
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <p className="text-white font-medium">{planDetails.planName}</p>
+                                            <p className="text-white/50 text-xs">{planDetails.validityDays} Days Validity</p>
+                                        </div>
+                                        <span className="text-white font-medium">${planDetails.originalPrice}</span>
+                                    </div>
+                                    <div className="flex justify-between text-green-400 text-sm">
+                                        <span>Discount ({planDetails.discount})</span>
+
+                                        <span>- ${planDetails.originalPrice - planDetails.finalPrice}</span>
+                                    </div>
+
+                                    {/* Coupon Input Section */}
+                                    {!couponDetails ? (
+                                        <div className="flex gap-2 my-2">
+                                            <input
+                                                type="text"
+                                                value={couponCode}
+                                                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                                                placeholder="Enter Coupon Code"
+                                                className="w-full px-4 py-2 rounded-xl glass-input text-sm uppercase"
+                                            />
+                                            <button
+                                                onClick={handleApplyCoupon}
+                                                disabled={verifyingCoupon || !couponCode}
+                                                className="px-4 py-2 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-xl font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                {verifyingCoupon ? '...' : 'APPLY'}
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="glass-card p-3 rounded-xl flex justify-between items-center border border-green-500/30 bg-green-500/10">
+                                            <div>
+                                                <p className="text-green-400 text-xs font-bold flex items-center gap-1">
+                                                    {/* <CheckCircleRoundedIcon fontSize="inherit" /> */}
+                                                    {couponDetails.coupon_code} APPLIED
+                                                </p>
+                                                <p className="text-white/60 text-xs">You saved ${couponDetails.discount_amount}</p>
+                                            </div>
+                                            <button
+                                                onClick={handleRemoveCoupon}
+                                                className="text-white/40 hover:text-white transition-colors"
+                                            >
+                                                <CloseRoundedIcon fontSize="small" />
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {couponDetails && (
+                                        <div className="flex justify-between text-green-400 text-sm animate-fadeIn">
+                                            <span>Coupon Discount</span>
+                                            <span>- ${couponDetails.discount_amount}</span>
+                                        </div>
+                                    )}
+
+                                    <div className="h-px bg-white/10 my-2"></div>
+
+                                    <div className="flex justify-between text-xl font-bold text-white">
+                                        <span>Total</span>
+                                        <span>${finalPayableAmount}</span>
+                                    </div>
+                                </div>
+
+                                {/* Pay Button */}
+
+                                <div className="flex flex-col gap-4">
+                                    <button
+                                        onClick={processPayment}
+                                        disabled={loading}
+                                        className="w-full py-4 rounded-xl bg-white/90 hover:bg-white/100 text-black font-bold text-lg  transition-all transform active:scale-[0.99] flex items-center justify-center gap-3"
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <div className="w-5 h-5 border-2 border-white/80 border-t-white rounded-full animate-spin"></div>
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            <>
+                                                Pay ${finalPayableAmount}
+                                                <LockRoundedIcon fontSize="small" className="opacity-80" />
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+
                             </div>
-                        )}
 
-                        <div className="h-px bg-white/10 my-2"></div>
-
-                        <div className="flex justify-between text-xl font-bold text-white">
-                            <span>Total</span>
-                            <span>${finalPayableAmount}</span>
                         </div>
                     </div>
 
-                    <div className="bg-white/5 rounded-xl p-4 text-xs text-white/60 leading-relaxed">
-                        By proceeding, you agree to our <span className="text-green-400 underline cursor-pointer">Terms of Service</span> and <span className="text-green-400 underline cursor-pointer">Privacy Policy</span>.
-                        Your subscription will auto-renew unless cancelled.
-                    </div>
+
+
+
+
                 </div>
             </div>
+
+
 
         </div>
     );
