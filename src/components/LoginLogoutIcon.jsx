@@ -59,12 +59,16 @@ function LoginLogoutIcon({ handleStop }) {
             case 'Well-being profile summary':
                 setProfileModal(true);
                 break;
+           
             case 'Profile':
                 setAccountModal(true);
 
                 break;
             case 'subscription':
                 navigate('/subscription');
+                break;
+            case 'transections':
+                navigate('/transactions');
                 break;
             case 'Terms & Conditions':
                 navigate('/terms');
@@ -150,6 +154,7 @@ function LoginLogoutIcon({ handleStop }) {
                             <PersonOutlineRoundedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Well-being profile summary</span>
                         </button>
+                     
                         <button
                             onClick={() => handleMenuClick('Profile')}
                             className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
@@ -163,6 +168,13 @@ function LoginLogoutIcon({ handleStop }) {
                         >
                             <InfoOutlinedIcon sx={{ fontSize: '1rem' }} />
                             <span className="text-[13px]">Subscription</span>
+                        </button>
+                        <button
+                            onClick={() => handleMenuClick('transections')}
+                            className="w-full flex items-center gap-3 px-3 py-2 text-[#d9d9d9]/70 hover:bg-white/10 hover:text-white transition-colors text-left cursor-pointer"
+                        >
+                            <ManageAccountsOutlinedIcon sx={{ fontSize: '1rem' }} />
+                            <span className="text-[13px]">Transaction Details</span>
                         </button>
                         {/* <button
                             onClick={() => handleMenuClick('disclaimer')}

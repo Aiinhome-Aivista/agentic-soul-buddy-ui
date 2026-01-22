@@ -27,6 +27,7 @@ import ContactPage from '../../pages/support/ContactPage'
 import SubscriptionPage from '../../pages/SubscriptionPage'
 import PaymentPage from '../../pages/PaymentPage'
 import ReceiptPage from '../../pages/ReceiptPage'
+import TransactionsPage from '../../pages/TransactionsPage'
 
 
 const DisclaimerWrapper = () => {
@@ -82,6 +83,7 @@ function Index() {
                 <Route path="/subscription" element={<SubscriptionPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/receipt" element={<ReceiptPage />} />
+                <Route path="/transactions" element={<TransactionsPage />} />
             </Routes>
             {contactModal && <ContactModal />}
             {profileModal && <WellBeingProfile onClose={() => setProfileModal(false)} />}
