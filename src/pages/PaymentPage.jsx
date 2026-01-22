@@ -44,6 +44,7 @@ export default function PaymentPage() {
     });
 
     const [loading, setLoading] = useState(false);
+    const [paymentVerifying, setPaymentVerifying] = useState(false);
     const [transactionId, setTransactionId] = useState(null);
     const [paymentDate, setPaymentDate] = useState(null);
     const [validTill, setValidTill] = useState(null);
@@ -240,6 +241,7 @@ export default function PaymentPage() {
                         // alert(razorpayResponse.razorpay_signature);
 
                         // Call verify API
+                        setPaymentVerifying(true);
                         try {
                             const verifyPayload = {
                                 transaction_id: response.transaction_id,
@@ -274,23 +276,32 @@ export default function PaymentPage() {
                                 });
                             } else {
                                 toast.current.show({ severity: 'error', summary: 'Verification Failed', detail: 'Payment verification failed.', life: 3000 });
+                                setPaymentVerifying(false); // Stop loader on failure
                             }
 
                         } catch (err) {
                             console.error("Verification Error", err);
                             toast.current.show({ severity: 'error', summary: 'Error', detail: 'Verification failed.', life: 3000 });
+                            setPaymentVerifying(false); // Stop loader on error
                         }
                     },
                     prefill: {
                         name: billingDetails.fullName || userName,
                         email: billingDetails.email,
-                        contact: "" // Can add phone if collected
+                        // contact: "" // Can add phone if collected
                     },
                     notes: {
                         address: billingDetails.addressLine1
                     },
                     theme: {
                         color: "#3399cc"
+                    },
+                    method: {
+                        card: true,
+                        upi: true,
+                        netbanking: true,
+                        wallet: true,
+                        emi: true
                     }
                 };
 
@@ -522,23 +533,29 @@ export default function PaymentPage() {
                                 {/* Pay Button */}
 
                                 <div className="flex flex-col gap-4">
-                                    <button
-                                        onClick={processPayment}
-                                        disabled={loading}
-                                        className="w-full py-4 rounded-xl bg-white/90 hover:bg-white/100 text-black font-bold text-lg  transition-all transform active:scale-[0.99] flex items-center justify-center gap-3"
-                                    >
-                                        {loading ? (
-                                            <>
-                                                <div className="w-5 h-5 border-2 border-white/80 border-t-white rounded-full animate-spin"></div>
-                                                Processing...
-                                            </>
-                                        ) : (
-                                            <>
-                                                Pay ${finalPayableAmount}
-                                                <LockRoundedIcon fontSize="small" className="opacity-80" />
-                                            </>
-                                        )}
-                                    </button>
+                                    {paymentVerifying ? (
+                                        <div className="flex justify-center items-center h-40">
+                                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            onClick={processPayment}
+                                            disabled={loading}
+                                            className="w-full py-4 rounded-xl bg-white/90 hover:bg-white/100 text-black font-bold text-lg  transition-all transform active:scale-[0.99] flex items-center justify-center gap-3"
+                                        >
+                                            {loading ? (
+                                                <>
+                                                    <div className="w-5 h-5 border-2 border-white/80 border-t-white rounded-full animate-spin"></div>
+                                                    Processing...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    Pay ${finalPayableAmount}
+                                                    <LockRoundedIcon fontSize="small" className="opacity-80" />
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
                                 </div>
 
                             </div>
