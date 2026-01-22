@@ -16,7 +16,7 @@ const App = () => (
           <VideoBackground />
           {/* <DarkVeil hueShift={186} speed={1} /> */}
         </div>
-        <BrowserRouter>
+        <BrowserRouter basename="/devloperzn/">
           <SeoHelper />
           <Index />
         </BrowserRouter>
