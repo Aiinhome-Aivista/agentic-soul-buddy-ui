@@ -174,10 +174,10 @@ const AiChat = () => {
           "Content-Type": "application/json",
         },
       });
-      setIsLoading(false);
 
       // Check subscription status after each ask API call
       const isActive = await checkSubscriptionStatus();
+      setIsLoading(false);
       if (!isActive) {
         setShowLimitReachedModal(true);
         return;
