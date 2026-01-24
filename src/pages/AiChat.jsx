@@ -147,6 +147,29 @@ const AiChat = () => {
     }
   }, [isLoggedIn]);
 
+  // Inactivity Timeout Effect
+  useEffect(() => {
+    let inactivityTimer;
+
+    const resetInactivityTimer = () => {
+      if (inactivityTimer) clearTimeout(inactivityTimer);
+
+      // Only set timer if user is logged in, not recording, not loading, and not playing audio
+      if (isLoggedIn && !isRecording && !isLoading && !isPlaying) {
+        inactivityTimer = setTimeout(() => {
+          console.log("User inactive for 2 minutes, sending __NO_RESPONSE__");
+          handleVoiceQuery("__NO_RESPONSE__");
+        }, 120000); // 2 minutes
+      }
+    };
+
+    resetInactivityTimer();
+
+    return () => {
+      if (inactivityTimer) clearTimeout(inactivityTimer);
+    };
+  }, [isLoggedIn, isRecording, isLoading, isPlaying]);
+
   const handleStop = () => {
     if (audioRef.current) {
       audioRef.current.pause();
