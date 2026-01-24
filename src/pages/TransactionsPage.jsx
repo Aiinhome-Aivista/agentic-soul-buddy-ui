@@ -176,7 +176,7 @@ export default function TransactionsPage() {
                                             </span>
                                         </td>
                                         <td className="p-4">
-                                            {txn.status?.toLowerCase() === 'active' && (
+                                            {txn.status?.toLowerCase() === 'active' && txn.plan_name?.toLowerCase() !== 'free' && (
                                                 <button
                                                     onClick={() => {
                                                         const txnId = txn.transaction_id;
