@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import { apiService } from '../service/apiService';
 import { get_url1 } from '../connection/connection';
+import { devUrl1 } from '../env/env';
 
 export default function TransactionsPage() {
     const navigate = useNavigate();
@@ -89,6 +91,34 @@ export default function TransactionsPage() {
         }
     };
 
+    const [downloadingId, setDownloadingId] = useState(null);
+
+    // Download PDF
+    const downloadPdf = async (url, filename, txnId) => {
+        try {
+            setDownloadingId(txnId);
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Failed to download invoice');
+            }
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            console.error('Download error:', error);
+            // You might want to show a toast here if available
+        } finally {
+            setDownloadingId(null);
+        }
+    };
+
     return (
         <div className="w-full h-full flex flex-col p-4 md:p-8 animate-fadeIn overflow-y-auto no-scrollbar bg-white/5 backdrop-blur-sm">
 
@@ -122,13 +152,14 @@ export default function TransactionsPage() {
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="border-b border-white/10 text-white/60 text-lg uppercase tracking-wider">
+                                <tr className="border-b border-white/10 text-white/60 text-sm uppercase tracking-wider">
                                     <th className="p-4 font-medium">Date</th>
                                     <th className="p-4 font-medium">Transaction ID</th>
                                     <th className="p-4 font-medium">Plan</th>
                                     <th className="p-4 font-medium">Method</th>
                                     <th className="p-4 font-medium">Amount</th>
                                     <th className="p-4 font-medium">Status</th>
+                                    <th className="p-4 font-medium">Invoice</th>
                                 </tr>
                             </thead>
                             <tbody className="text-white text-sm">
@@ -143,6 +174,33 @@ export default function TransactionsPage() {
                                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${getStatusColor(txn.status)}`}>
                                                 {txn.status}
                                             </span>
+                                        </td>
+                                        <td className="p-4">
+                                            {txn.status?.toLowerCase() === 'active' && (
+                                                <button
+                                                    onClick={() => {
+                                                        const txnId = txn.transaction_id;
+                                                        if (!txnId) return;
+
+                                                        const filename = txnId.startsWith('TXN')
+                                                            ? `INV-${txnId}.pdf`
+                                                            : `INV-TXN-${txnId}.pdf`;
+
+                                                        const url = `${devUrl1}invoices/${filename}`; // API endpoint returning binary PDF
+
+                                                        downloadPdf(url, filename, txnId);
+                                                    }}
+                                                    disabled={downloadingId === txn.transaction_id}
+                                                    className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all text-white/70 hover:text-white disabled:opacity-50 disabled:cursor-wait"
+                                                    title="Download Invoice"
+                                                >
+                                                    {downloadingId === txn.transaction_id ? (
+                                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                                    ) : (
+                                                        <DownloadRoundedIcon fontSize="small" />
+                                                    )}
+                                                </button>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}

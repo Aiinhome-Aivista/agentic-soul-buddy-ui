@@ -231,7 +231,7 @@ export default function PaymentPage() {
                     key: response.razorpay_key,
                     amount: response.gateway_order.amount, // Amount is in subunits (paise/cents)
                     currency: response.gateway_order.currency,
-                    name: "Soul Junction",
+                    name: "Souljunction",
                     description: `Subscription for ${planDetails.planName}`,
                     image: "http://122.163.121.176:3004/logo", // Replace with your logo URL
                     order_id: response.gateway_order.id, // This is a sample Order ID

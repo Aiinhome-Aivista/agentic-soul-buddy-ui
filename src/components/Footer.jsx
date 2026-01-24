@@ -10,7 +10,7 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-between gap-10">
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-2 text-white cursor-pointer" onClick={() => navigate('/')}>
-                            <span className="text-lg font-extrabold tracking-wide uppercase">Soul Junction</span>
+                            <span className="text-lg font-extrabold tracking-wide uppercase">Souljunction</span>
                         </div>
                         <p className="text-gray-400 text-sm max-w-xs leading-relaxed">
                             A mindful technology company dedicated to human flourishing and spiritual oneness.
@@ -33,7 +33,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-gray-500 text-xs">© 2026 Soul Junction Inc. All rights reserved.</p>
+                    <p className="text-gray-500 text-xs">© 2026 Souljunction Inc. All rights reserved.</p>
                     {/* <div className="flex gap-4 opacity-50 hover:opacity-100 transition-opacity">
                         <a href="#" className="text-gray-500 hover:text-primary transition-colors">
                             <span className="sr-only">Twitter</span>

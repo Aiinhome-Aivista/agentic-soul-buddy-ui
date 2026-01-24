@@ -54,7 +54,7 @@ export default function ReceiptPage() {
                 <div className="bg-white text-gray-800 rounded-lg p-6 mb-8 shadow-lg relative receipt-paper transform transition-all hover:scale-[1.01]">
                     <div className="border-b border-dashed border-gray-300 pb-4 mb-4">
                         <div className="flex justify-between items-center mb-2">
-                            <span className="font-bold text-lg">Soul Junction</span>
+                            <span className="font-bold text-lg">Souljunction</span>
                             <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">PAID</span>
                         </div>
                         <div className="text-xs text-gray-500">

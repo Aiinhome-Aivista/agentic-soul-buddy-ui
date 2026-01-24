@@ -493,7 +493,7 @@ export default function LoginModal({ OnClose }) {
 
                     {view === 'login' && (
                         <div className="text-sm text-[#FFFFFF]/54 text-center">
-                            New to <span className="text-primary font-medium">Soul Junction</span>? {' '}
+                            New to <span className="text-primary font-medium">Souljunction</span>? {' '}
                             <button
                                 type="button"
                                 onClick={() => { OnClose(); navigate('/questionnaire'); }}

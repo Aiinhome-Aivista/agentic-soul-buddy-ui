@@ -4,12 +4,12 @@ import { useLocation } from 'react-router-dom';
 import { get_url1 } from '../../connection/connection';
 
 const SeoHelper = ({
-    title: defaultTitle = "Soul Junction",
+    title: defaultTitle = "Souljunction",
     description: defaultDescription = "Your wellness companion",
     keywords: defaultKeywords = "",
     image: defaultImage = "/og-image.jpg",
     type = 'website',
-    author = 'Soul Junction'
+    author = 'Souljunction'
 }) => {
     const location = useLocation();
     const [seoData, setSeoData] = useState(null);

@@ -9,12 +9,12 @@ const TermsOfUse = () => {
         {
             icon: "handshake",
             title: "Acceptance of Terms",
-            content: "By accessing and using Soul Junction, you accept and agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use our service. Your continued use of the platform constitutes acceptance of any updates to these terms."
+            content: "By accessing and using Souljunction, you accept and agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use our service. Your continued use of the platform constitutes acceptance of any updates to these terms."
         },
         {
             icon: "license",
             title: "Use License",
-            content: "We grant you a personal, non-transferable, non-exclusive license to use Soul Junction for your personal spiritual growth. You may not modify, copy, distribute, transmit, display, perform, reproduce, publish, license, create derivative works from, or sell any content or software obtained from our service."
+            content: "We grant you a personal, non-transferable, non-exclusive license to use Souljunction for your personal spiritual growth. You may not modify, copy, distribute, transmit, display, perform, reproduce, publish, license, create derivative works from, or sell any content or software obtained from our service."
         },
         {
             icon: "account_circle",
@@ -24,7 +24,7 @@ const TermsOfUse = () => {
         {
             icon: "edit",
             title: "User Content",
-            content: "You retain ownership of any content you create within Soul Junction. By posting content, you grant us a license to use, store, and display that content solely for the purpose of providing our services to you. We will never share your personal reflections or journal entries with third parties."
+            content: "You retain ownership of any content you create within Souljunction. By posting content, you grant us a license to use, store, and display that content solely for the purpose of providing our services to you. We will never share your personal reflections or journal entries with third parties."
         },
         {
             icon: "block",
@@ -34,7 +34,7 @@ const TermsOfUse = () => {
         {
             icon: "copyright",
             title: "Intellectual Property",
-            content: "All content, features, and functionality of Soul Junction, including but not limited to text, graphics, logos, and software, are the exclusive property of Soul Junction Inc. and are protected by copyright, trademark, and other intellectual property laws."
+            content: "All content, features, and functionality of Souljunction, including but not limited to text, graphics, logos, and software, are the exclusive property of Souljunction Inc. and are protected by copyright, trademark, and other intellectual property laws."
         },
         {
             icon: "cancel",
@@ -44,12 +44,12 @@ const TermsOfUse = () => {
         {
             icon: "gavel",
             title: "Limitation of Liability",
-            content: "Soul Junction and its affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use or inability to use the service. Our total liability shall not exceed the amount you paid for the service in the past 12 months."
+            content: "Souljunction and its affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use or inability to use the service. Our total liability shall not exceed the amount you paid for the service in the past 12 months."
         },
         {
             icon: "info",
             title: "Disclaimer",
-            content: "Our service is provided 'as is' without warranties of any kind, either express or implied. We do not guarantee that the service will be uninterrupted, secure, or error-free. Soul Junction is not a substitute for professional mental health care or medical advice."
+            content: "Our service is provided 'as is' without warranties of any kind, either express or implied. We do not guarantee that the service will be uninterrupted, secure, or error-free. Souljunction is not a substitute for professional mental health care or medical advice."
         },
         {
             icon: "balance",
@@ -74,7 +74,7 @@ const TermsOfUse = () => {
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
                     <div onClick={() => navigate('/')} className="flex items-center gap-3 text-white cursor-pointer group">
-                        <h2 className="text-3xl font-semibold tracking-wide uppercase text-primary">Soul Junction</h2>
+                        <h2 className="text-3xl font-semibold tracking-wide uppercase text-primary">Souljunction</h2>
                     </div>
                     <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors">
                         <span className="material-symbols-outlined">arrow_back</span>
@@ -98,7 +98,7 @@ const TermsOfUse = () => {
                         Terms of <span className="font-serif italic text-primary">Use</span>
                     </h1>
                     <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-                        Please read these terms carefully before using Soul Junction. They outline your rights and responsibilities as a member of our community.
+                        Please read these terms carefully before using Souljunction. They outline your rights and responsibilities as a member of our community.
                     </p>
                     <p className="text-sm text-text-muted mt-6">Last updated: January 7, 2026</p>
                 </div>
