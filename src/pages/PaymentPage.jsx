@@ -233,7 +233,7 @@ export default function PaymentPage() {
                     currency: response.gateway_order.currency,
                     name: "Souljunction",
                     description: `Subscription for ${planDetails.planName}`,
-                    image: "http://122.163.121.176:3004/logo", // Replace with your logo URL
+                    image: "https://aivista.co.in/souljuntion/logo", // Replace with your logo URL
                     order_id: response.gateway_order.id, // This is a sample Order ID
                     handler: async function (razorpayResponse) {
                         // alert(razorpayResponse.razorpay_payment_id);

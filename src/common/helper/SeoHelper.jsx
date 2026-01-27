@@ -5,9 +5,9 @@ import { get_url1 } from '../../connection/connection';
 
 const SeoHelper = ({
     title: defaultTitle = "Souljunction",
-    description: defaultDescription = "Your wellness companion",
-    keywords: defaultKeywords = "",
-    image: defaultImage = "/og-image.jpg",
+    description: defaultDescription = "Souljunction is a safe space for emotional wellness, therapy, self-healing, and inner growth",
+    keywords: defaultKeywords = "emotional wellness, mental health support, therapy platform",
+    image: defaultImage = "https://aivista.co.in/souljuntion/logo",
     type = 'website',
     author = 'Souljunction'
 }) => {
@@ -84,7 +84,7 @@ const SeoHelper = ({
     const keywords = seoData?.target_keyword || defaultKeywords;
     // console.log( "333333333333333------" , keywords);
 
-    const canonical = window.location.href;
+    const canonical = `https://www.souljunction.life${location.pathname}`;
 
     return (
         <Helmet>
