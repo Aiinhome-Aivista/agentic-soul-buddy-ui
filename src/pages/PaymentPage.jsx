@@ -539,7 +539,7 @@ export default function PaymentPage() {
                                             <button
                                                 onClick={handleApplyCoupon}
                                                 disabled={verifyingCoupon || !couponCode}
-                                                className="px-4 py-2 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-xl font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                className="px-4 py-2 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-xl font-bold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                                             >
                                                 {verifyingCoupon ? '...' : 'APPLY'}
                                             </button>
@@ -555,7 +555,7 @@ export default function PaymentPage() {
                                             </div>
                                             <button
                                                 onClick={handleRemoveCoupon}
-                                                className="text-white/40 hover:text-white transition-colors"
+                                                className="text-white/40 hover:text-white transition-colors cursor-pointer"
                                             >
                                                 <CloseRoundedIcon fontSize="small" />
                                             </button>
@@ -588,7 +588,7 @@ export default function PaymentPage() {
                                         <button
                                             onClick={processPayment}
                                             disabled={loading}
-                                            className="w-full py-4 rounded-xl bg-white/90 hover:bg-white/100 text-black font-bold text-lg  transition-all transform active:scale-[0.99] flex items-center justify-center gap-3"
+                                            className="w-full py-4 rounded-xl bg-white/90 hover:bg-white/100 text-black font-bold text-lg  transition-all transform active:scale-[0.99] flex items-center justify-center gap-3 cursor-pointer"
                                         >
                                             {loading ? (
                                                 <>
