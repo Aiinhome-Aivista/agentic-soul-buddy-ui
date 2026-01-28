@@ -8,6 +8,7 @@ const IntroPage = () => {
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
     const [transitionColor, setTransitionColor] = useState('bg-primary-dark');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     // Testimonials Logic
     const testimonials = [
         {
@@ -136,6 +137,21 @@ const IntroPage = () => {
                         }
                     }
                     
+                    @keyframes slideDown {
+                        from {
+                            opacity: 0;
+                            transform: translateY(-10px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                    
+                    .animate-slideDown {
+                        animation: slideDown 0.3s ease-out forwards;
+                    }
+                    
                     /* Scroll Animation Classes */
                     .scroll-animate {
                         opacity: 0;
@@ -241,12 +257,49 @@ const IntroPage = () => {
                         <button onClick={(e) => handleNavigateWithTransition(e, '/contact', 'bg-secondary')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-secondary text-black text-sm font-medium hover:bg-secondary/90 transition-colors shadow-sm">
                             <span>Contact Us</span>
                         </button>
-                        <button className="md:hidden text-white">
-                            <span className="material-symbols-outlined">menu</span>
+                        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden text-white">
+                            <span className="material-symbols-outlined">
+                                {isMobileMenuOpen ? 'close' : 'menu'}
+                            </span>
                         </button>
                     </div>
                 </div>
             </header>
+
+            {/* Mobile Menu */}
+            {isMobileMenuOpen && (
+                <div className="md:hidden fixed top-[73px] left-0 right-0 bg-background-dark/95 backdrop-blur-lg border-b border-white/10 z-40 animate-slideDown">
+                    <div className="flex flex-col p-6 gap-4">
+                        <button 
+                            onClick={(e) => {
+                                setIsMobileMenuOpen(false);
+                                handleEnterSpace(e);
+                            }} 
+                            className="flex cursor-pointer items-center justify-center rounded-full h-12 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm"
+                        >
+                            <span>Begin</span>
+                        </button>
+                        <button 
+                            onClick={(e) => {
+                                setIsMobileMenuOpen(false);
+                                handlePricingClick(e);
+                            }} 
+                            className="flex cursor-pointer items-center justify-center rounded-full h-12 px-6 bg-[#646459] text-white text-sm font-medium hover:bg-[#646459]/90 transition-colors shadow-sm"
+                        >
+                            <span>Pricing</span>
+                        </button>
+                        <button 
+                            onClick={(e) => {
+                                setIsMobileMenuOpen(false);
+                                handleNavigateWithTransition(e, '/contact', 'bg-secondary');
+                            }} 
+                            className="flex cursor-pointer items-center justify-center rounded-full h-12 px-6 bg-secondary text-black text-sm font-medium hover:bg-secondary/90 transition-colors shadow-sm"
+                        >
+                            <span>Contact Us</span>
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Hero Section */}
             <section className="relative flex flex-col justify-center pt-16 pb-20 md:pt-24 md:pb-28 px-6 md:px-12 max-w-[1280px] mx-auto w-full">
