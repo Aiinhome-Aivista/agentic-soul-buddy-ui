@@ -24,6 +24,8 @@
     "react-audio-visualize": "^1.2.0",
     "react-dom": "^19.1.1",
     "react-helmet-async": "^2.0.5",
+    "react-international-phone": "^4.7.0",
+    "react-phone-number-input": "^3.4.14",
     "react-router-dom": "^7.8.2",
     "tailwindcss": "^4.1.13",
     "three": "^0.180.0",

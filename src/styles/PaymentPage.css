@@ -59,7 +59,7 @@
 }
 
 .payment-tab::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -76,7 +76,11 @@
 
 /* Card Visuals */
 .credit-card-visual {
-  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
@@ -87,7 +91,7 @@
   background-size: 51% 51%;
   background-repeat: no-repeat;
   /* Filter: drop-shadow for the "cutout" look if needed, but simple white bg works for now */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 /* Hide scrollbar for layout */
@@ -97,4 +101,41 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+.react-international-phone-country-selector-button {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  transition: all 0.3s ease;
+  border-radius: 12px 0 0 12px !important;
+  height: 100% !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.react-international-phone-input-container {
+  height: 48px !important;
+}
+
+.react-international-phone-input-container .react-international-phone-input {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  transition: all 0.3s ease;
+  padding: 0.75rem 1rem !important;
+  border-top-right-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+  height: 100% !important;
+  font-size: 1rem !important;
+}
+
+.react-international-phone-country-selector-dropdown {
+  background-color: rgb(131, 128, 128) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.3s ease;
+  border-radius: 8px !important;
+}
+
+.react-international-phone-country-selector-dropdown__list-item-dial-code {
+  color: black !important;
 }

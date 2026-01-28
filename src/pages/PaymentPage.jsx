@@ -12,6 +12,9 @@ import '../styles/PaymentPage.css';
 
 import '../styles/modal.css';
 import Confetti from '../common/components/Confetti';
+import PhoneInput from 'react-phone-number-input';
+import { PhoneInput as InternationalPhoneInput } from 'react-international-phone';
+import 'react-international-phone/style.css';
 
 
 
@@ -63,6 +66,9 @@ export default function PaymentPage() {
     const [billingDetails, setBillingDetails] = useState({
         fullName: '',
         email: '',
+        countryCode: '',
+        // contactNumber: '',
+        phone: '',
         addressLine1: '',
         addressLine2: '',
         city: '',
@@ -88,6 +94,13 @@ export default function PaymentPage() {
             setBillingDetails(prev => ({ ...prev, [name]: numericValue }));
             return;
         }
+
+        // For contactNumber, only allow numbers
+        // if (name === 'contactNumber') {
+        //     const numericValue = value.replace(/\D/g, '');
+        //     setBillingDetails(prev => ({ ...prev, [name]: numericValue }));
+        //     return;
+        // }
 
         // Country - only letters and spaces
         if (name === 'country') {
@@ -153,18 +166,24 @@ export default function PaymentPage() {
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const validateZip = (zip) => /^\d{6}$/.test(zip); // Assuming 6 digit PIN code
+    const validatePhone = (phone) => phone && phone.length >= 10; // International phone should have at least 10 digits
 
     const processPayment = async () => {
         // Billing Validation
-        const { fullName, email, addressLine1, city, state, zipCode } = billingDetails;
+        const { fullName, email, countryCode, contactNumber, addressLine1, city, state, zipCode } = billingDetails;
 
-        if (!fullName || !email || !addressLine1 || !city || !state || !zipCode || !billingDetails.country) {
-            toast.current.show({ severity: 'warn', summary: 'Missing Details', detail: 'Please fill in all mandatory billing fields including Country.', life: 3000 });
+        if (!fullName || !email || !countryCode || !contactNumber || !addressLine1 || !city || !state || !zipCode || !billingDetails.country) {
+            toast.current.show({ severity: 'warn', summary: 'Missing Details', detail: 'Please fill in all mandatory billing fields including Country Code and Contact Number.', life: 3000 });
             return;
         }
 
         if (!validateEmail(email)) {
             toast.current.show({ severity: 'warn', summary: 'Invalid Email', detail: 'Please enter a valid email address.', life: 3000 });
+            return;
+        }
+
+        if (!validatePhone(contactNumber)) {
+            toast.current.show({ severity: 'warn', summary: 'Invalid Contact Number', detail: 'Please enter a valid contact number.', life: 3000 });
             return;
         }
 
@@ -288,7 +307,7 @@ export default function PaymentPage() {
                     prefill: {
                         name: billingDetails.fullName || userName,
                         email: billingDetails.email,
-                        // contact: "" // Can add phone if collected
+                        contact: billingDetails.countryCode
                     },
                     notes: {
                         address: billingDetails.addressLine1
@@ -387,6 +406,37 @@ export default function PaymentPage() {
                                         onChange={handleBillingChange}
                                         className="w-full px-4 py-3 rounded-xl glass-input"
                                         placeholder="john@example.com"
+                                    />
+                                </div>
+                                {/* <div className="md:col-span-1">
+                                    <label className="block text-white/60 text-sm mb-2">Contact Number <span className="text-red-400">*</span></label>
+                                    <div className="phone-input-wrapper">
+                                        <PhoneInput
+                                            international
+                                            countryCallingCodeEditable={false}
+                                            defaultCountry="US"
+                                            value={billingDetails.phone}
+                                            onChange={(value) => {
+                                                setBillingDetails(prev => ({ ...prev, phone: value || '' }));
+                                                if (value) {
+                                                    const countryCode = value.split(' ')[0];
+                                                    setBillingDetails(prev => ({ ...prev, countryCode }));
+                                                }
+                                            }}
+                                            displayInitialValueAsLocalNumber={true}
+                                        />
+                                    </div>
+                                </div> */}
+                                <div className="md:col-span-1">
+                                    <label className="block text-white/60 text-sm mb-2">Contact Number <span className="text-red-400">*</span></label>
+                                    <InternationalPhoneInput
+                                        value={billingDetails.contactNumber}
+                                        onChange={(phone) => {
+                                            setBillingDetails(prev => ({ ...prev, contactNumber: phone }));
+                                        }}
+                                        defaultCountry="us"
+                                        placeholder="Enter your phone number"
+                                        inputClassName="international-phone-input"
                                     />
                                 </div>
                                 <div className="md:col-span-2">
@@ -545,7 +595,7 @@ export default function PaymentPage() {
                                         >
                                             {loading ? (
                                                 <>
-                                                    <div className="w-5 h-5 border-2 border-white/80 border-t-white rounded-full animate-spin"></div>
+                                                    <div className="w-5 h-5 border-2 border-white/80 border-t-black rounded-full animate-spin"></div>
                                                     Processing...
                                                 </>
                                             ) : (
