@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import { Toast } from 'primereact/toast';
 import { apiService } from '../service/apiService';
 import { get_url1 } from '../connection/connection';
 import { devUrl1 } from '../env/env';
 
 export default function TransactionsPage() {
     const navigate = useNavigate();
+    const toast = useRef(null);
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -111,9 +113,21 @@ export default function TransactionsPage() {
             link.click();
             document.body.removeChild(link);
             window.URL.revokeObjectURL(blobUrl);
+            
+            toast.current.show({ 
+                severity: 'success', 
+                summary: 'Download Successful', 
+                detail: 'Invoice downloaded successfully.', 
+                life: 3000 
+            });
         } catch (error) {
             console.error('Download error:', error);
-            // You might want to show a toast here if available
+            toast.current.show({ 
+                severity: 'error', 
+                summary: 'Download Failed', 
+                detail: 'Failed to download invoice. Please try again.', 
+                life: 3000 
+            });
         } finally {
             setDownloadingId(null);
         }
@@ -121,6 +135,7 @@ export default function TransactionsPage() {
 
     return (
         <div className="w-full h-full flex flex-col p-4 md:p-8 animate-fadeIn overflow-y-auto no-scrollbar bg-white/5 backdrop-blur-sm">
+            <Toast ref={toast} className="custom-toast-message" position="top-right" />
 
             {/* Header */}
             <div className="flex items-center gap-4 mb-6 max-w-6xl mx-auto w-full">
