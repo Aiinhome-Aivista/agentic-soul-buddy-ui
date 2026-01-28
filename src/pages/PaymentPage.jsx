@@ -383,7 +383,7 @@ export default function PaymentPage() {
                                 Billing Details
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="md:col-span-1">
+                                <div className="md:col-span-2">
                                     <label className="block text-white/60 text-sm mb-2">Full Name <span className="text-red-400">*</span></label>
                                     <input
                                         type="text"
