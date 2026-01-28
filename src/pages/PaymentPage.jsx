@@ -9,10 +9,8 @@ import { Toast } from 'primereact/toast';
 import { apiService } from '../service/apiService';
 import { POST_url1 } from '../connection/connection';
 import '../styles/PaymentPage.css';
-
 import '../styles/modal.css';
 import Confetti from '../common/components/Confetti';
-import PhoneInput from 'react-phone-number-input';
 import { PhoneInput as InternationalPhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
 
@@ -66,8 +64,7 @@ export default function PaymentPage() {
     const [billingDetails, setBillingDetails] = useState({
         fullName: '',
         email: '',
-        countryCode: '',
-        // contactNumber: '',
+        contactNumber: '',
         phone: '',
         addressLine1: '',
         addressLine2: '',
@@ -170,9 +167,9 @@ export default function PaymentPage() {
 
     const processPayment = async () => {
         // Billing Validation
-        const { fullName, email, countryCode, contactNumber, addressLine1, city, state, zipCode } = billingDetails;
+        const { fullName, email, contactNumber, addressLine1, city, state, zipCode } = billingDetails;
 
-        if (!fullName || !email || !countryCode || !contactNumber || !addressLine1 || !city || !state || !zipCode || !billingDetails.country) {
+        if (!fullName || !email || !contactNumber || !addressLine1 || !city || !state || !zipCode || !billingDetails.country) {
             toast.current.show({ severity: 'warn', summary: 'Missing Details', detail: 'Please fill in all mandatory billing fields including Country Code and Contact Number.', life: 3000 });
             return;
         }
@@ -307,7 +304,7 @@ export default function PaymentPage() {
                     prefill: {
                         name: billingDetails.fullName || userName,
                         email: billingDetails.email,
-                        contact: billingDetails.countryCode
+                        contact: billingDetails.contactNumber
                     },
                     notes: {
                         address: billingDetails.addressLine1
