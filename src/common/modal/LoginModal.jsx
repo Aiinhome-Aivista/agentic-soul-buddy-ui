@@ -96,6 +96,7 @@ export default function LoginModal({ OnClose }) {
                             sessionStorage.setItem("signupEmail", result.user.email);
                             // Store Firebase UID for signup process
                             sessionStorage.setItem("firebaseUid", result.user.uid);
+                            sessionStorage.setItem("isGoogleSignup", "true"); // Mark as Google signup
                             localStorage.setItem('sessionId', response.session_id);
                             OnClose();
                             navigate('/questionnaire')

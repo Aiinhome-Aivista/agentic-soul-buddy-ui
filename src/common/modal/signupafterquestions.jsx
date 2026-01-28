@@ -21,9 +21,12 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const toast = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
 
+  // Check if this is a Google signup
+  const isGoogleSignup = sessionStorage.getItem("isGoogleSignup") === "true";
+
   // Email verification states
   const [otpSent, setOtpSent] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(isGoogleSignup); // Auto-verify for Google signups
   const [sendingOtp, setSendingOtp] = useState(false);
   const [showOtpModal, setShowOtpModal] = useState(false);
 
@@ -205,7 +208,9 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
   const validationSchema = Yup.object({
     full_name: Yup.string().required("Full name is required."),
     email: Yup.string().email("Invalid email").required("Email is required."),
-    password: Yup.string().required("Password is required."),
+    password: isGoogleSignup 
+      ? Yup.string().notRequired() 
+      : Yup.string().required("Password is required."),
     age: Yup.number()
       .min(18, "Age must be at least 18 years.")
       .max(120, "Invalid age!")
@@ -237,10 +242,17 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       try {
         // Formatting payload as per user JSON requirement
         // { "full_name":..., "email":..., "age":..., "gender":..., "work":..., "health":..., "emotional_state":..., "relationship":... }
+        // Exclude password for Google signups
         const payload = {
           ...values,
           captchaId: captchaId,
         };
+        
+        // Remove password from payload for Google signups
+        if (isGoogleSignup) {
+          delete payload.password;
+        }
+        
         const response = await apiService({
           url: POST_url1.signup, // Verify if this endpoint accepts this payload structure
           method: "POST",
@@ -261,6 +273,7 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
           sessionStorage.removeItem("firebaseUid");
           sessionStorage.removeItem("signupName");
           sessionStorage.removeItem("signupEmail");
+          sessionStorage.removeItem("isGoogleSignup");
 
           // Submit Questionnaire Responses
           if (answers) {
@@ -419,8 +432,8 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
       return;
     }
 
-    // 2. Check Password
-    if (!formik.values.password || formik.values.password.trim() === "") {
+    // 2. Check Password (Skip for Google signups)
+    if (!isGoogleSignup && (!formik.values.password || formik.values.password.trim() === "")) {
       toast.current.show({
         severity: "error",
         summary: "Password Required",
@@ -621,30 +634,32 @@ export default function SignupModal2({ OnClose, onSuccess, answers }) {
                 )}
               </div>
 
-              {/* Password */}
-              <div className="relative w-full">
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.password}
-                  placeholder="Password"
-                  className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all pr-12"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#D9D9D9]/70 hover:text-white transition-colors cursor-pointer flex items-center justify-center p-1"
-                >
-                  {showPassword ? (
-                    <VisibilityOff sx={{ fontSize: "1.2rem" }} />
-                  ) : (
-                    <Visibility sx={{ fontSize: "1.2rem" }} />
-                  )}
-                </button>
-              </div>
+              {/* Password - Hidden for Google signups */}
+              {!isGoogleSignup && (
+                <div className="relative w-full">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.password}
+                    placeholder="Password"
+                    className="bg-inherit text-[#D9D9D9] placeholder:text-[#D9D9D9]/50 focus:text-white rounded-xl w-full px-4 py-2 outline-none border-2 border-[#D9D9D9]/25 focus:ring-2 focus:ring-[#D9D9D9]/25 transition-all pr-12"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#D9D9D9]/70 hover:text-white transition-colors cursor-pointer flex items-center justify-center p-1"
+                  >
+                    {showPassword ? (
+                      <VisibilityOff sx={{ fontSize: "1.2rem" }} />
+                    ) : (
+                      <Visibility sx={{ fontSize: "1.2rem" }} />
+                    )}
+                  </button>
+                </div>
+              )}
 
               {/* Age */}
               <input
