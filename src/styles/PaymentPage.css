@@ -127,6 +127,7 @@
   border-bottom-right-radius: 12px !important;
   height: 100% !important;
   font-size: 1rem !important;
+  width:100%;
 }
 
 .react-international-phone-country-selector-dropdown {
