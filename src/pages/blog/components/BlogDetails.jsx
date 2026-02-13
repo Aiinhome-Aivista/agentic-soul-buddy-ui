@@ -15,6 +15,19 @@ const BlogDetails = () => {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Helper to parse tags
+  const parseTags = (tags) => {
+    if (!tags) return [];
+    if (Array.isArray(tags)) return tags;
+    try {
+      const parsed = JSON.parse(tags);
+      if (Array.isArray(parsed)) return parsed;
+      return tags.split(',').map(t => t.trim());
+    } catch (e) {
+      return tags.split(',').map(t => t.trim());
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -178,25 +191,28 @@ const BlogDetails = () => {
         <div className="max-w-[1360px] mx-auto px-6 flex flex-col lg:flex-row justify-between gap-12 lg:gap-0">
           <article className="lg:w-[66%] max-w-[800px] text-lg md:text-xl text-[#e5e7eb]/90 leading-relaxed [&>p]:mb-8 [&>p]:leading-[1.9] lg:pr-12">
             {blog.content ? (
-              <>
+              <div className="prose prose-invert max-w-none">
                 {blog.content_preview && (
-                  <div className="text-xl md:text-2xl text-white font-light italic mb-10 leading-relaxed opacity-90 border-l-4 border-[#6a8c7e] pl-6" dangerouslySetInnerHTML={{ __html: blog.content_preview }} />
+                  <div dangerouslySetInnerHTML={{ __html: blog.content_preview }} />
                 )}
                 <div dangerouslySetInnerHTML={{ __html: blog.content }} />
-              </>
+              </div>
             ) : (
-              // Fallback: If no full content is available (e.g. List API), display preview as main content
-              <div dangerouslySetInnerHTML={{ __html: blog.content_preview }} />
+              <div
+                className="prose prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: blog.content_preview }}
+              />
             )}
 
+
             {/* Tags */}
-            {blog.tags && (
+            {blog.tags && parseTags(blog.tags).length > 0 && (
               <div className="flex items-center gap-4 mt-10 mb-4">
                 <h3 className="text-sm font-bold text-white uppercase tracking-widest shrink-0">Tags</h3>
                 <div className="flex flex-wrap gap-2">
-                  {blog.tags.split(',').map((tag, index) => (
+                  {parseTags(blog.tags).map((tag, index) => (
                     <span key={index} className="px-3 py-1 bg-[#232926] border border-white/10 rounded-full text-xs text-[#9ca3af] uppercase tracking-wider">
-                      {tag.trim()}
+                      {tag}
                     </span>
                   ))}
                 </div>
@@ -300,16 +316,6 @@ const BlogDetails = () => {
                   ) : (
                     <p className="text-sm text-[#9ca3af] italic">No related posts found.</p>
                   )}
-                </div>
-              </div>
-
-              <div className="bg-[#2a3631] rounded-3xl p-8 border border-[#6a8c7e]/20 relative overflow-hidden">
-                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#6a8c7e]/10 rounded-full blur-3xl"></div>
-                <h3 className="text-xl font-light mb-4 text-white">Stay in the Quiet</h3>
-                <p className="text-sm text-[#e5e7eb]/70 mb-8 leading-relaxed">Weekly reflections delivered gently to your inbox. No noise, just stillness.</p>
-                <div className="space-y-4 relative z-10">
-                  <input className="w-full bg-[#1a1f1d]/50 border border-white/10 rounded-full px-6 py-3.5 text-sm text-white focus:ring-1 focus:ring-[#6a8c7e]/50 focus:border-[#6a8c7e]/50 focus:outline-none placeholder-[#9ca3af]/50" placeholder="Your email address" type="email" />
-                  <button className="w-full bg-[#6a8c7e] text-[#1a1f1d] py-3.5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] shadow-lg hover:brightness-110 transition-all">Subscribe to Peace</button>
                 </div>
               </div>
 

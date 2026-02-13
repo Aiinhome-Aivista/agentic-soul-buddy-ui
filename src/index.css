@@ -93,3 +93,100 @@ body,
     }
   }
 }
+
+
+.prose h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0.75rem 0;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0.7rem 0;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0.6rem 0;
+}
+
+.prose h6 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* Lists */
+.prose ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin: 0.25rem 0;
+}
+
+/* Paragraph */
+.prose p {
+  margin: 0.4rem 0;
+}
+.prose em,
+.prose i {
+  font-style: italic;
+}
+
+.prose .uppercase {
+  text-transform: uppercase;
+}
+
+/* Lowercase */
+.prose .lowercase {
+  text-transform: lowercase;
+}
+
+.prose .sentence-case {
+  text-transform: lowercase;
+}
+.prose .sentence-case::first-letter {
+  text-transform: uppercase;
+}
+
+/* Capitalize each word */
+.prose .capitalize {
+  text-transform: capitalize;
+}
+
+.prose ol.roman {
+  list-style-type: upper-roman;
+}
+
+/* roman (i, ii, iii) */
+.prose ol.roman-lower {
+  list-style-type: lower-roman;
+}
+
+/* Alphabetical (A, B, C) */
+.prose ol.alpha {
+  list-style-type: upper-alpha;
+}
+
+/* alphabetical (a, b, c) */
+.prose ol.alpha-lower {
+  list-style-type: lower-alpha;
+}
+
+/* Default numbered list */
+.prose ol.decimal {
+  list-style-type: decimal;
+}
+
+
+
