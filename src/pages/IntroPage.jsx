@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "./../components/Footer";
+import { get_url1 } from "../connection/connection";
+import { devUrl1 } from "../env/env";
+import { apiService } from "../service/apiService";
 
 const IntroPage = () => {
     const navigate = useNavigate();
@@ -9,7 +12,80 @@ const IntroPage = () => {
     const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
     const [transitionColor, setTransitionColor] = useState('bg-primary-dark');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    // Testimonials Logic
+    const [blogs, setBlogs] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("All Stories");
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch Categories
+                const categoryResponse = await apiService({
+                    url: get_url1.categories,
+                    method: 'GET'
+                });
+
+                if (categoryResponse?.data && Array.isArray(categoryResponse.data)) {
+                    setCategories(categoryResponse.data);
+                } else if (Array.isArray(categoryResponse)) {
+                    setCategories(categoryResponse);
+                }
+
+                // Fetch Blogs
+                const blogResponse = await apiService({
+                    url: get_url1.blogposts,
+                    method: 'GET'
+                });
+
+                let posts = [];
+                if (blogResponse?.data && Array.isArray(blogResponse.data)) {
+                    posts = blogResponse.data;
+                } else if (Array.isArray(blogResponse)) {
+                    posts = blogResponse;
+                }
+
+                if (posts.length > 0) {
+                    const sortedPosts = posts.sort((a, b) => {
+                        const isPinnedA = a.is_pinned === 1 || a.is_pinned === true;
+                        const isPinnedB = b.is_pinned === 1 || b.is_pinned === true;
+
+                        if (isPinnedA && !isPinnedB) return -1;
+                        if (!isPinnedA && isPinnedB) return 1;
+                        return new Date(b.created_at || b.date) - new Date(a.created_at || a.date);
+                    });
+                    setBlogs(sortedPosts);
+                }
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Filter blogs based on selected category
+    const filteredBlogs = selectedCategory === "All Stories"
+        ? blogs
+        : blogs.filter(blog => (blog.category_name || blog.category) === selectedCategory);
+
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return 'https://lh3.googleusercontent.com/aida-public/AB6AXuA8joqQH76wY929nfMjdCWo90o3YvVrmxLVPT6leihiEFLEotvvSkJl5aSyKDHUcIL2WaaKCKI60M2m4vwYnu7NSD5Xy--Ck59MHJBuQec18_i_gzEO8qoH8bujRpFwmVND68NVoOeXIGiT5PKnRuzNS7LnolI4ZJZ8LssidI1De_1-EYMxLLu78_B7qCOKHQq2qWGRR37gMiZdg210fN7YwbgZVa2vCiwh6X9IE3t31aSri0GpGi2cipvNINfq6wdpAYZP9ThecLd-';
+        if (imagePath.startsWith('http')) return imagePath;
+
+        return `${devUrl1}${imagePath.replace(/^\/+/, '')}`;
+    };
+
+    const stripHtml = (html) => {
+        if (!html) return "";
+        const tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+    };
+
     const testimonials = [
         {
             quote: "I didn't realize how much noise I was carrying until I found this quiet corner. It's the only app that feels like an exhale.",
@@ -49,7 +125,6 @@ const IntroPage = () => {
         }
     ];
 
-    // Double the testimonials for seamless loop
     const loopedTestimonials = [...testimonials, ...testimonials];
     // Set up scroll-triggered animations
     useEffect(() => {
@@ -238,8 +313,11 @@ const IntroPage = () => {
             {/* Header */}
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
-                    <div className="flex items-center gap-3 text-white cursor-pointer group">
+                    <div className="flex items-center gap-2 text-white cursor-pointer group">
+                        <img src={get_url1.logo} alt="Souljunction" className="h-10 w-10 rounded-full object-cover" />
+
                         <h2 className="text-3xl font-extrabold tracking-wide uppercase text-primary">Souljunction</h2>
+
                     </div>
                     <nav className="hidden md:flex items-center gap-10">
                         {/* <a href="#" className="text-sm font-medium text-text-muted hover:text-primary-dark transition-colors">Philosophy</a>
@@ -270,29 +348,29 @@ const IntroPage = () => {
             {isMobileMenuOpen && (
                 <div className="md:hidden fixed top-[73px] left-0 right-0 bg-background-dark/95 backdrop-blur-lg border-b border-white/10 z-40 animate-slideDown">
                     <div className="flex flex-col p-6 gap-4">
-                        <button 
+                        <button
                             onClick={(e) => {
                                 setIsMobileMenuOpen(false);
                                 handleEnterSpace(e);
-                            }} 
+                            }}
                             className="flex cursor-pointer items-center justify-center rounded-full h-12 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm"
                         >
                             <span>Begin</span>
                         </button>
-                        <button 
+                        <button
                             onClick={(e) => {
                                 setIsMobileMenuOpen(false);
                                 handlePricingClick(e);
-                            }} 
+                            }}
                             className="flex cursor-pointer items-center justify-center rounded-full h-12 px-6 bg-[#646459] text-white text-sm font-medium hover:bg-[#646459]/90 transition-colors shadow-sm"
                         >
                             <span>Pricing</span>
                         </button>
-                        <button 
+                        <button
                             onClick={(e) => {
                                 setIsMobileMenuOpen(false);
                                 handleNavigateWithTransition(e, '/contact', 'bg-secondary');
-                            }} 
+                            }}
                             className="flex cursor-pointer items-center justify-center rounded-full h-12 px-6 bg-secondary text-black text-sm font-medium hover:bg-secondary/90 transition-colors shadow-sm"
                         >
                             <span>Contact Us</span>
@@ -627,6 +705,59 @@ const IntroPage = () => {
                     <p className="text-sm text-text-muted leading-relaxed">
                         We believe your spiritual journey is private. We never sell your data, we don't use manipulative algorithms to keep you scrolling, and you can export your journal entries or delete your account fully at any time. This is a safe container.
                     </p>
+                </div>
+            </section>
+
+            {/* Blogs & Stories */}
+            <section className="py-10 px-20 md:px-24 bg-white/[0.01] border-t border-white/5">
+                <div className="max-w-[1440px] mx-auto">
+                    <div className="flex flex-col items-center gap-8 mb-20">
+                        <div className="max-w-2xl">
+                            <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight mb-6 justify-center flex items-center">
+                                Blogs &amp; <span className="italic text-primary">Stories</span>
+                            </h2>
+                            <p className="text-text-muted text-lg font-light leading-relaxed">Deep dives into the art of being, curated for your quiet moments.</p>
+                            <div className="flex gap-4 flex-wrap justify-center overflow-x-auto hide-scrollbar pb-1">
+
+                            </div>
+                        </div>
+                        {filteredBlogs.length === 0 ? (
+                            <div className="text-center py-20 text-text-muted">
+                                <p className="text-xl">No stories found in this category.</p>
+                            </div>
+                        ) : (
+                            <div className="relative w-full overflow-hidden mask-gradient">
+                                <div className={`flex gap-10 w-max ${filteredBlogs.length > 3 ? 'animate-scroll' : 'mx-auto'} px-4 hover:pause`}>
+                                    {[...filteredBlogs, ...(filteredBlogs.length > 3 ? filteredBlogs : [])].map((blog, index) => (
+                                        <div key={`${blog.id}-${index}`} className="min-w-[340px] w-[340px] md:min-w-[460px] md:w-[460px]">
+                                            <div className="bg-surface-dark rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl hover:border-primary/30 transition-all duration-700 flex flex-col h-full group">
+                                                <div className="relative aspect-[16/10] overflow-hidden cursor-pointer" onClick={() => navigate(`/blog/details/${blog.id}`)}>
+                                                    <div className="absolute inset-0 bg-cover bg-center opacity-60 transition-all duration-1000 group-hover:scale-110" style={{ backgroundImage: `url('${getImageUrl(blog.image_url || blog.featured_image || blog.image)}')` }}></div>
+
+                                                </div>
+                                                <div className="p-10 flex flex-col flex-grow">
+                                                    <span className="text-[10px] font-black text-secondary uppercase tracking-[0.3em] mb-4">{blog.category_name || blog.category}</span>
+                                                    <h3 className="text-2xl  text-white mb-6 leading-snug">{blog.title}</h3>
+                                                    <p className="text-text-muted font-light text-sm leading-relaxed mb-8">{stripHtml(blog.content_preview || blog.content || blog.description).substring(0, 100)}...</p>
+                                                    <button className="mt-auto inline-flex items-center gap-3 text-primary font-bold text-xs uppercase tracking-widest group/link cursor-pointer" onClick={() => navigate(`/blog/details/${blog.id}`)}>
+                                                        Read Journal
+                                                        <span className="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex justify-center mt-12">
+                            <button className="group inline-flex items-center gap-4 px-10 py-4 rounded-full border border-primary text-primary font-bold text-xs uppercase tracking-[0.2em] hover:bg-primary hover:text-white transition-all duration-500 cursor-pointer" onClick={() => navigate('/blog/all')}>
+                                <span>View All Categories</span>
+                                <span className="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">menu_book</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
 

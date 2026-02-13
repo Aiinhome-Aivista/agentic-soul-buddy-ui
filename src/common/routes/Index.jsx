@@ -29,10 +29,14 @@ import PaymentPage from '../../pages/PaymentPage'
 import ReceiptPage from '../../pages/ReceiptPage'
 import TransactionsPage from '../../pages/TransactionsPage'
 
+// Community Pages
+import Blog from '../../pages/blog/BlogAll'
+import BlogDetails from '../../pages/blog/components/BlogDetails'
+
 
 const DisclaimerWrapper = () => {
     const navigate = useNavigate();
-    const location = useLocation(); // Need useLocation imported? It's not imported in original snippet but used in logic I plan. Wait, I checked imports and useLocation is NOT imported.
+    const location = useLocation();
     const [showSignup, setShowSignup] = useState(false);
 
     // answers passed from Questionnaire
@@ -84,6 +88,9 @@ function Index() {
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/receipt" element={<ReceiptPage />} />
                 <Route path="/transactions" element={<TransactionsPage />} />
+                {/* community or blog pages */}
+                <Route path="/blog/all" element={<Blog />} />
+                <Route path="blog/details/:id" element={<BlogDetails />} />
             </Routes>
             {contactModal && <ContactModal />}
             {profileModal && <WellBeingProfile onClose={() => setProfileModal(false)} />}

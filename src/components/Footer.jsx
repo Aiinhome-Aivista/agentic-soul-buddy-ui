@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Footer = () => {
     const navigate = useNavigate();
@@ -17,16 +17,20 @@ const Footer = () => {
                         </p>
                     </div>
                     <div className="flex gap-16 flex-wrap">
+                          <div className="flex flex-col gap-4">
+                            <h4 className="text-white font-bold text-sm uppercase tracking-wider">Community</h4>
+                            <Link to="/blog/all" className="text-gray-400 text-sm hover:text-primary transition-colors">Blog</Link>
+                        </div>
                         <div className="flex flex-col gap-4">
                             <h4 className="text-white font-bold text-sm uppercase tracking-wider">Get In Touch</h4>
-                            <a href="/contact" className="text-gray-400 text-sm hover:text-primary transition-colors">Contact Us</a>
+                            <Link to="/contact" className="text-gray-400 text-sm hover:text-primary transition-colors">Contact Us</Link>
                         </div>
 
                         <div className="flex flex-col gap-4">
                             <h4 className="text-white font-bold text-sm uppercase tracking-wider">Legal</h4>
-                            <a href="/privacy-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Privacy Policy</a>
-                            <a href="/terms-of-use" className="text-gray-400 text-sm hover:text-primary transition-colors">Terms of Use</a>
-                            <a href="/cookie-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Cookie Policy</a>
+                            <Link to="/privacy-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Privacy Policy</Link>
+                            <Link to="/terms-of-use" className="text-gray-400 text-sm hover:text-primary transition-colors">Terms of Use</Link>
+                            <Link to="/cookie-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Cookie Policy</Link>
                             {/* <a href="/subscription-policy" className="text-gray-400 text-sm hover:text-primary transition-colors">Subscription Policy</a>
                             <a href="/subscription-plans" className="text-gray-400 text-sm hover:text-primary transition-colors">Pricing</a> */}
                         </div>

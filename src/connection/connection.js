@@ -35,6 +35,14 @@ export const get_url1 = {
   subscription_plan: devUrl1 + "subscription_plan",
   capcha: devUrl1 + "generate_captcha",
   seo: devUrl1 + "seo",
-  transections: devUrl1 + "transactions"
+  transections: devUrl1 + "transactions",
+  logo: devUrl1 + "logo",
+  categories: devUrl1 + "categories",
+  blogposts: devUrl1 + "blogs/published",
+  tags: devUrl1 + "blogs/tags",
+
+
 
 };
+
+export { devUrl1 };
