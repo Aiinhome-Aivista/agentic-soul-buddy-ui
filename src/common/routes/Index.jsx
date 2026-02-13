@@ -90,7 +90,7 @@ function Index() {
                 <Route path="/transactions" element={<TransactionsPage />} />
                 {/* community or blog pages */}
                 <Route path="/blog/all" element={<Blog />} />
-                <Route path="blog/details/:id" element={<BlogDetails />} />
+                <Route path="/blog/:title" element={<BlogDetails />} />
             </Routes>
             {contactModal && <ContactModal />}
             {profileModal && <WellBeingProfile onClose={() => setProfileModal(false)} />}

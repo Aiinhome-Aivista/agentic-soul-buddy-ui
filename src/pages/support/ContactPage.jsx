@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import { Toast } from 'primereact/toast';
 import { apiService } from "../../service/apiService";
-import { POST_url1 } from "../../connection/connection";
+import { POST_url1 , get_url1} from "../../connection/connection";
 
 const ContactPage = () => {
     const navigate = useNavigate();
@@ -211,6 +211,7 @@ const ContactPage = () => {
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
                     <div onClick={() => navigate('/')} className="flex items-center gap-3 text-white cursor-pointer group">
+                         <img src={get_url1.logo} alt="Souljunction" className="h-10 w-10 rounded-full object-cover" />
                         <h2 className="text-3xl font-semibold tracking-wide uppercase text-primary">Souljunction</h2>
                     </div>
                     <button onClick={handleGoBack} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer';
 import { apiService } from '../../service/apiService';
@@ -19,6 +19,9 @@ const Blog = () => {
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
     const [transitionColor, setTransitionColor] = useState('bg-background-dark');
+    const categoryScrollRef = useRef(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
 
     useEffect(() => {
         const fetchBlogs = async () => {
@@ -87,11 +90,37 @@ const Blog = () => {
         setCurrentPage(1);
     };
 
+    const checkScrollButtons = () => {
+        if (categoryScrollRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = categoryScrollRef.current;
+            setCanScrollLeft(scrollLeft > 0);
+            setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+        }
+    };
+
+    const scrollCategories = (direction) => {
+        if (categoryScrollRef.current) {
+            const scrollAmount = 200;
+            categoryScrollRef.current.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    useEffect(() => {
+        checkScrollButtons();
+        const handleResize = () => checkScrollButtons();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [categories]);
+
     const filteredPosts = blogPosts
         .filter(post => {
             const matchesCategory = selectedCategory === "All Stories" || (post.category_name || post.category) === selectedCategory;
-            const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (post.content_preview || post.content || "").toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesSearch = searchQuery === "" ||
+                post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (post.category_name || post.category || "").toLowerCase().includes(searchQuery.toLowerCase());
             return matchesCategory && matchesSearch;
         });
 
@@ -134,6 +163,11 @@ const Blog = () => {
         return tmp.textContent || tmp.innerText || "";
     };
 
+    // Helper function to create URL-friendly slug from title
+    const createSlug = (title) => {
+        return encodeURIComponent(title.replace(/\s+/g, '-'));
+    };
+
     return (
         <div className="bg-background-dark text-main antialiased overflow-x-hidden selection:bg-primary/30  min-h-screen">
             {/* Page Transition Overlay */}
@@ -172,6 +206,7 @@ const Blog = () => {
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
                     <div onClick={() => navigate('/')} className="flex items-center gap-3 text-white cursor-pointer group">
+                        <img src={get_url1.logo} alt="Souljunction" className="h-10 w-10 rounded-full object-cover" />
                         <h2 className="text-3xl font-semibold tracking-wide uppercase text-primary">Souljunction</h2>
                     </div>
                     <button onClick={handleGoBack} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors cursor-pointer">
@@ -182,7 +217,7 @@ const Blog = () => {
             </header>
 
             <section className="py-10 px-20 md:px-24 bg-white/[0.01] border-t border-white/5">
-                <div className="max-w-[1440px] mx-auto">
+                <div className="max-w-360 mx-auto">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 mb-20">
                         <div className="max-w-2xl w-full flex justify-between items-start">
                             <div className="flex-1">
@@ -194,7 +229,7 @@ const Blog = () => {
 
                             {/* Search Icon (Added here) */}
                             <div
-                                className={`flex items-center justify-center -mr-160 bg-white/5 border border-white/10 rounded-full transition-all duration-500 ease-in-out group/search h-9 mt-2 ml-4 ${isSearchExpanded ? 'w-48 px-3' : 'w-9 justify-center'
+                                className={`flex items-center justify-center -mr-170 bg-white/5 border border-white/10 rounded-full transition-all duration-500 ease-in-out group/search h-9 mt-2 ml-4 ${isSearchExpanded ? 'w-48 px-3' : 'w-9 justify-center'
                                     }`}
                                 onMouseEnter={() => setIsSearchExpanded(true)}
                                 onMouseLeave={() => !searchQuery && setIsSearchExpanded(false)}
@@ -222,22 +257,47 @@ const Blog = () => {
                                 />
                             </div>
                         </div>
-                        <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-1 cursor-pointer">
+                        <div className="relative">
+                            {/* Left Arrow - Absolutely positioned */}
                             <button
-                                onClick={() => handleCategoryClick("All Stories")}
-                                className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === "All Stories" ? 'bg-primary text-white' : 'bg-white/5 text-text-muted hover:bg-primary hover:text-white'}`}
+                                onClick={() => scrollCategories('left')}
+                                disabled={!canScrollLeft}
+                                className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-10 ${canScrollLeft ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
                             >
-                                All Stories
+                                <span className="material-symbols-outlined text-lg">chevron_left</span>
                             </button>
-                            {categories.map((cat) => (
+
+                            {/* Category Buttons */}
+                            <div
+                                ref={categoryScrollRef}
+                                onScroll={checkScrollButtons}
+                                className="flex gap-4 overflow-x-auto hide-scrollbar pb-1 cursor-pointer max-w-[580px] rounded-full mr-10"
+                            >
                                 <button
-                                    key={cat.id}
-                                    onClick={() => handleCategoryClick(cat.category_name || cat.name)}
-                                    className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === (cat.category_name || cat.name) ? 'bg-primary text-white' : 'bg-white/5 text-text-muted hover:bg-primary hover:text-white'}`}
+                                    onClick={() => handleCategoryClick("All Stories")}
+                                    className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === "All Stories" ? 'bg-primary text-white' : 'bg-white/5 text-text-muted hover:bg-primary hover:text-white'}`}
                                 >
-                                    {cat.category_name || cat.name}
+                                    All Stories
                                 </button>
-                            ))}
+                                {categories.map((cat) => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => handleCategoryClick(cat.category_name || cat.name)}
+                                        className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === (cat.category_name || cat.name) ? 'bg-primary text-white' : 'bg-white/5 text-text-muted hover:bg-primary hover:text-white'}`}
+                                    >
+                                        {cat.category_name || cat.name}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Right Arrow - Absolutely positioned */}
+                            <button
+                                onClick={() => scrollCategories('right')}
+                                disabled={!canScrollRight}
+                                className={`absolute  right-10 top-1/2 -translate-y-1/2 translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-10 ${canScrollRight ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
+                            >
+                                <span className="material-symbols-outlined text-lg">chevron_right</span>
+                            </button>
                         </div>
                     </div>
 
@@ -251,8 +311,9 @@ const Blog = () => {
                         </div>
                     ) : displayedPosts.length === 0 ? (
                         <div className="text-center py-20 text-text-muted">
+                            <span className="material-symbols-outlined text-6xl mb-2">article_shortcut</span>
                             <p className="text-xl">No blog posts found.</p>
-                            <p className="text-sm mt-2 opacity-70">Check back later for new stories.</p>
+                            {/* <p className="text-sm mt-2 opacity-70">Check back later for new stories.</p> */}
                         </div>
                     ) : (
                         <div className="relative">
@@ -260,14 +321,14 @@ const Blog = () => {
                                 {displayedPosts.map((post) => (
                                     <div key={post.id} className="h-full">
                                         <div className="bg-surface-dark rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl hover:border-primary/30 transition-all duration-700 flex flex-col h-full group">
-                                            <div className="relative aspect-[16/10] overflow-hidden cursor-pointer" onClick={() => navigate(`/blog/details/${post.id}`)}>
+                                            <div className="relative aspect-[16/10] overflow-hidden cursor-pointer" onClick={() => navigate(`/blog/${createSlug(post.title)}`)}>
                                                 <div className="absolute inset-0 bg-cover bg-center opacity-60 transition-all duration-1000 group-hover:scale-110" style={{ backgroundImage: `url('${getImageUrl(post.image_url || post.featured_image || post.image)}')` }}></div>
                                             </div>
                                             <div className="p-8 flex flex-col flex-grow">
                                                 <span className="text-[10px] font-black text-secondary uppercase tracking-[0.3em] mb-4">{post.category_name || post.category || "General"}</span>
                                                 <h3 className="text-2xl  text-white mb-4 leading-snug">{post.title}</h3>
                                                 <p className="text-text-muted font-light text-sm leading-relaxed mb-6">{stripHtml(post.content_preview || post.content).substring(0, 120)}...</p>
-                                                <button className="mt-auto inline-flex items-center gap-3 text-primary font-bold text-xs uppercase tracking-widest group/link cursor-pointer transition-colors" onClick={() => navigate(`/blog/details/${post.id}`)}>
+                                                <button className="mt-auto inline-flex items-center gap-3 text-primary font-bold text-xs uppercase tracking-widest group/link cursor-pointer transition-colors" onClick={() => navigate(`/blog/${createSlug(post.title)}`)}>
                                                     Read Journal
                                                     <span className="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
                                                 </button>

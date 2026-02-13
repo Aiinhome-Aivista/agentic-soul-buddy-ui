@@ -5,7 +5,7 @@ import { apiService } from '../../../service/apiService';
 import { get_url1, devUrl1 } from '../../../connection/connection';
 
 const BlogDetails = () => {
-  const { id } = useParams();
+  const { title } = useParams();
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
   const [allBlogs, setAllBlogs] = useState([]);
@@ -32,24 +32,7 @@ const BlogDetails = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Fetch current blog details
-        const response = await apiService({
-          url: `${get_url1.blogposts}/${id}`,
-          method: 'GET'
-        });
-
-        let blogData = null;
-        if (Array.isArray(response) && response.length > 0) {
-          blogData = response[0];
-        } else if (response?.data) {
-          blogData = Array.isArray(response.data) ? response.data[0] : response.data;
-        } else {
-          blogData = response;
-        }
-
-        if (!blogData) throw new Error("Blog not found");
-        setBlog(blogData);
-
+        // Fetch all blogs to find the one matching the title
         const allResponse = await apiService({
           url: get_url1.blogposts,
           method: 'GET'
@@ -69,23 +52,29 @@ const BlogDetails = () => {
 
         setAllBlogs(blogsList);
 
-        // Find current blog from the list
-        // parsedId because params are strings
-        const parsedId = parseInt(id);
-        console.log("Details Debug - ID:", id, "Parsed:", parsedId);
+        // Decode the title from URL (replace hyphens with spaces and decode URI)
+        const decodedTitle = decodeURIComponent(title).replace(/-/g, ' ');
+        console.log("Details Debug - Title from URL:", title, "Decoded:", decodedTitle);
 
-        const currentBlog = blogsList.find(b => b.id === parsedId || b.id == id);
+        // Find current blog from the list by matching title (case-insensitive)
+        const currentBlog = blogsList.find(b =>
+          b.title.toLowerCase() === decodedTitle.toLowerCase()
+        );
         console.log("Details Debug - Found Blog:", currentBlog);
 
         if (currentBlog) {
           setBlog(currentBlog);
+          // Update document title with blog title
+          document.title = `${currentBlog.title} - Souljunction`;
         } else {
           setError("Blog not found.");
+          document.title = "Blog Not Found - Souljunction";
         }
 
       } catch (err) {
         console.error("Failed to fetch data", err);
         setError("Failed to load blog details.");
+        document.title = "Error - Souljunction";
       } finally {
         setLoading(false);
       }
@@ -93,12 +82,22 @@ const BlogDetails = () => {
 
     fetchData();
     window.scrollTo(0, 0);
-  }, [id]);
+
+    // Cleanup: reset title when component unmounts
+    return () => {
+      document.title = "Souljunction";
+    };
+  }, [title]);
 
   const getImageUrl = (imagePath) => {
     if (!imagePath) return 'https://lh3.googleusercontent.com/aida-public/AB6AXuA8joqQH76wY929nfMjdCWo90o3YvVrmxLVPT6leihiEFLEotvvSkJl5aSyKDHUcIL2WaaKCKI60M2m4vwYnu7NSD5Xy--Ck59MHJBuQec18_i_gzEO8qoH8bujRpFwmVND68NVoOeXIGiT5PKnRuzNS7LnolI4ZJZ8LssidI1De_1-EYMxLLu78_B7qCOKHQq2qWGRR37gMiZdg210fN7YwbgZVa2vCiwh6X9IE3t31aSri0GpGi2cipvNINfq6wdpAYZP9ThecLd-';
     if (imagePath.startsWith('http')) return imagePath;
     return `${devUrl1}${imagePath.replace(/^\/+/, '')}`;
+  };
+
+  // Helper function to create URL-friendly slug from title
+  const createSlug = (title) => {
+    return encodeURIComponent(title.replace(/\s+/g, '-'));
   };
 
   const handleCopyLink = () => {
@@ -108,7 +107,7 @@ const BlogDetails = () => {
   };
 
   // Logic for Related, Previous, Next
-  const currentBlogId = parseInt(id);
+  const currentBlogId = blog?.id;
 
   // Filter related by category, exclude current, and apply search query
   const relatedBlogs = allBlogs
@@ -117,7 +116,7 @@ const BlogDetails = () => {
       const matchesSearch = b.title.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     })
-    .slice(0, 7);
+    .slice(0, 6);
 
   // Find current index for Prev/Next
   const currentIndex = allBlogs.findIndex(b => b.id === currentBlogId);
@@ -174,8 +173,31 @@ const BlogDetails = () => {
 
           <div className="text-center max-w-[800px] mx-auto">
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-['Lora'] text-white leading-[1.15] text-balance mb-6">
-              {blog.title}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white leading-[1.15] text-balance mb-6">
+              {(() => {
+                const words = blog.title.split(' ');
+                const totalWords = words.length;
+
+                // Determine how many words to style based on title length
+                let wordsToStyle = 2;
+                if (totalWords > 10) {
+                  wordsToStyle = 4;
+                } else if (totalWords > 6) {
+                  wordsToStyle = 3;
+                }
+
+                if (totalWords <= wordsToStyle) {
+                  return <span className="italic text-[#6a8c7e]">{blog.title}</span>;
+                }
+
+                const mainPart = words.slice(0, -wordsToStyle).join(' ');
+                const styledPart = words.slice(-wordsToStyle).join(' ');
+                return (
+                  <>
+                    {mainPart} <span className="italic text-[#6a8c7e]">{styledPart}</span>
+                  </>
+                );
+              })()}
             </h1>
             <span className="inline-block px-5 py-1.5 bg-[#6a8c7e]/10 border border-[#6a8c7e]/20 text-[#6a8c7e] text-[10px] font-bold uppercase tracking-[0.3em] rounded-full ">
               {blog.category_name || blog.category || "Story"}
@@ -189,7 +211,7 @@ const BlogDetails = () => {
           </div>
         </section>
         <div className="max-w-[1360px] mx-auto px-6 flex flex-col lg:flex-row justify-between gap-12 lg:gap-0">
-          <article className="lg:w-[66%] max-w-[800px] text-lg md:text-xl text-[#e5e7eb]/90 leading-relaxed [&>p]:mb-8 [&>p]:leading-[1.9] lg:pr-12">
+          <article className="lg:w-[75%] max-w-[950px] text-lg md:text-xl text-[#e5e7eb]/90 leading-relaxed [&>p]:mb-8 [&>p]:leading-[1.9] lg:pr-8">
             {blog.content ? (
               <div className="prose prose-invert max-w-none">
                 {blog.content_preview && (
@@ -236,7 +258,7 @@ const BlogDetails = () => {
               {
                 prevPost ? (
                   <div
-                    onClick={() => navigate(`/blog/details/${prevPost.id}`)}
+                    onClick={() => navigate(`/blog/${createSlug(prevPost.title)}`)}
                     className="cursor-pointer group p-4 rounded-xl border border-white/5 hover:bg-white/5 transition-all text-left"
                   >
                     <p className="text-xs uppercase tracking-widest text-[#6a8c7e] mb-2 group-hover:translate-x-1 transition-transform">Previous Post</p>
@@ -248,7 +270,7 @@ const BlogDetails = () => {
               {
                 nextPost ? (
                   <div
-                    onClick={() => navigate(`/blog/details/${nextPost.id}`)}
+                    onClick={() => navigate(`/blog/${createSlug(nextPost.title)}`)}
                     className="cursor-pointer group p-4 rounded-xl border border-white/5 hover:bg-white/5 transition-all text-right"
                   >
                     <p className="text-xs uppercase tracking-widest text-[#6a8c7e] mb-2 group-hover:-translate-x-1 transition-transform">Next Post</p>
@@ -292,12 +314,18 @@ const BlogDetails = () => {
                     />
                   </div>
                 </div>
-                <div className="space-y-4">
+                <div
+                  className="space-y-4 max-h-[500px] overflow-y-auto pr-2"
+                  style={{
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: '#6a8c7e4d transparent'
+                  }}
+                >
                   {relatedBlogs.length > 0 ? (
                     relatedBlogs.map(rb => (
                       <div
                         key={rb.id}
-                        onClick={() => navigate(`/blog/details/${rb.id}`)}
+                        onClick={() => navigate(`/blog/${createSlug(rb.title)}`)}
                         className="group cursor-pointer flex gap-3 items-center"
                       >
                         <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-[#121413]">

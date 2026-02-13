@@ -86,6 +86,11 @@ const IntroPage = () => {
         return tmp.textContent || tmp.innerText || "";
     };
 
+    // Helper function to create URL-friendly slug from title
+    const createSlug = (title) => {
+        return encodeURIComponent(title.replace(/\s+/g, '-'));
+    };
+
     const testimonials = [
         {
             quote: "I didn't realize how much noise I was carrying until I found this quiet corner. It's the only app that feels like an exhale.",
@@ -731,7 +736,7 @@ const IntroPage = () => {
                                     {[...filteredBlogs, ...(filteredBlogs.length > 3 ? filteredBlogs : [])].map((blog, index) => (
                                         <div key={`${blog.id}-${index}`} className="min-w-[340px] w-[340px] md:min-w-[460px] md:w-[460px]">
                                             <div className="bg-surface-dark rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl hover:border-primary/30 transition-all duration-700 flex flex-col h-full group">
-                                                <div className="relative aspect-[16/10] overflow-hidden cursor-pointer" onClick={() => navigate(`/blog/details/${blog.id}`)}>
+                                                <div className="relative aspect-[16/10] overflow-hidden cursor-pointer" onClick={() => navigate(`/blog/${createSlug(blog.title)}`)}>
                                                     <div className="absolute inset-0 bg-cover bg-center opacity-60 transition-all duration-1000 group-hover:scale-110" style={{ backgroundImage: `url('${getImageUrl(blog.image_url || blog.featured_image || blog.image)}')` }}></div>
 
                                                 </div>
@@ -739,7 +744,7 @@ const IntroPage = () => {
                                                     <span className="text-[10px] font-black text-secondary uppercase tracking-[0.3em] mb-4">{blog.category_name || blog.category}</span>
                                                     <h3 className="text-2xl  text-white mb-6 leading-snug">{blog.title}</h3>
                                                     <p className="text-text-muted font-light text-sm leading-relaxed mb-8">{stripHtml(blog.content_preview || blog.content || blog.description).substring(0, 100)}...</p>
-                                                    <button className="mt-auto inline-flex items-center gap-3 text-primary font-bold text-xs uppercase tracking-widest group/link cursor-pointer" onClick={() => navigate(`/blog/details/${blog.id}`)}>
+                                                    <button className="mt-auto inline-flex items-center gap-3 text-primary font-bold text-xs uppercase tracking-widest group/link cursor-pointer" onClick={() => navigate(`/blog/${createSlug(blog.title)}`)}>
                                                         Read Journal
                                                         <span className="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>
                                                     </button>
