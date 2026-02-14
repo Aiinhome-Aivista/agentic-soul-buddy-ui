@@ -23,7 +23,8 @@ export const POST_url1 = {
   send_otp: devUrl1 + "send_otp",
   verify_otp: devUrl1 + "verify_otp",
   cupon_validate: devUrl1 + "validate_coupon",
-  razorpay_verify: devUrl1 + "payment_razorpay_verify"
+  razorpay_verify: devUrl1 + "payment_razorpay_verify",
+  related_blogs: devUrl1 + "blogs/filter",
 };
 
 export const get_url1 = {

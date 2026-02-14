@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Footer from '../../../components/Footer';
 import { apiService } from '../../../service/apiService';
-import { get_url1, devUrl1 } from '../../../connection/connection';
+import { get_url1, POST_url1, devUrl1 } from '../../../connection/connection';
 
 const BlogDetails = () => {
   const { title } = useParams();
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
   const [allBlogs, setAllBlogs] = useState([]);
+  const [relatedBlogs, setRelatedBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -66,6 +67,9 @@ const BlogDetails = () => {
           setBlog(currentBlog);
           // Update document title with blog title
           document.title = `${currentBlog.title} - Souljunction`;
+
+          // Fetch related blogs using the filter API
+          fetchRelatedBlogs(currentBlog);
         } else {
           setError("Blog not found.");
           document.title = "Blog Not Found - Souljunction";
@@ -89,6 +93,44 @@ const BlogDetails = () => {
     };
   }, [title]);
 
+  // Fetch related blogs using the filter API
+  const fetchRelatedBlogs = async (currentBlog) => {
+    try {
+      const filterPayload = {
+        category_name: currentBlog.category_name || currentBlog.category,
+        tags: parseTags(currentBlog.tags)
+      };
+
+      console.log("Fetching related blogs with filter:", filterPayload);
+
+      const response = await apiService({
+        url: POST_url1.related_blogs,
+        method: 'POST',
+        data: filterPayload
+      });
+
+      console.log("Related blogs API response:", response);
+
+      // Extract blogs from response
+      let relatedBlogsList = [];
+      if (response?.data && Array.isArray(response.data)) {
+        relatedBlogsList = response.data;
+      } else if (Array.isArray(response)) {
+        relatedBlogsList = response;
+      }
+
+      // Filter out the current blog and limit to 6
+      const filteredRelated = relatedBlogsList
+        .filter(b => b.id !== currentBlog.id)
+        .slice(0, 6);
+
+      setRelatedBlogs(filteredRelated);
+    } catch (err) {
+      console.error("Failed to fetch related blogs:", err);
+      setRelatedBlogs([]);
+    }
+  };
+
   const getImageUrl = (imagePath) => {
     if (!imagePath) return 'https://lh3.googleusercontent.com/aida-public/AB6AXuA8joqQH76wY929nfMjdCWo90o3YvVrmxLVPT6leihiEFLEotvvSkJl5aSyKDHUcIL2WaaKCKI60M2m4vwYnu7NSD5Xy--Ck59MHJBuQec18_i_gzEO8qoH8bujRpFwmVND68NVoOeXIGiT5PKnRuzNS7LnolI4ZJZ8LssidI1De_1-EYMxLLu78_B7qCOKHQq2qWGRR37gMiZdg210fN7YwbgZVa2vCiwh6X9IE3t31aSri0GpGi2cipvNINfq6wdpAYZP9ThecLd-';
     if (imagePath.startsWith('http')) return imagePath;
@@ -106,17 +148,13 @@ const BlogDetails = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Logic for Related, Previous, Next
+  // Logic for Previous, Next
   const currentBlogId = blog?.id;
 
-  // Filter related by category, exclude current, and apply search query
-  const relatedBlogs = allBlogs
-    .filter(b => {
-      const matchesCategory = b.id !== currentBlogId && (b.category_id === blog?.category_id || b.category === blog?.category);
-      const matchesSearch = b.title.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    })
-    .slice(0, 6);
+  // Filter related blogs by search query (client-side)
+  const filteredRelatedBlogs = relatedBlogs.filter(b =>
+    b.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   // Find current index for Prev/Next
   const currentIndex = allBlogs.findIndex(b => b.id === currentBlogId);
@@ -315,14 +353,14 @@ const BlogDetails = () => {
                   </div>
                 </div>
                 <div
-                  className="space-y-4 max-h-[500px] overflow-y-auto pr-2"
+                  className={`space-y-4 overflow-y-auto pr-2 ${filteredRelatedBlogs.length > 0 ? 'max-h-[500px]' : 'max-h-[400px]'}`}
                   style={{
                     scrollbarWidth: 'thin',
                     scrollbarColor: '#6a8c7e4d transparent'
                   }}
                 >
-                  {relatedBlogs.length > 0 ? (
-                    relatedBlogs.map(rb => (
+                  {filteredRelatedBlogs.length > 0 ? (
+                    filteredRelatedBlogs.map(rb => (
                       <div
                         key={rb.id}
                         onClick={() => navigate(`/blog/${createSlug(rb.title)}`)}
@@ -342,7 +380,10 @@ const BlogDetails = () => {
                       </div>
                     ))
                   ) : (
-                    <p className="text-sm text-[#9ca3af] italic">No related posts found.</p>
+                    <div className="flex flex-col items-center justify-center py-8 text-center min-h-[350px]">
+                      <span className="material-symbols-outlined text-5xl text-[#6a8c7e]/30 mb-4">article_shortcut</span>
+                      <p className="text-sm text-[#9ca3af] italic">No related posts found.</p>
+                    </div>
                   )}
                 </div>
               </div>
