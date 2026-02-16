@@ -13,6 +13,7 @@ const Blog = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("All Stories");
+    const [selectedSubCategory, setSelectedSubCategory] = useState("All Subcategories");
     const [categories, setCategories] = useState([]);
     const [isSearchExpanded, setIsSearchExpanded] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
@@ -22,6 +23,19 @@ const Blog = () => {
     const categoryScrollRef = useRef(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
+    const [activeDropdown, setActiveDropdown] = useState(null);
+    const dropdownRef = useRef(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setActiveDropdown(null);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     useEffect(() => {
         const fetchBlogs = async () => {
@@ -70,7 +84,7 @@ const Blog = () => {
         const fetchCategories = async () => {
             try {
                 const response = await apiService({
-                    url: get_url1.categories,
+                    url: get_url1.subcategories,
                     method: 'GET'
                 });
                 if (response?.data && Array.isArray(response.data)) {
@@ -87,6 +101,8 @@ const Blog = () => {
 
     const handleCategoryClick = (category) => {
         setSelectedCategory(category);
+        setSelectedSubCategory("All Subcategories");
+        setActiveDropdown(null);
         setCurrentPage(1);
     };
 
@@ -117,11 +133,18 @@ const Blog = () => {
 
     const filteredPosts = blogPosts
         .filter(post => {
-            const matchesCategory = selectedCategory === "All Stories" || (post.category_name || post.category) === selectedCategory;
+            const postCategory = post.category_name || post.category || "";
+            const postSubCategory = post.subcategory_name || post.subcategory || "";
+
+            const matchesCategory = selectedCategory === "All Stories" || postCategory === selectedCategory;
+            const matchesSubCategory = selectedSubCategory === "All Subcategories" || postSubCategory === selectedSubCategory;
+
             const matchesSearch = searchQuery === "" ||
                 post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (post.category_name || post.category || "").toLowerCase().includes(searchQuery.toLowerCase());
-            return matchesCategory && matchesSearch;
+                postCategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                postSubCategory.toLowerCase().includes(searchQuery.toLowerCase());
+
+            return matchesCategory && matchesSubCategory && matchesSearch;
         });
 
     const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
@@ -252,39 +275,145 @@ const Blog = () => {
                         </div>
                     </div>
 
-                    {/* Category Selection Section - Now below the header */}
-                    <div className="relative mb-15 max-w-[1200px] mx-auto">
-                        {/* Left Arrow - Absolutely positioned */}
+                  
+                    <div className="relative mb-20 max-w-310 mx-auto z-60 h-11 pointer-events-none">
+                     
                         <button
                             onClick={() => scrollCategories('left')}
                             disabled={!canScrollLeft}
-                            className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-10 ${canScrollLeft ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
+                            className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-[70] pointer-events-auto ${canScrollLeft ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
                         >
                             <span className="material-symbols-outlined text-lg">chevron_left</span>
                         </button>
 
-                        {/* Category Buttons Wrapper for safe centering */}
-                        <div className="flex justify-center">
+                      
+                        <div className="absolute inset-0 pointer-events-none">
                             <div
                                 ref={categoryScrollRef}
                                 onScroll={checkScrollButtons}
-                                className="flex gap-4 overflow-x-auto hide-scrollbar pb-1 cursor-pointer w-max max-w-full rounded-full"
+                                className="overflow-x-auto hide-scrollbar pb-64 -mb-60 pt-1 cursor-pointer pointer-events-auto"
                             >
-                                <button
-                                    onClick={() => handleCategoryClick("All Stories")}
-                                    className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === "All Stories" ? 'bg-primary text-white' : 'bg-white/5 text-text-muted hover:bg-primary hover:text-white'}`}
-                                >
-                                    All Stories
-                                </button>
-                                {categories.map((cat) => (
-                                    <button
-                                        key={cat.id}
-                                        onClick={() => handleCategoryClick(cat.category_name || cat.name)}
-                                        className={`px-6 py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === (cat.category_name || cat.name) ? 'bg-primary text-white' : 'bg-white/5 text-text-muted hover:bg-primary hover:text-white'}`}
-                                    >
-                                        {cat.category_name || cat.name}
-                                    </button>
-                                ))}
+                                <div className="flex gap-4 w-fit mx-auto px-10 pointer-events-none">
+                                    <div className="relative group pointer-events-auto">
+                                        <div
+                                            className={`flex items-center h-full rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300 cursor-pointer ${selectedCategory === "All Stories" ? 'bg-primary text-white scale-105 shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]' : 'bg-white/5 text-text-muted hover:bg-primary hover:text-white'}`}
+                                        >
+                                            <button
+                                                onClick={() => {
+                                                    if (selectedCategory === "All Stories") {
+                                                        setActiveDropdown(activeDropdown === "all" ? null : "all");
+                                                    } else {
+                                                        handleCategoryClick("All Stories");
+                                                    }
+                                                }}
+                                                className="px-6 py-1.5 rounded-l-full h-full flex items-center cursor-pointer"
+                                            >
+                                                All Stories
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setActiveDropdown(activeDropdown === "all" ? null : "all");
+                                                }}
+                                                className={`px-3 py-1.5 rounded-r-full transition-colors flex items-center h-full cursor-pointer ${activeDropdown === "all" ? 'text-white' : ''}`}
+                                            >
+                                                <span className={`material-symbols-outlined text-sm transition-transform duration-300 cursor-pointer ${activeDropdown === "all" ? 'rotate-180' : ''}`}>
+                                                    expand_more
+                                                </span>
+                                            </button>
+                                        </div>
+                                        {activeDropdown === "all" && (
+                                            <div
+                                                ref={dropdownRef}
+                                                className="absolute top-full left-0 mt-3 w-56 bg-surface-dark/95 backdrop-blur-md border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300 cursor-pointer"
+                                            >
+                                                <div className="py-3 px-5 text-[10px] font-bold uppercase tracking-widest text-white italic">
+                                                    No Subcategories
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    {categories.map((cat, index) => {
+                                        const categoryName = cat.category_name || cat.name;
+                                        const categoryId = cat.id || categoryName || index;
+                                        const hasSubcategories = cat.subcategories?.length > 0;
+                                        const isOpen = activeDropdown === categoryId;
+                                        const isSelected = selectedCategory === categoryName;
+
+                                        // Dynamic label: show subcategory name if selected, otherwise category name
+                                        const displayLabel = (isSelected && selectedSubCategory !== "All Subcategories")
+                                            ? selectedSubCategory
+                                            : categoryName;
+
+                                        return (
+                                            <div key={categoryId} className="relative group pointer-events-auto">
+                                                <div
+                                                    className={`flex items-center h-full rounded-full text-[10px] font-bold uppercase tracking-widest whitespace-nowrap transition-all duration-300 cursor-pointer ${isSelected ? 'bg-primary text-white scale-105 shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]' : 'bg-white/5 text-text-muted hover:bg-primary hover:text-white'}`}
+                                                >
+                                                    <button
+                                                        onClick={() => {
+                                                            if (isSelected && selectedSubCategory !== "All Subcategories") {
+                                                                // If a subcategory is selected, clicking the label resets to base category
+                                                                setSelectedSubCategory("All Subcategories");
+                                                                setActiveDropdown(null);
+                                                            } else if (isSelected) {
+                                                                setActiveDropdown(isOpen ? null : categoryId);
+                                                            } else {
+                                                                handleCategoryClick(categoryName);
+                                                            }
+                                                        }}
+                                                        className="px-6 py-1.5 rounded-l-full h-full flex items-center cursor-pointer"
+                                                    >
+                                                        {displayLabel}
+                                                    </button>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveDropdown(isOpen ? null : categoryId);
+                                                        }}
+                                                        className={`px-3 py-1.5 rounded-r-full transition-colors flex items-center h-full cursor-pointer ${isOpen ? 'text-white' : ''}`}
+                                                    >
+                                                        <span className={`material-symbols-outlined text-sm transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+                                                            expand_more
+                                                        </span>
+                                                    </button>
+                                                </div>
+
+                                             
+                                                {isOpen && (
+                                                    <div
+                                                        ref={dropdownRef}
+                                                        className="absolute top-full left-0 mt-3 w-56 bg-surface-dark/95 backdrop-blur-md border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300"
+                                                    >
+                                                        <div className="py-3 px-2">
+                                                            {hasSubcategories ? (
+                                                                <>
+                                                                    {cat.subcategories.map((sub, idx) => (
+                                                                        <button
+                                                                            key={idx}
+                                                                            onClick={() => {
+                                                                                setSelectedSubCategory(sub);
+                                                                                setActiveDropdown(null);
+                                                                                setCurrentPage(1);
+                                                                            }}
+                                                                            className={`w-full text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-colors cursor-pointer mb-1 ${selectedSubCategory === sub ? 'text-primary bg-white/5 rounded-full' : 'text-white hover:bg-white/5 rounded-full'}`}
+                                                                        >
+                                                                            {sub}
+                                                                        </button>
+                                                                    ))}
+                                                                </>
+                                                            ) : (
+                                                                <div className="px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-white italic">
+                                                                    No Subcategories
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
 
@@ -292,11 +421,13 @@ const Blog = () => {
                         <button
                             onClick={() => scrollCategories('right')}
                             disabled={!canScrollRight}
-                            className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-10 ${canScrollRight ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
+                            className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-[70] pointer-events-auto ${canScrollRight ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
                         >
                             <span className="material-symbols-outlined text-lg">chevron_right</span>
                         </button>
                     </div>
+
+
 
                     {loading ? (
                         <div className="flex justify-center items-center py-20">
@@ -322,7 +453,34 @@ const Blog = () => {
                                                 <div className="absolute inset-0 bg-cover bg-center opacity-60 transition-all duration-1000 group-hover:scale-110" style={{ backgroundImage: `url('${getImageUrl(post.image_url || post.featured_image || post.image)}')` }}></div>
                                             </div>
                                             <div className="p-8 flex flex-col flex-grow">
-                                                <span className="text-[10px] font-black text-secondary uppercase tracking-[0.3em] mb-4">{post.category_name || post.category || "General"}</span>
+                                                <div className="flex items-center gap-2 mb-4">
+                                                    <span
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleCategoryClick(post.category_name || post.category || "General");
+                                                        }}
+                                                        className="text-[10px] font-black text-secondary uppercase tracking-[0.3em] cursor-pointer hover:text-primary transition-colors"
+                                                    >
+                                                        {post.category_name || post.category || "General"}
+                                                    </span>
+                                                    {(post.subcategory_name || post.subcategory) && (
+                                                        <>
+                                                            <span className="text-[10px] text-white/20">•</span>
+                                                            <span
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setSelectedCategory(post.category_name || post.category || "General");
+                                                                    setSelectedSubCategory(post.subcategory_name || post.subcategory);
+                                                                    setCurrentPage(1);
+                                                                    setActiveDropdown(null);
+                                                                }}
+                                                                className="text-[10px] font-black text-primary uppercase tracking-[0.3em] cursor-pointer hover:text-white transition-colors"
+                                                            >
+                                                                {post.subcategory_name || post.subcategory}
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </div>
                                                 <h3 className="text-2xl  text-white mb-4 leading-snug">{post.title}</h3>
                                                 <p className="text-text-muted font-light text-sm leading-relaxed mb-6">{stripHtml(post.content_preview || post.content).substring(0, 120)}...</p>
                                                 <button className="mt-auto inline-flex items-center gap-3 text-primary font-bold text-xs uppercase tracking-widest group/link cursor-pointer transition-colors" onClick={() => navigate(`/blog/${createSlug(post.title)}`)}>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 const SocialShare = () => {
   const url = window.location.href;
-  const title = document.title;
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = () => {

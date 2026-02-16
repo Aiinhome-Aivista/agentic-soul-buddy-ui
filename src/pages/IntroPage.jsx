@@ -741,7 +741,15 @@ const IntroPage = () => {
 
                                                 </div>
                                                 <div className="p-10 flex flex-col flex-grow">
-                                                    <span className="text-[10px] font-black text-secondary uppercase tracking-[0.3em] mb-4">{blog.category_name || blog.category}</span>
+                                                    <div className="flex items-center gap-2 mb-4">
+                                                        <span className="text-[10px] font-black text-secondary uppercase tracking-[0.3em]">{blog.category_name || blog.category}</span>
+                                                        {(blog.subcategory_name || blog.subcategory) && (
+                                                            <>
+                                                                <span className="text-[#9ca3af] text-[10px]">•</span>
+                                                                <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">{blog.subcategory_name || blog.subcategory}</span>
+                                                            </>
+                                                        )}
+                                                    </div>
                                                     <h3 className="text-2xl  text-white mb-6 leading-snug">{blog.title}</h3>
                                                     <p className="text-text-muted font-light text-sm leading-relaxed mb-8">{stripHtml(blog.content_preview || blog.content || blog.description).substring(0, 100)}...</p>
                                                     <button className="mt-auto inline-flex items-center gap-3 text-primary font-bold text-xs uppercase tracking-widest group/link cursor-pointer" onClick={() => navigate(`/blog/${createSlug(blog.title)}`)}>

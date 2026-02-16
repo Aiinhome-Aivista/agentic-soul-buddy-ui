@@ -57,11 +57,11 @@ const BlogDetails = () => {
 
         setAllBlogs(blogsList);
 
-        // Decode the title from URL (replace hyphens with spaces and decode URI)
+
         const decodedTitle = decodeURIComponent(title).replace(/-/g, ' ');
         console.log("Details Debug - Title from URL:", title, "Decoded:", decodedTitle);
 
-        // Find current blog from the list by matching title (case-insensitive)
+
         const currentBlog = blogsList.find(b =>
           b.title.toLowerCase() === decodedTitle.toLowerCase()
         );
@@ -295,12 +295,22 @@ const BlogDetails = () => {
                 );
               })()}
             </h1>
-            <span className="inline-block px-5 py-1.5 bg-[#6a8c7e]/10 border border-[#6a8c7e]/20 text-[#6a8c7e] text-[10px] font-bold uppercase tracking-[0.3em] rounded-full ">
-              {blog.category_name || blog.category || "Story"}
-            </span>
+            <div className="flex items-center justify-center gap-2">
+              <span className="inline-block px-5 py-1.5 bg-[#6a8c7e]/10 border border-[#6a8c7e]/20 text-[#6a8c7e] text-[10px] font-bold uppercase tracking-[0.3em] rounded-full">
+                {blog.category_name || blog.category || "Story"}
+              </span>
+              {(blog.subcategory_name || blog.subcategory) && (
+                <>
+                  <span className="text-[#9ca3af] text-[10px]">•</span>
+                  <span className="inline-block px-5 py-1.5 bg-[#6a8c7e]/20 border border-[#6a8c7e]/30 text-white text-[10px] font-bold uppercase tracking-[0.3em] rounded-full">
+                    {blog.subcategory_name || blog.subcategory}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
         </section>
-        <section className="max-w-[1000px] mx-auto px-6 mb-20">
+        <section className="max-w-[1000px] mx-auto px-6 mb-24">
           <div className="w-full aspect-[21/10] rounded-3xl overflow-hidden shadow-2xl relative border border-white/5">
             <div className="absolute inset-0 bg-[#1a1f1d]/20"></div>
             <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${getImageUrl(blog.image_url || blog.featured_image || blog.image)}')` }}></div>
@@ -325,7 +335,7 @@ const BlogDetails = () => {
 
             {/* Tags */}
             {blog.tags && parseTags(blog.tags).length > 0 && (
-              <div className="flex items-center gap-4 mt-10 mb-4">
+              <div className="flex items-center gap-4 py-12 clear-both">
                 <h3 className="text-sm font-bold text-white uppercase tracking-widest shrink-0">Tags</h3>
                 <div className="flex flex-wrap gap-2">
                   {parseTags(blog.tags).map((tag, index) => (
@@ -338,13 +348,13 @@ const BlogDetails = () => {
             )}
 
             {/* Share Section */}
-            <div className="flex items-center gap-4 border-t border-white/10 pt-4">
+            <div className="flex items-center gap-4 border-t border-white/10 mt-12 pt-12 clear-both">
               <h3 className="text-xs font-bold text-white uppercase tracking-widest shrink-0">Share:</h3>
               <SocialShare />
             </div>
 
             {/* Post Navigation */}
-            <div className="pt-8 grid grid-cols-1 md:grid-cols-2 gap-30 md:gap-40">
+            <div className="pt-32 grid grid-cols-1 md:grid-cols-2 gap-30 md:gap-40">
               {
                 prevPost ? (
                   <div

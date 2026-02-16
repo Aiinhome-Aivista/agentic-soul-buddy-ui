@@ -41,6 +41,7 @@ export const get_url1 = {
   categories: devUrl1 + "categories",
   blogposts: devUrl1 + "blogs/published",
   tags: devUrl1 + "blogs/tags",
+  subcategories: devUrl1 + "categories/subcategories/list-all",
 
 
 
