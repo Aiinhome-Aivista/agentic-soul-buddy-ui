@@ -14,7 +14,7 @@ const Blog = () => {
     const [error, setError] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("All Stories");
     const [categories, setCategories] = useState([]);
-    const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+    const [isSearchExpanded, setIsSearchExpanded] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
@@ -218,60 +218,57 @@ const Blog = () => {
 
             <section className="py-10 px-20 md:px-24 bg-white/[0.01] border-t border-white/5">
                 <div className="max-w-360 mx-auto">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 mb-20">
-                        <div className="max-w-2xl w-full flex justify-between items-start">
-                            <div className="flex-1">
-                                <h2 className="text-4xl md:text-5xl  text-white tracking-tight mb-6">
-                                    Blogs &amp; <span className="italic text-primary">Stories</span>
-                                </h2>
-                                <p className="text-text-muted text-lg font-light leading-relaxed">Deep dives into the art of being, curated for your quiet moments.</p>
-                            </div>
-
-                            {/* Search Icon (Added here) */}
-                            <div
-                                className={`flex items-center justify-center -mr-170 bg-white/5 border border-white/10 rounded-full transition-all duration-500 ease-in-out group/search h-9 mt-2 ml-4 ${isSearchExpanded ? 'w-48 px-3' : 'w-9 justify-center'
-                                    }`}
-                                onMouseEnter={() => setIsSearchExpanded(true)}
-                                onMouseLeave={() => !searchQuery && setIsSearchExpanded(false)}
-                            >
-                                <button
-                                    onClick={() => {
-                                        if (searchQuery) {
-                                            setSearchQuery("");
-                                        }
-                                    }}
-                                    className={`flex items-center  shrink-0 transition-colors ${isSearchExpanded ? 'text-primary' : 'text-text-muted group-hover/search:text-primary'
-                                        }`}
-                                >
-                                    <span className="material-symbols-outlined text-xl">
-                                        {isSearchExpanded && searchQuery ? 'close' : 'search'}
-                                    </span>
-                                </button>
-                                <input
-                                    type="text"
-                                    placeholder="Search..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className={`bg-transparent border-none text-[10px] text-white focus:outline-none transition-all duration-500 ${isSearchExpanded ? 'w-full ml-2 opacity-100' : 'w-0 opacity-0 pointer-events-none'
-                                        }`}
-                                />
-                            </div>
+                    <div className="flex justify-between items-start mb-12">
+                        <div className="max-w-2xl">
+                            <h2 className="text-4xl md:text-5xl text-white tracking-tight mb-3">
+                                Blogs &amp; <span className="italic text-primary">Stories</span>
+                            </h2>
+                            <p className="text-text-muted text-lg font-light leading-relaxed">Deep dives into the art of being, curated for your quiet moments.</p>
                         </div>
-                        <div className="relative">
-                            {/* Left Arrow - Absolutely positioned */}
-                            <button
-                                onClick={() => scrollCategories('left')}
-                                disabled={!canScrollLeft}
-                                className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-10 ${canScrollLeft ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
-                            >
-                                <span className="material-symbols-outlined text-lg">chevron_left</span>
-                            </button>
 
-                            {/* Category Buttons */}
+                        {/* Search Bar - Persistently Open */}
+                        <div
+                            className={`flex items-center justify-center bg-white/5 border border-white/10 rounded-full transition-all duration-500 ease-in-out group/search h-9 mt-2 ml-4 w-60 px-3`}
+                        >
+                            <button
+                                onClick={() => {
+                                    if (searchQuery) {
+                                        setSearchQuery("");
+                                    }
+                                }}
+                                className={`flex items-center shrink-0 transition-colors text-primary`}
+                            >
+                                <span className="material-symbols-outlined text-xl">
+                                    {searchQuery ? 'close' : 'search'}
+                                </span>
+                            </button>
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className={`bg-transparent border-none text-[10px] text-white focus:outline-none transition-all duration-500 w-full ml-2 opacity-100`}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Category Selection Section - Now below the header */}
+                    <div className="relative mb-15 max-w-[1200px] mx-auto">
+                        {/* Left Arrow - Absolutely positioned */}
+                        <button
+                            onClick={() => scrollCategories('left')}
+                            disabled={!canScrollLeft}
+                            className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-10 ${canScrollLeft ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
+                        >
+                            <span className="material-symbols-outlined text-lg">chevron_left</span>
+                        </button>
+
+                        {/* Category Buttons Wrapper for safe centering */}
+                        <div className="flex justify-center">
                             <div
                                 ref={categoryScrollRef}
                                 onScroll={checkScrollButtons}
-                                className="flex gap-4 overflow-x-auto hide-scrollbar pb-1 cursor-pointer max-w-[580px] rounded-full mr-10"
+                                className="flex gap-4 overflow-x-auto hide-scrollbar pb-1 cursor-pointer w-max max-w-full rounded-full"
                             >
                                 <button
                                     onClick={() => handleCategoryClick("All Stories")}
@@ -289,16 +286,16 @@ const Blog = () => {
                                     </button>
                                 ))}
                             </div>
-
-                            {/* Right Arrow - Absolutely positioned */}
-                            <button
-                                onClick={() => scrollCategories('right')}
-                                disabled={!canScrollRight}
-                                className={`absolute  right-10 top-1/2 -translate-y-1/2 translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-10 ${canScrollRight ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
-                            >
-                                <span className="material-symbols-outlined text-lg">chevron_right</span>
-                            </button>
                         </div>
+
+                        {/* Right Arrow - Absolutely positioned */}
+                        <button
+                            onClick={() => scrollCategories('right')}
+                            disabled={!canScrollRight}
+                            className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 w-9 h-9 rounded-full border border-white/10 flex items-center justify-center transition-all z-10 ${canScrollRight ? 'text-text-muted hover:border-primary hover:text-white bg-white/5' : 'text-white/20 cursor-not-allowed bg-white/5'}`}
+                        >
+                            <span className="material-symbols-outlined text-lg">chevron_right</span>
+                        </button>
                     </div>
 
                     {loading ? (

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Footer from '../../../components/Footer';
 import { apiService } from '../../../service/apiService';
 import { get_url1, POST_url1, devUrl1 } from '../../../connection/connection';
+import SocialShare from './SocialShare';
 
 const BlogDetails = () => {
   const { title } = useParams();
@@ -13,8 +14,11 @@ const BlogDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [transitionOrigin, setTransitionOrigin] = useState({ x: 0, y: 0 });
+  const [transitionColor, setTransitionColor] = useState('bg-background-dark');
 
   // Helper to parse tags
   const parseTags = (tags) => {
@@ -142,6 +146,20 @@ const BlogDetails = () => {
     return encodeURIComponent(title.replace(/\s+/g, '-'));
   };
 
+  const handleGoBack = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTransitionOrigin({
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2
+    });
+    setTransitionColor('bg-[#1a1f1d]');
+    setIsTransitioning(true);
+
+    setTimeout(() => {
+      navigate('/blog/all');
+    }, 800);
+  };
+
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
@@ -182,7 +200,47 @@ const BlogDetails = () => {
 
   return (
     <div className="bg-[#1a1f1d] text-[#e5e7eb] overflow-x-hidden selection:bg-[#6a8c7e]/30 min-h-screen">
-      <main className="pt-16 pb-24">
+      {/* Page Transition Overlay */}
+      {isTransitioning && (
+        <div
+          className={`fixed inset-0 z-[100] pointer-events-none ${transitionColor}`}
+          style={{
+            clipPath: `circle(150% at ${transitionOrigin.x}px ${transitionOrigin.y}px)`,
+            animation: 'expandFromButton 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+          }}
+        />
+      )}
+      <style>{`
+        @keyframes expandFromButton {
+          from {
+            clip-path: circle(0% at ${transitionOrigin.x}px ${transitionOrigin.y}px);
+          }
+          to {
+            clip-path: circle(150% at ${transitionOrigin.x}px ${transitionOrigin.y}px);
+          }
+        }
+      `}</style>
+      <style>{`
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+      `}</style>
+
+      <header className="w-full border-b border-white/5 bg-[#1a1f1d]/90 backdrop-blur-sm sticky top-0 z-50">
+        <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
+          <div onClick={() => navigate('/blog/all')} className="flex items-center gap-3 text-white cursor-pointer group">
+            <img src={get_url1.logo} alt="Souljunction" className="h-10 w-10 rounded-full object-cover" />
+            <h2 className="text-3xl font-semibold tracking-wide uppercase text-[#6a8c7e]">Souljunction</h2>
+          </div>
+          <button onClick={handleGoBack} className="flex items-center gap-2 text-[#9ca3af] hover:text-[#6a8c7e] transition-colors cursor-pointer">
+            <span className="material-symbols-outlined">arrow_back</span>
+            <span className="text-sm font-medium">Back</span>
+          </button>
+        </div>
+      </header>
+
+      <main className="pt-10 pb-24">
+
         <section className="max-w-[1360px] mx-auto px-6 mb-16">
           <div className="flex flex-col md:flex-row justify-between items-center mb-10">
             <button onClick={() => navigate('/blog/all')} className="inline-flex items-center gap-2 text-[#9ca3af] hover:text-[#6a8c7e] transition-colors group mb-4 md:mb-0 cursor-pointer">
@@ -279,16 +337,10 @@ const BlogDetails = () => {
               </div>
             )}
 
-            {/* Share Button (Moved here) */}
+            {/* Share Section */}
             <div className="flex items-center gap-4 border-t border-white/10 pt-4">
               <h3 className="text-xs font-bold text-white uppercase tracking-widest shrink-0">Share:</h3>
-              <button
-                onClick={handleCopyLink}
-                className="inline-flex items-center gap-2 bg-[#1a1f1d] border border-white/10 hover:bg-white/5 text-[#9ca3af] hover:text-white px-2 py-2 rounded-full transition-all group"
-              >
-                <span className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">link</span>
-                <span className="text-xs font-bold uppercase tracking-[0.2em]">{copied ? "Link Copied!" : "Copy Link"}</span>
-              </button>
+              <SocialShare />
             </div>
 
             {/* Post Navigation */}

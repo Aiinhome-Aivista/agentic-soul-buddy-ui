@@ -188,5 +188,14 @@ body,
   list-style-type: decimal;
 }
 
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+}
+
+
 
 
