@@ -276,7 +276,7 @@ const Blog = () => {
                     </div>
 
 
-                    <div className="relative mb-20 max-w-310 mx-auto z-60 h-11 pointer-events-none rounded-full">
+                    <div className="relative mb-20 max-w-310 mx-auto z-60 h-11 pointer-events-none">
 
                         <button
                             onClick={() => scrollCategories('left')}
@@ -291,7 +291,7 @@ const Blog = () => {
                             <div
                                 ref={categoryScrollRef}
                                 onScroll={checkScrollButtons}
-                                className="overflow-x-auto hide-scrollbar  -mb-60 cursor-pointer   rounded-full pt-1 pointer-events-auto"
+                                className="overflow-x-auto hide-scrollbar -mb-60 pb-64 pt-1 cursor-pointer pointer-events-auto"
                             >
                                 <div className="flex gap-4 w-fit mx-auto px-10 pointer-events-none">
                                     <div className="relative group pointer-events-auto">
