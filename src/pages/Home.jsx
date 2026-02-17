@@ -37,7 +37,7 @@ function Home() {
 
     return (
         <BackgroundAudioProvider>
-            <div className='w-[100%] h-[100%] p-[0.5rem]'>
+            <div className='w-[100%] h-screen p-[0.5rem]'>
                 <AiChat />
             </div>
         </BackgroundAudioProvider>
