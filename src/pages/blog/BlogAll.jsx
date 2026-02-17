@@ -275,9 +275,9 @@ const Blog = () => {
                         </div>
                     </div>
 
-                  
-                    <div className="relative mb-20 max-w-310 mx-auto z-60 h-11 pointer-events-none">
-                     
+
+                    <div className="relative mb-20 max-w-310 mx-auto z-60 h-11 pointer-events-none rounded-full">
+
                         <button
                             onClick={() => scrollCategories('left')}
                             disabled={!canScrollLeft}
@@ -286,12 +286,12 @@ const Blog = () => {
                             <span className="material-symbols-outlined text-lg">chevron_left</span>
                         </button>
 
-                      
-                        <div className="absolute inset-0 pointer-events-none">
+
+                        <div className="absolute inset-0 pointer-events-none ">
                             <div
                                 ref={categoryScrollRef}
                                 onScroll={checkScrollButtons}
-                                className="overflow-x-auto hide-scrollbar pb-64 -mb-60 pt-1 cursor-pointer pointer-events-auto"
+                                className="overflow-x-auto hide-scrollbar  -mb-60 cursor-pointer   rounded-full pt-1 pointer-events-auto"
                             >
                                 <div className="flex gap-4 w-fit mx-auto px-10 pointer-events-none">
                                     <div className="relative group pointer-events-auto">
@@ -379,7 +379,7 @@ const Blog = () => {
                                                     </button>
                                                 </div>
 
-                                             
+
                                                 {isOpen && (
                                                     <div
                                                         ref={dropdownRef}
@@ -392,6 +392,7 @@ const Blog = () => {
                                                                         <button
                                                                             key={idx}
                                                                             onClick={() => {
+                                                                                setSelectedCategory(categoryName);
                                                                                 setSelectedSubCategory(sub);
                                                                                 setActiveDropdown(null);
                                                                                 setCurrentPage(1);

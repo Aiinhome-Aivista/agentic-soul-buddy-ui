@@ -317,7 +317,7 @@ const BlogDetails = () => {
           </div>
         </section>
         <div className="max-w-[1360px] mx-auto px-6 flex flex-col lg:flex-row justify-between gap-12 lg:gap-0">
-          <article className="lg:w-[75%] max-w-[950px] text-lg md:text-xl text-[#e5e7eb]/90 leading-relaxed [&>p]:mb-8 [&>p]:leading-[1.9] lg:pr-8">
+          <article className="lg:w-[75%] max-w-[950px] text-lg md:text-xl text-[#e5e7eb]/90 leading-relaxed [&>p]:mb-8 [&>p]:leading-[1.9] [&_img]:rounded-2xl [&_img]:overflow-hidden lg:pr-8">
             {blog.content ? (
               <div className="prose prose-invert max-w-none">
                 {blog.content_preview && (
@@ -335,7 +335,7 @@ const BlogDetails = () => {
 
             {/* Tags */}
             {blog.tags && parseTags(blog.tags).length > 0 && (
-              <div className="flex items-center gap-4 py-12 clear-both">
+              <div className="flex items-center gap-4 py-8 clear-both">
                 <h3 className="text-sm font-bold text-white uppercase tracking-widest shrink-0">Tags</h3>
                 <div className="flex flex-wrap gap-2">
                   {parseTags(blog.tags).map((tag, index) => (
@@ -348,13 +348,13 @@ const BlogDetails = () => {
             )}
 
             {/* Share Section */}
-            <div className="flex items-center gap-4 border-t border-white/10 mt-12 pt-12 clear-both">
+            <div className="flex items-center gap-4 border-t border-white/10  pt-5 clear-both">
               <h3 className="text-xs font-bold text-white uppercase tracking-widest shrink-0">Share:</h3>
               <SocialShare />
             </div>
 
             {/* Post Navigation */}
-            <div className="pt-32 grid grid-cols-1 md:grid-cols-2 gap-30 md:gap-40">
+            <div className="pt-15 grid grid-cols-1 md:grid-cols-2 gap-30 md:gap-40">
               {
                 prevPost ? (
                   <div

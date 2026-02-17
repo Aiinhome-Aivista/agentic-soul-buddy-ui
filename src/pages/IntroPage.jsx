@@ -420,7 +420,7 @@ const IntroPage = () => {
 
             {/* Benefits Banner */}
             <section className="w-full border-y border-white/5 py-8 bg-white/5">
-                <div className="scroll-animate max-w-[1280px] mx-auto px-6 md:px-12 flex flex-wrap justify-center md:justify-between items-center gap-8 hover:opacity-100 transition-opacity duration-500">
+                <div className="scroll-animate max-w-7xl mx-auto px-6 md:px-12 flex flex-wrap justify-center md:justify-between items-center gap-8 hover:opacity-100 transition-opacity duration-500">
                     <span className="text-xs font-semibold text-text-muted uppercase tracking-widest hidden md:block">Mindfully designed for:</span>
                     <div className="flex items-center gap-2">
                         <span className="material-symbols-outlined text-secondary">spa</span>
@@ -442,7 +442,7 @@ const IntroPage = () => {
             </section>
 
             {/* Problem Statement */}
-            <section className="py-24 px-6 md:px-12 max-w-[1000px] mx-auto text-center">
+            <section className="py-24 px-6 md:px-12 max-w-250 mx-auto text-center">
                 <div className="scroll-animate flex flex-col gap-6 items-center">
                     <span className="scroll-animate scroll-animate-scale material-symbols-outlined text-5xl text-secondary mb-4 font-light">graphic_eq</span>
                     <h2 className="text-3xl md:text-4xl font-light text-white leading-tight">
@@ -732,7 +732,7 @@ const IntroPage = () => {
                             </div>
                         ) : (
                             <div className="relative w-full overflow-hidden mask-gradient">
-                                <div className={`flex gap-10 w-max ${filteredBlogs.length > 3 ? 'animate-scroll' : 'mx-auto'} px-4 hover:pause`}>
+                                <div className={`flex gap-10 w-max p-2 ${filteredBlogs.length > 3 ? 'animate-scroll' : 'mx-auto'} px-4 hover:pause`}>
                                     {[...filteredBlogs, ...(filteredBlogs.length > 3 ? filteredBlogs : [])].map((blog, index) => (
                                         <div key={`${blog.id}-${index}`} className="min-w-[340px] w-[340px] md:min-w-[460px] md:w-[460px]">
                                             <div className="bg-surface-dark rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl hover:border-primary/30 transition-all duration-700 flex flex-col h-full group">
