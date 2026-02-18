@@ -446,7 +446,7 @@ const Blog = () => {
                         </div>
                     ) : (
                         <div className="relative">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-12" onClick={() => navigate(`/blog/${createSlug(post.title)}`)}>
                                 {displayedPosts.map((post) => (
                                     <div key={post.id} className="h-full">
                                         <div className="bg-surface-dark rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl hover:border-primary/30 transition-all duration-700 flex flex-col h-full group">
@@ -482,8 +482,8 @@ const Blog = () => {
                                                         </>
                                                     )}
                                                 </div>
-                                                <h3 className="text-2xl  text-white mb-4 leading-snug">{post.title}</h3>
-                                                <p className="text-text-muted font-light text-sm leading-relaxed mb-6">{stripHtml(post.content_preview || post.content).substring(0, 120)}...</p>
+                                                <h3 className="text-2xl  text-white mb-4 leading-snug cursor-pointer" onClick={() => navigate(`/blog/${createSlug(post.title)}`)}>{post.title}</h3>
+                                                <p className="text-text-muted font-light text-sm leading-relaxed mb-6" onClick={() => navigate(`/blog/${createSlug(post.title)}`)}>{stripHtml(post.content_preview || post.content).substring(0, 120)}...</p>
                                                 <button className="mt-auto inline-flex items-center gap-3 text-primary font-bold text-xs uppercase tracking-widest group/link cursor-pointer transition-colors" onClick={() => navigate(`/blog/${createSlug(post.title)}`)}>
                                                     Read Journal
                                                     <span className="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>

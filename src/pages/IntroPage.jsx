@@ -718,7 +718,7 @@ const IntroPage = () => {
                 <div className="max-w-[1440px] mx-auto">
                     <div className="flex flex-col items-center gap-8 mb-20">
                         <div className="max-w-2xl">
-                            <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tight mb-6 justify-center flex items-center">
+                            <h2 className="text-4xl md:text-5xl text-white tracking-tight mb-3 font-serif justify-center flex gap-2 items-center">
                                 Blogs &amp; <span className="italic text-primary">Stories</span>
                             </h2>
                             <p className="text-text-muted text-lg font-light leading-relaxed">Deep dives into the art of being, curated for your quiet moments.</p>
@@ -750,8 +750,8 @@ const IntroPage = () => {
                                                             </>
                                                         )}
                                                     </div>
-                                                    <h3 className="text-2xl  text-white mb-6 leading-snug">{blog.title}</h3>
-                                                    <p className="text-text-muted font-light text-sm leading-relaxed mb-8">{stripHtml(blog.content_preview || blog.content || blog.description).substring(0, 100)}...</p>
+                                                    <h3 className="text-2xl  text-white mb-6 leading-snug cursor-pointer" onClick={() => navigate(`/blog/${createSlug(blog.title)}`)}>{blog.title}</h3>
+                                                    <p className="text-text-muted font-light text-sm leading-relaxed mb-8" onClick={() => navigate(`/blog/${createSlug(blog.title)}`)}>{stripHtml(blog.content_preview || blog.content || blog.description).substring(0, 100)}...</p>
                                                     <button className="mt-auto inline-flex items-center gap-3 text-primary font-bold text-xs uppercase tracking-widest group/link cursor-pointer" onClick={() => navigate(`/blog/${createSlug(blog.title)}`)}>
                                                         Read Journal
                                                         <span className="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">arrow_forward</span>

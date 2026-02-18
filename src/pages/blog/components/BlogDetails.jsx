@@ -243,11 +243,29 @@ const BlogDetails = () => {
 
         <section className="max-w-[1360px] mx-auto px-6 mb-16">
           <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-            <button onClick={() => navigate('/blog/all')} className="inline-flex items-center gap-2 text-[#9ca3af] hover:text-[#6a8c7e] transition-colors group mb-4 md:mb-0 cursor-pointer">
-              <span className="material-symbols-outlined text-base group-hover:-translate-x-1 transition-transform">arrow_back</span>
-
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Return to Journey</span>
-            </button>
+            <nav className="flex items-center gap-2 text-base text-[#9ca3af] mb-4 md:mb-0">
+              <button
+                onClick={() => navigate('/')}
+                className="hover:text-[#6a8c7e] transition-colors cursor-pointer"
+              >
+                Home
+              </button>
+              <span className="text-white/20 select-none">&gt;</span>
+              <button
+                onClick={() => navigate('/blog/all')}
+                className="hover:text-[#6a8c7e] transition-colors cursor-pointer"
+              >
+                Blogs
+              </button>
+              <span className="text-white/20 select-none">&gt;</span>
+              <span
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="text-white font-medium truncate max-w-[200px] md:max-w-[400px] cursor-pointer hover:text-[#6a8c7e] transition-colors"
+                title={blog.title}
+              >
+                {blog.title}
+              </span>
+            </nav>
             <div className="flex items-center gap-4">
               <div className="text-right hidden md:block">
                 <p className="text-sm font-medium text-white">{blog.author_name || "Unknown Author"}</p>
@@ -322,8 +340,8 @@ const BlogDetails = () => {
               <div className="prose prose-invert max-w-none">
                 {blog.content_preview && (
                   <div dangerouslySetInnerHTML={{ __html: blog.content_preview }} />
-        
-        )}
+
+                )}
                 <div dangerouslySetInnerHTML={{ __html: blog.content }} />
               </div>
             ) : (
