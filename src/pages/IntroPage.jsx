@@ -319,9 +319,9 @@ const IntroPage = () => {
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
                     <div className="flex items-center gap-2 text-white cursor-pointer group">
-                        <img src={get_url1.logo} alt="Souljunction" className="h-10 w-10 rounded-full object-cover" />
+                        <img src={get_url1.logo} alt="Souljunction" className="h-15" />
 
-                        <h2 className="text-3xl font-extrabold tracking-wide uppercase text-primary">Souljunction</h2>
+
 
                     </div>
                     <nav className="hidden md:flex items-center gap-10">

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import SeoBlogDetails from '../../../common/helper/SeoBlogDetails';
 import Footer from '../../../components/Footer';
 import { apiService } from '../../../service/apiService';
 import { get_url1, POST_url1, devUrl1 } from '../../../connection/connection';
@@ -69,20 +70,16 @@ const BlogDetails = () => {
 
         if (currentBlog) {
           setBlog(currentBlog);
-          // Update document title with blog title
-          document.title = `${currentBlog.title} - Souljunction`;
 
           // Fetch related blogs using the filter API
           fetchRelatedBlogs(currentBlog);
         } else {
           setError("Blog not found.");
-          document.title = "Blog Not Found - Souljunction";
         }
 
       } catch (err) {
         console.error("Failed to fetch data", err);
         setError("Failed to load blog details.");
-        document.title = "Error - Souljunction";
       } finally {
         setLoading(false);
       }
@@ -93,7 +90,6 @@ const BlogDetails = () => {
 
     // Cleanup: reset title when component unmounts
     return () => {
-      document.title = "Souljunction";
     };
   }, [title]);
 
@@ -146,6 +142,9 @@ const BlogDetails = () => {
     return encodeURIComponent(title.replace(/\s+/g, '-'));
   };
 
+
+
+
   const handleGoBack = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setTransitionOrigin({
@@ -160,11 +159,7 @@ const BlogDetails = () => {
     }, 800);
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+
 
   // Logic for Previous, Next
   const currentBlogId = blog?.id;
@@ -200,6 +195,7 @@ const BlogDetails = () => {
 
   return (
     <div className="bg-[#1a1f1d] text-[#e5e7eb] overflow-x-hidden selection:bg-[#6a8c7e]/30 min-h-screen">
+      <SeoBlogDetails blog={blog} />
       {/* Page Transition Overlay */}
       {isTransitioning && (
         <div
@@ -229,8 +225,7 @@ const BlogDetails = () => {
       <header className="w-full border-b border-white/5 bg-[#1a1f1d]/90 backdrop-blur-sm sticky top-0 z-50">
         <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
           <div onClick={() => navigate('/blog/all')} className="flex items-center gap-3 text-white cursor-pointer group">
-            <img src={get_url1.logo} alt="Souljunction" className="h-10 w-10 rounded-full object-cover" />
-            <h2 className="text-3xl font-semibold tracking-wide uppercase text-[#6a8c7e]">Souljunction</h2>
+            <img src={get_url1.logo} alt="Souljunction" className="h-15" />
           </div>
           <button onClick={handleGoBack} className="flex items-center gap-2 text-[#9ca3af] hover:text-[#6a8c7e] transition-colors cursor-pointer">
             <span className="material-symbols-outlined">arrow_back</span>
@@ -266,19 +261,23 @@ const BlogDetails = () => {
                 {blog.title}
               </span>
             </nav>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <div className="text-right hidden md:block">
-                <p className="text-sm font-medium text-white">{blog.author_name || "Unknown Author"}</p>
-                <p className="text-[10px] text-[#9ca3af] uppercase tracking-widest">
+                <div className="flex items-center justify-end gap-2">
+                  <p className='text-sm text-white font-serif'>Author :</p>
+                  <p className="text-sm font-medium text-[#8AA399] font-serif italic">{blog.author_name}</p>
+                </div>
+                <p className="text-[10px] text-[#9ca3af] uppercase tracking-widest text-left">
                   {new Date(blog.created_at || blog.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </p>
               </div>
-              <div className="w-12 h-12 rounded-full border border-[#6a8c7e]/20 p-0.5">
-                <div className="w-full h-full rounded-full bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8joqQH76wY929nfMjdCWo90o3YvVrmxLVPT6leihiEFLEotvvSkJl5aSyKDHUcIL2WaaKCKI60M2m4vwYnu7NSD5Xy--Ck59MHJBuQec18_i_gzEO8qoH8bujRpFwmVND68NVoOeXIGiT5PKnRuzNS7LnolI4ZJZ8LssidI1De_1-EYMxLLu78_B7qCOKHQq2qWGRR37gMiZdg210fN7YwbgZVa2vCiwh6X9IE3t31aSri0GpGi2cipvNINfq6wdpAYZP9ThecLd-')" }}></div>
-              </div>
+
               <div className="text-left md:hidden">
-                <p className="text-sm font-medium text-white">{blog.author_name || "Unknown Author"}</p>
-                <p className="text-[10px] text-[#9ca3af] uppercase tracking-widest">
+                <div className="flex items-center gap-2">
+                  <p className='text-sm text-white'>Author :</p>
+                  <p className="text-sm font-medium text-[#8AA399] font-serif italic">{blog.author_name}</p>
+                </div>
+                <p className="text-[10px] text-[#9ca3af] uppercase tracking-widest mt-0.5">
                   {new Date(blog.created_at || blog.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </p>
               </div>

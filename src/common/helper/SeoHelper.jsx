@@ -9,7 +9,8 @@ const SeoHelper = ({
     keywords: defaultKeywords = "emotional wellness, mental health support, therapy platform",
     image: defaultImage = "https://aivista.co.in/souljuntion/logo",
     type = 'website',
-    author = 'Souljunction'
+    author = 'Souljunction',
+
 }) => {
     const location = useLocation();
     const [seoData, setSeoData] = useState(null);
@@ -86,6 +87,26 @@ const SeoHelper = ({
 
     const canonical = `https://www.souljunction.life${location.pathname}`;
 
+    // Schema generation logic
+    const defaultSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": title,
+        "description": description,
+        "keywords": keywords,
+        "url": canonical,
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": `https://www.souljunction.life/search?q={search_term_string}`,
+            "query-input": "required name=search_term_string"
+        }
+    };
+
+
+
+
+
+
     return (
         <Helmet>
             {/* Standard metadata */}
@@ -108,6 +129,12 @@ const SeoHelper = ({
             <meta name="twitter:title" content={title} />
             <meta name="twitter:description" content={description} />
             {defaultImage && <meta name="twitter:image" content={defaultImage} />}
+
+
+            <script type="application/ld+json">
+                {JSON.stringify(defaultSchema)}
+            </script>
+
         </Helmet>
     );
 };

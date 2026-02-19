@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { get_url1 } from "../connection/connection";
 
 const Footer = () => {
     const navigate = useNavigate();
@@ -10,7 +11,8 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-between gap-10">
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-2 text-white cursor-pointer" onClick={() => navigate('/')}>
-                            <span className="text-lg font-extrabold tracking-wide uppercase">Souljunction</span>
+                            {/* <span className="text-lg font-extrabold tracking-wide uppercase">Souljunction</span> */}
+                             <img src={get_url1.logo} alt="Souljunction" className="h-10" />
                         </div>
                         <p className="text-gray-400 text-sm max-w-xs leading-relaxed">
                             A mindful technology company dedicated to human flourishing and spiritual oneness.

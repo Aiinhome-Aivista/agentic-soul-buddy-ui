@@ -16,6 +16,7 @@ import DisclaimerModal from "../common/modal/DisclaimerModal";
 import AccountModal from "../common/modal/AccountModal";
 import { useMicVolume } from "../common/hooks/useMicVolume";
 import { BackgroundAudioContext } from "../common/helper/BackgroundAudioProvider";
+import logo from "../assets/icons/souljunction_logo.svg";
 
 const AiChat = () => {
   const navigate = useNavigate();
@@ -378,9 +379,10 @@ const AiChat = () => {
       </div>
 
       <div className="flex flex-col items-center gap-[3%] h-[40%]">
-        <p className="text-4xl font-bold text-white pt-[12%]  cursor-default">
+        {/* <p className="text-4xl font-bold text-white pt-[12%]  cursor-default">
           Souljunction
-        </p>
+        </p> */}
+        <img src={logo} alt="Souljunction Logo" className="h-25 pt-[12%]" />
         <p className="text-white text-xl font-light  cursor-default">
           "Grow With Ancient Indian Guidance..."
         </p>

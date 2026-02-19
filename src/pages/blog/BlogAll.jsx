@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Footer from '../../components/Footer';
 import { apiService } from '../../service/apiService';
 import { get_url1 } from '../../connection/connection';
@@ -193,6 +194,15 @@ const Blog = () => {
 
     return (
         <div className="bg-background-dark text-main antialiased overflow-x-hidden selection:bg-primary/30  min-h-screen">
+            <Helmet>
+                <title>Blogs & Stories - Souljunction</title>
+                <meta name="description" content="Deep dives into the art of being, curated for your quiet moments. Explore our latest blog posts and stories." />
+                <meta name="keywords" content="blog, stories, souljunction, personal growth, wellness, mindfulness" />
+                <meta property="og:title" content="Blogs & Stories - Souljunction" />
+                <meta property="og:description" content="Deep dives into the art of being, curated for your quiet moments. Explore our latest blog posts and stories." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={window.location.href} />
+            </Helmet>
             {/* Page Transition Overlay */}
             {isTransitioning && (
                 <div
@@ -229,8 +239,7 @@ const Blog = () => {
             <header className="w-full border-b border-white/5 bg-background-dark/90 backdrop-blur-sm sticky top-0 z-50">
                 <div className="px-6 md:px-12 py-4 flex items-center justify-between max-w-[1280px] mx-auto">
                     <div onClick={() => navigate('/')} className="flex items-center gap-3 text-white cursor-pointer group">
-                        <img src={get_url1.logo} alt="Souljunction" className="h-10 w-10 rounded-full object-cover" />
-                        <h2 className="text-3xl font-semibold tracking-wide uppercase text-primary">Souljunction</h2>
+                        <img src={get_url1.logo} alt="Souljunction" className="h-15" />
                     </div>
                     <button onClick={handleGoBack} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors cursor-pointer">
                         <span className="material-symbols-outlined">arrow_back</span>
