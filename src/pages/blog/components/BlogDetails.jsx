@@ -59,12 +59,11 @@ const BlogDetails = () => {
         setAllBlogs(blogsList);
 
 
-        const decodedTitle = decodeURIComponent(title).replace(/-/g, ' ');
-        console.log("Details Debug - Title from URL:", title, "Decoded:", decodedTitle);
+        console.log("Details Debug - Title from URL:", title);
 
 
         const currentBlog = blogsList.find(b =>
-          b.title.toLowerCase() === decodedTitle.toLowerCase()
+          createSlug(b.title) === title
         );
         console.log("Details Debug - Found Blog:", currentBlog);
 
@@ -139,7 +138,13 @@ const BlogDetails = () => {
 
   // Helper function to create URL-friendly slug from title
   const createSlug = (title) => {
-    return encodeURIComponent(title.replace(/\s+/g, '-'));
+    if (!title) return "";
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '') // Remove non-word characters (except spaces and hyphens)
+      .replace(/[\s_]+/g, '-')  // Replace spaces and underscores with hyphens
+      .replace(/-+/g, '-')      // Replace multiple hyphens with single hyphen
+      .trim();                  // Trim leading/trailing hyphens
   };
 
 

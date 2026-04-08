@@ -189,7 +189,13 @@ const Blog = () => {
 
     // Helper function to create URL-friendly slug from title
     const createSlug = (title) => {
-        return encodeURIComponent(title.replace(/\s+/g, '-'));
+        if (!title) return "";
+        return title
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '') // Remove non-word characters (except spaces and hyphens)
+            .replace(/[\s_]+/g, '-')  // Replace spaces and underscores with hyphens
+            .replace(/-+/g, '-')      // Replace multiple hyphens with single hyphen
+            .trim();                  // Trim leading/trailing hyphens
     };
 
     return (
