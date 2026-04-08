@@ -334,8 +334,12 @@ const IntroPage = () => {
                         <button onClick={handleEnterSpace} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
                             <span>Begin</span>
                         </button>
+                       
                         <button onClick={handlePricingClick} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-[#646459] text-white text-sm font-medium hover:bg-[#646459]/90 transition-colors shadow-sm">
                             <span>Pricing</span>
+                        </button>
+                         <button onClick={(e) => handleNavigateWithTransition(e, '/blog/all', 'bg-[#8AA399]')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-[#8AA399]  text-white text-sm font-medium hover:bg-[#6B7C76] transition-colors shadow-sm">
+                            <span>Blogs</span>
                         </button>
                         <button onClick={(e) => handleNavigateWithTransition(e, '/contact', 'bg-secondary')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-secondary text-black text-sm font-medium hover:bg-secondary/90 transition-colors shadow-sm">
                             <span>Contact Us</span>
@@ -361,6 +365,15 @@ const IntroPage = () => {
                             className="flex cursor-pointer items-center justify-center rounded-full h-12 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm"
                         >
                             <span>Begin</span>
+                        </button>
+                        <button
+                            onClick={(e) => {
+                                setIsMobileMenuOpen(false);
+                                handleNavigateWithTransition(e, '/blog/all', 'bg-[#8AA399]');
+                            }}
+                            className="flex cursor-pointer items-center justify-center rounded-full h-12 px-6 bg-primary-dark/10 border border-primary-dark/20 text-white text-sm font-medium hover:bg-primary-dark/20 transition-colors shadow-sm"
+                        >
+                            <span>Blog</span>
                         </button>
                         <button
                             onClick={(e) => {

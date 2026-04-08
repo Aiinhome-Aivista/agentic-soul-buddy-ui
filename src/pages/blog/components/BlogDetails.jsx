@@ -333,8 +333,8 @@ const BlogDetails = () => {
             <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${getImageUrl(blog.image_url || blog.featured_image || blog.image)}')` }}></div>
           </div>
         </section>
-        <div className="max-w-[1360px] mx-auto  flex flex-col lg:flex-row justify-between gap-12 lg:gap-0">
-          <article className="lg:w-[75%] max-w-[950px] text-lg md:text-xl text-[#e5e7eb]/90  [&_img]:rounded-2xl [&_img]:overflow-hidden lg:pr-8">
+        <div className="max-w-[1440px] mx-auto flex flex-col lg:flex-row justify-between gap-12 lg:gap-0 md:px-8">
+          <article className="lg:w-[73%] max-w-[980px] text-[#e5e7eb]/90  [&_img]:rounded-2xl [&_img]:overflow-hidden lg:pr-8">
             {blog.content ? (
               <div className="prose prose-invert max-w-none">
                 {blog.content_preview && (
@@ -398,7 +398,7 @@ const BlogDetails = () => {
               }
             </div>
           </article>
-          <aside className="lg:w-[28%]">
+          <aside className="lg:w-[28%] shrink-0">
             <div className="sticky top-32 space-y-10">
               <div className="bg-[#232926] rounded-3xl p-6 border border-white/5 shadow-xl">
                 <div className="flex items-center justify-between mb-8">

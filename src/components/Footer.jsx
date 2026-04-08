@@ -21,7 +21,7 @@ const Footer = () => {
                     <div className="flex gap-16 flex-wrap">
                           <div className="flex flex-col gap-4">
                             <h4 className="text-white font-bold text-sm uppercase tracking-wider">Community</h4>
-                            <Link to="/blog/all" className="text-gray-400 text-sm hover:text-primary transition-colors">Blog</Link>
+                            <Link to="/blog/all" className="text-gray-400 text-sm hover:text-primary transition-colors">Blogs</Link>
                         </div>
                         <div className="flex flex-col gap-4">
                             <h4 className="text-white font-bold text-sm uppercase tracking-wider">Get In Touch</h4>
