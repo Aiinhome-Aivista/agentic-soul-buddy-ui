@@ -25,10 +25,24 @@ const SeoBlogDetails = ({ blog }) => {
         (Array.isArray(blog.tags) ? blog.tags.join(", ") : blog.tags) ||
         "";
 
+    // Helper function to create URL-friendly slug
+    const createSlug = (text = "") => {
+        return text
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_]+/g, '-')
+            .replace(/-+/g, '-')
+            .trim();
+    };
+
     // Slug fallback from title for canonical URL if slug is missing
-    const slug = blog.slug || blog.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const canonical =
-        blog.canonical_url || `${window.location.origin}/blog/${slug}`;
+    const slug = createSlug(blog.slug || blog.title || "");
+    
+    // Ensure canonical URL is always a valid, clean URL without spaces
+    const isValidCanonical = blog.canonical_url && !blog.canonical_url.includes(" ");
+    const canonical = isValidCanonical
+        ? blog.canonical_url
+        : `https://www.souljunction.life/blog/${slug}`;
 
     const robots =
         blog.index_status === "noindex" ? "noindex, nofollow" : "index, follow";

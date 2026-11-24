@@ -1,16 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
-
-<url>
-  <loc>https://www.souljunction.life/</loc>
-  <lastmod>2026-01-20T13:27:55+00:00</lastmod>
-</url>
-
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.souljunction.life/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>1.0000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/pricing</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/all</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.8000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/contact</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.6400</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/privacy-policy</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.6400</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/terms-of-use</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.6400</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/cookie-policy</loc>
+    <lastmod>2026-11-24</lastmod>
+    <priority>0.6400</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/childhood-trauma-test-signs-you-may-still-be-carrying-emotional-wounds</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/people-pleasing-why-you-struggle-to-say-no-and-how-to-stop</loc>
+    <lastmod>2026-09-09</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/why-do-i-feel-guilty-all-the-time-understanding-healthy-and-unhealthy-guilt</loc>
+    <lastmod>2026-07-22</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/emotional-flashbacks-what-they-are-and-how-to-regain-control</loc>
+    <lastmod>2026-07-14</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/why-do-i-feel-empty-even-when-life-is-going-well</loc>
+    <lastmod>2026-06-11</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/how-to-stop-living-on-autopilot-and-feel-present-again</loc>
+    <lastmod>2026-06-04</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/what-is-emotional-detox-signs-you-need-an-emotional-reset</loc>
+    <lastmod>2026-05-20</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/side-effects-of-overthinking-mental-physical-emotional-impact</loc>
+    <lastmod>2026-05-12</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/what-is-calm-technology-using-digital-tools-without-stress</loc>
+    <lastmod>2026-05-12</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/what-is-cognitive-rest-how-to-recover-from-mental-fatigue</loc>
+    <lastmod>2026-05-01</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/what-happens-in-anxiety-physical-psychological-effects-explained</loc>
+    <lastmod>2026-04-22</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/is-overthinking-good-or-bad-the-science-behind-mental-rumination</loc>
+    <lastmod>2026-04-15</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/vagus-nerve-exercises-how-to-activate-your-parasympathetic-system</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/what-is-procrastination-causes-symptoms-how-to-overcome-it-naturally</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7000</priority>
+  </url>
+  <url>
+    <loc>https://www.souljunction.life/blog/overthinking-symptoms-signs-side-effects-when-it-becomes-a-problem</loc>
+    <lastmod>2026-04-08</lastmod>
+    <priority>0.7000</priority>
+  </url>
 </urlset>

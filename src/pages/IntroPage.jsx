@@ -5,7 +5,9 @@ import Footer from "./../components/Footer";
 import { get_url1 } from "../connection/connection";
 import { devUrl1 } from "../env/env";
 import { apiService } from "../service/apiService";
-
+import screenshot1 from "../assets/image/screenshot-1.png";
+import screenshot2 from "../assets/image/screenshot-2.png";
+import screenshot3 from "../assets/image/screenshot-3.png";
 const IntroPage = () => {
     const navigate = useNavigate();
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -340,11 +342,11 @@ const IntroPage = () => {
                         <button onClick={handleEnterSpace} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-primary-dark text-white text-sm font-medium hover:bg-primary-deep transition-colors shadow-sm">
                             <span>Begin</span>
                         </button>
-                       
+
                         <button onClick={handlePricingClick} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-[#646459] text-white text-sm font-medium hover:bg-[#646459]/90 transition-colors shadow-sm">
                             <span>Pricing</span>
                         </button>
-                         <button onClick={(e) => handleNavigateWithTransition(e, '/blog/all', 'bg-[#8AA399]')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-[#8AA399]  text-white text-sm font-medium hover:bg-[#6B7C76] transition-colors shadow-sm">
+                        <button onClick={(e) => handleNavigateWithTransition(e, '/blog/all', 'bg-[#8AA399]')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-[#8AA399]  text-white text-sm font-medium hover:bg-[#6B7C76] transition-colors shadow-sm">
                             <span>Blogs</span>
                         </button>
                         <button onClick={(e) => handleNavigateWithTransition(e, '/contact', 'bg-secondary')} className="hidden md:flex cursor-pointer items-center justify-center rounded-full h-10 px-6 bg-secondary text-black text-sm font-medium hover:bg-secondary/90 transition-colors shadow-sm">
@@ -415,9 +417,22 @@ const IntroPage = () => {
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight tracking-[-0.02em] text-white text-balance">
                                 A Quiet Space to <br /><span className="font-serif italic text-primary">Come Back to Yourself.</span>
                             </h1>
-                            <p className="text-lg font-light leading-relaxed text-gray-300 max-w-lg mx-auto md:mx-0 text-balance">
-                                A digital sanctuary for when the noise gets too loud. No notifications, no endless scrolls. Just a path back to your center.
-                            </p>
+                            <div className="flex flex-col gap-5 mt-6 text-balance max-w-lg mx-auto md:mx-0 text-left border-l-4 border-primary/60 pl-6 py-2 bg-gradient-to-r from-primary/5 to-transparent rounded-r-xl">
+                                <h3 className="text-2xl font-bold text-primary  ">A Space to Talk, Reflect & Feel Heard</h3>
+                                <p className="text-lg font-medium text-white font-serif italic">
+                                    Sometimes you don't need advice. <br />
+                                    Sometimes you simply need a space where you can express what you're feeling without judgment.
+                                </p>
+                                <p className="text-base font-light  text-[#C2C2B9] text-justify">
+                                    Souljunction is a digital space for emotional wellbeing, self-reflection, healing, and personal growth. Talk about what's on your mind, take a moment to reflect, explore calming practices, and discover stories and resources that may help you feel a little lighter.
+                                </p>
+                                <div className="flex items-center gap-3 mt-2">
+                                    <div className="h-px bg-secondary w-8"></div>
+                                    <p className="text-sm font-bold text-secondary uppercase tracking-widest">
+                                        Talk. Reflect. Explore. Grow.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-5 justify-center md:justify-start items-center">
                             <button onClick={handleEnterSpace} className="flex min-w-[180px] cursor-pointer items-center justify-center rounded-full h-14 px-8 bg-primary-dark text-white text-base font-medium shadow-lg shadow-primary-dark/20 hover:bg-primary-deep hover:translate-y-[-1px] transition-all duration-300">
@@ -459,6 +474,77 @@ const IntroPage = () => {
                     </div> */}
                 </div>
             </section>
+
+            {/* NEW: What can you do at Souljunction? */}
+            <section className="py-24 px-6 md:px-12 max-w-[1280px] mx-auto text-center w-full">
+                <div className="scroll-animate flex flex-col gap-6 items-center mb-16">
+                    <h2 className="text-3xl md:text-4xl font-light text-white">Find Your Space with SoulJunction</h2>
+                </div>
+
+                <div className="grid md:grid-cols-4 gap-6">
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col items-center text-center gap-4 hover:bg-white/10 transition-colors">
+                        <span className="text-4xl">💬</span>
+                        <h3 className="text-xl font-bold text-white">Talk</h3>
+                        <p className="text-sm text-gray-400">Express what's on your mind and have a supportive conversation whenever you need a space to talk.</p>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col items-center text-center gap-4 hover:bg-white/10 transition-colors">
+                        <span className="text-4xl">🪞</span>
+                        <h3 className="text-xl font-bold text-white">Reflect</h3>
+                        <p className="text-sm text-gray-400">Take time to understand your thoughts, emotions, experiences, and yourself.</p>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col items-center text-center gap-4 hover:bg-white/10 transition-colors">
+                        <span className="text-4xl">🌿</span>
+                        <h3 className="text-xl font-bold text-white">Feel Supported</h3>
+                        <p className="text-sm text-gray-400">Have a supportive conversation during moments when they feel low, lonely, overwhelmed, or emotionally heavy</p>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col items-center text-center gap-4 hover:bg-white/10 transition-colors">
+                        <span className="text-4xl">📖</span>
+                        <h3 className="text-xl font-bold text-white">Read & Discover</h3>
+                        <p className="text-sm text-gray-400">Explore blogs and stories about emotional wellbeing, self-care, relationships, healing and personal growth.</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* NEW: Everything you need in one space */}
+            <section className="py-20 px-6 md:px-12 bg-white/5 w-full">
+                <div className="max-w-[1280px] mx-auto">
+                    <div className="scroll-animate text-center mb-16">
+                        <h2 className="text-3xl font-light text-white">Everything you need in one space</h2>
+                        <p className="mt-4 text-text-muted">Explore the capabilities of Souljunction.</p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="bg-background-dark border border-white/10 rounded-2xl p-6 flex flex-col gap-2">
+                            <h3 className="text-lg font-bold text-white">Reflection</h3>
+                            <p className="text-sm text-gray-400">Self assessment & insights</p>
+                        </div>
+                        <div className="bg-background-dark border border-white/10 rounded-2xl p-6 flex flex-col gap-2">
+                            <h3 className="text-lg font-bold text-white">Practices</h3>
+                            <p className="text-sm text-gray-400">Guided Practices for Calm & Wellbeing</p>
+                        </div>
+                        <div className="bg-background-dark border border-white/10 rounded-2xl p-6 flex flex-col gap-2">
+                            <h3 className="text-lg font-bold text-white">Talk</h3>
+                            <p className="text-sm text-gray-400">A Space to Express What You're Feeling</p>
+                        </div>
+                        <div className="bg-background-dark border border-white/10 rounded-2xl p-6 flex flex-col gap-2">
+                            <h3 className="text-lg font-bold text-white">Guided Audio</h3>
+                            <p className="text-sm text-gray-400">Soundscapes for calm & focus</p>
+                        </div>
+                        <div className="bg-background-dark border border-white/10 rounded-2xl p-6 flex flex-col gap-2">
+                            <h3 className="text-lg font-bold text-white">Personalised Experience</h3>
+                            <p className="text-sm text-gray-400">Tailored recommendations</p>
+                        </div>
+                        <div className="bg-background-dark border border-white/10 rounded-2xl p-6 flex flex-col gap-2">
+                            <h3 className="text-lg font-bold text-white">Resources</h3>
+                            <p className="text-sm text-gray-400">Thoughtful stories & blogs</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
 
             {/* Problem Statement */}
             <section className="py-24 px-6 md:px-12 max-w-250 mx-auto text-center">
@@ -527,6 +613,13 @@ const IntroPage = () => {
                                     <div>
                                         <h4 className="font-bold text-white">Deep, not wide</h4>
                                         <p className="text-sm text-text-muted mt-1">Quality guidance over quantity of content.</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-4">
+                                    <span className="material-symbols-outlined text-primary">check_circle</span>
+                                    <div>
+                                        <h4 className="font-bold text-white">A personal wellbeing space</h4>
+                                        <p className="text-sm text-text-muted mt-1">A place to reflect, practice, journal, learn and reconnect with yourself.</p>
                                     </div>
                                 </div>
                             </div>
@@ -604,7 +697,7 @@ const IntroPage = () => {
                 <div className="px-6 md:px-12 max-w-[1280px] mx-auto">
                     <div className="scroll-animate text-center max-w-2xl mx-auto mb-16">
                         <h2 className="text-3xl font-light text-white">The Journey Home</h2>
-                        <p className="mt-4 text-text-muted">A gentle structure for your spiritual unfolding.</p>
+                        <p className="mt-4 text-text-muted max-w-2xl mx-auto">Souljunction guides you through a personalized journey of reflection, discovery, practice, and growth.</p>
                     </div>
                     <div className="grid md:grid-cols-4 gap-8 relative">
                         {/* Connector line for desktop */}
@@ -642,12 +735,54 @@ const IntroPage = () => {
                 </div>
             </section>
 
+            {/* NEW: Who is Souljunction for? */}
+            <section className="py-24 px-6 md:px-12 max-w-[1280px] mx-auto w-full">
+                <div className="flex flex-col lg:flex-row gap-16 items-center">
+                    <div className="lg:w-5/12 flex flex-col gap-8 md:pr-8">
+                        <div className="flex flex-col gap-5">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-secondary w-fit backdrop-blur-sm">
+                                <span className="material-symbols-outlined text-sm">favorite</span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">For You</span>
+                            </div>
+                            <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white leading-[1.1] tracking-tight">
+                                Who is <br className="hidden md:block" />
+                                <span className="whitespace-nowrap"><span className="font-serif italic text-primary">SoulJunction</span> for?</span>
+                            </h2>
+                        </div>
+
+                        <div className="flex flex-col gap-5">
+                            <p className="text-xl md:text-2xl font-light text-white/80  text-balance">
+                                For anyone going through a difficult moment, feeling emotionally overwhelmed, lonely, low, or simply looking for a space to talk and feel heard.
+                            </p>
+                            <div className="w-12 h-0.5 bg-gradient-to-r from-secondary to-transparent rounded-full mt-2 opacity-50"></div>
+                        </div>
+                    </div>
+                    <div className="lg:w-7/12 grid sm:grid-cols-2 gap-4">
+                        {[
+                            "Talk about what they're going through",
+                            "Express their thoughts and feelings openly",
+                            "Feel heard without judgment",
+                            "Reflect on their emotions and experiences",
+                            "Find moments of calm and emotional relief",
+                            "Explore practices that support their wellbeing",
+                            "Read stories and blogs that help them feel understood",
+                            "Learn more about themselves and their emotional wellbeing"
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-start gap-4 bg-white/5 hover:bg-white/10 transition-colors p-5 rounded-2xl border border-white/5">
+                                <span className="material-symbols-outlined text-secondary text-xl mt-0.5">done_all</span>
+                                <span className="text-gray-200 text-sm font-medium leading-relaxed">{item}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* Personalization */}
             <section className="py-24 px-6 md:px-12 max-w-[1280px] mx-auto w-full">
                 <div className="scroll-animate bg-gradient-to-br from-primary-dark to-primary-deep rounded-3xl p-8 md:p-16 text-white overflow-hidden relative">
                     <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
                     <div className="relative z-10 max-w-3xl">
-                        <h2 className="text-3xl md:text-4xl font-light mb-6">Personalization, <span className="font-serif italic text-secondary">Without Labels.</span></h2>
+                        <h2 className="text-3xl md:text-4xl font-light mb-6">Personalized wellbeing, <br className="hidden md:block" /><span className="font-serif italic text-secondary">without putting you in a box.</span></h2>
                         <p className="text-lg md:text-xl font-light leading-relaxed text-white/90 mb-8">
                             We don't categorize you as "stressed" or "anxious." You are complex and ever-changing. Our system flows with your energy, suggesting softer practices for tender days and deeper work for days of strength.
                         </p>
@@ -715,6 +850,108 @@ const IntroPage = () => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* NEW: Why Souljunction? */}
+            <section className="py-24 px-6 md:px-12 bg-white/5 w-full">
+                <div className="max-w-[1280px] mx-auto">
+                    <div className="scroll-animate text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-light text-white">Why SoulJunction?</h2>
+                    </div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="bg-background-dark border border-white/10 p-8 rounded-2xl flex flex-col gap-3 text-center items-center">
+                            <span className="material-symbols-outlined text-3xl text-secondary">lock</span>
+                            <h4 className="text-xl font-bold text-white">Private</h4>
+                            <p className="text-sm text-gray-400">Your personal reflections belong to you.</p>
+                        </div>
+                        <div className="bg-background-dark border border-white/10 p-8 rounded-2xl flex flex-col gap-3 text-center items-center">
+                            <span className="material-symbols-outlined text-3xl text-secondary">tune</span>
+                            <h4 className="text-xl font-bold text-white">Personal</h4>
+                            <p className="text-sm text-gray-400">Your experience can adapt to your needs.</p>
+                        </div>
+                        <div className="bg-background-dark border border-white/10 p-8 rounded-2xl flex flex-col gap-3 text-center items-center">
+                            <span className="material-symbols-outlined text-3xl text-secondary">self_improvement</span>
+                            <h4 className="text-xl font-bold text-white">Intentional</h4>
+                            <p className="text-sm text-gray-400">No endless feeds or engagement pressure.</p>
+                        </div>
+                        <div className="bg-background-dark border border-white/10 p-8 rounded-2xl flex flex-col gap-3 text-center items-center">
+                            <span className="material-symbols-outlined text-3xl text-secondary">hourglass_empty</span>
+                            <h4 className="text-xl font-bold text-white">Self-paced</h4>
+                            <p className="text-sm text-gray-400">Come back whenever you need it.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* NEW: Explore Souljunction / Screenshots */}
+            <section className="py-24 px-6 md:px-12 max-w-[1280px] mx-auto w-full">
+                <div className="scroll-animate text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-light text-white">Explore <span className="font-serif italic text-primary">SoulJunction</span></h2>
+                    <p className="mt-4 text-text-muted">A glimpse inside your personal space.</p>
+                </div>
+
+                <div className="flex flex-col gap-24">
+                    {/* Screen 1 */}
+                    <div className="flex flex-col md:flex-row items-center gap-12">
+                        <div className="w-full md:w-1/2 flex flex-col gap-4">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-secondary w-fit mb-2">
+                                <span className="material-symbols-outlined text-sm">chat_bubble</span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">Talk</span>
+                            </div>
+                            <h3 className="text-3xl md:text-4xl font-light text-white">A safe space to express</h3>
+                            <p className="text-lg text-gray-400 leading-relaxed">Express what you're feeling without judgment. A supportive conversational experience whenever you need someone to talk to, ready to listen at any time.</p>
+                        </div>
+                        <div className="w-full md:w-1/2 bg-white/5 rounded-[2.5rem] aspect-[4/3] border border-white/10 flex flex-col items-center justify-center overflow-hidden shadow-2xl relative group hover:border-white/20 transition-colors">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-secondary/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                            <div className="absolute inset-0 bg-gradient-to-tr from-secondary/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity z-0"></div>
+                            <img src={screenshot1} alt="Souljunction Talk Interface" className="w-full h-full object-cover relative z-10 opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                            <div className="hidden absolute inset-0 flex-col items-center justify-center z-20">
+                                <span className="material-symbols-outlined text-6xl text-white/20 mb-4 group-hover:scale-110 transition-transform duration-500">forum</span>
+                                <p className="text-gray-500 italic text-sm tracking-wide text-center px-4">Save your talk interface image as <br /><code className="text-secondary/80">public/screenshot-talk.png</code></p>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Screen 2 */}
+                    <div className="flex flex-col md:flex-row-reverse items-center gap-12">
+                        <div className="w-full md:w-1/2 flex flex-col gap-4 md:pl-12">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-primary w-fit mb-2">
+                                <span className="material-symbols-outlined text-sm">auto_awesome</span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">Reflect</span>
+                            </div>
+                            <h3 className="text-3xl md:text-4xl font-light text-white">Discover your inner world</h3>
+                            <p className="text-lg text-gray-400 leading-relaxed">Take time to reflect and understand your emotions. Dive deeper into your thoughts and find clarity in moments of confusion or overwhelm.</p>
+                        </div>
+                        <div className="w-full md:w-1/2 bg-white/5 rounded-[2.5rem] aspect-[4/3] border border-white/10 flex flex-col items-center justify-center overflow-hidden shadow-2xl relative group hover:border-white/20 transition-colors">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                            <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity z-0"></div>
+                            <img src={screenshot2} alt="Souljunction Reflection Assessment" className="w-full h-full object-cover relative z-10 opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                            <div className="hidden absolute inset-0 flex-col items-center justify-center z-20">
+                                <span className="material-symbols-outlined text-6xl text-white/20 mb-4 group-hover:scale-110 transition-transform duration-500">psychology</span>
+                                <p className="text-gray-500 italic text-sm tracking-wide text-center px-4">Save your assessment image as <br /><code className="text-primary/80">public/screenshot-reflect.png</code></p>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Screen 3 */}
+                    <div className="flex flex-col md:flex-row items-center gap-12">
+                        <div className="w-full md:w-1/2 flex flex-col gap-4">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-secondary w-fit mb-2">
+                                <span className="material-symbols-outlined text-sm">self_improvement</span>
+                                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">Calm</span>
+                            </div>
+                            <h3 className="text-3xl md:text-4xl font-light text-white">Find your center</h3>
+                            <p className="text-lg text-gray-400 leading-relaxed">Explore guided practices, private journaling, and immersive audio designed to bring you back to your center and create moments of profound calm.</p>
+                        </div>
+                        <div className="w-full md:w-1/2 bg-white/5 rounded-[2.5rem] aspect-[4/3] border border-white/10 flex flex-col items-center justify-center overflow-hidden shadow-2xl relative group hover:border-white/20 transition-colors">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-secondary/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                            <div className="absolute inset-0 bg-gradient-to-tr from-secondary/10 to-transparent opacity-50 group-hover:opacity-100 transition-opacity z-0"></div>
+                            <img src={screenshot3} alt="Souljunction Audio Experience" className="w-full h-full object-cover relative z-10 opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                            <div className="hidden absolute inset-0 flex-col items-center justify-center z-20">
+                                <span className="material-symbols-outlined text-6xl text-white/20 mb-4 group-hover:scale-110 transition-transform duration-500">spa</span>
+                                <p className="text-gray-500 italic text-sm tracking-wide text-center px-4">Save your audio experience image as <br /><code className="text-secondary/80">public/screenshot-calm.png</code></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
